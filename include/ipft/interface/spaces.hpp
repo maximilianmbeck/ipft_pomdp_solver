@@ -7,7 +7,7 @@
 #include <ipft/core/globals.hpp>
 #include <ipft/interface/point.hpp>
 
-namespace ipft {
+namespace solver_ipft {
 
 class POMDP;
 
@@ -36,4 +36,4 @@ typedef Point Observation;
 // action space assumed to be discrete not continuous at first (later maybe point too)
 typedef int Action;
 typedef Point ActionValue;
-}  // namespace ipft
+}  // namespace solver_ipft

@@ -5,7 +5,7 @@
 #include "ipft/core/globals.hpp"
 #include "ipft/interface/spaces.hpp"
 
-namespace ipft {
+namespace solver_ipft {
 class Belief;
 
 class POMDP {
@@ -148,4 +148,4 @@ class POMDP {
     virtual int numActiveStates() const = 0;
 };
 
-}  // namespace ipft
+}  // namespace solver_ipft

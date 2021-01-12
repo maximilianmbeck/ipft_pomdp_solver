@@ -8,7 +8,7 @@
 
 #include "ipft/config.hpp"
 
-namespace ipft {
+namespace solver_ipft {
 
 namespace Globals {
 
@@ -44,4 +44,4 @@ constexpr double smart_value = 1.0;
 
 } // namespace Globals
 
-} // namespace ipft
+} // namespace solver_ipft

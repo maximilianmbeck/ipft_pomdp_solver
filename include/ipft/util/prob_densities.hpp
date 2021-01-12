@@ -1,6 +1,6 @@
 #pragma once
 
-namespace ipft {
+namespace solver_ipft {
 
 class NormalDistr {
 public:
@@ -8,4 +8,4 @@ public:
 };
 
 
-} // namespace ipft
+} // namespace solver_ipft

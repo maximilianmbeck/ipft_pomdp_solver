@@ -4,7 +4,7 @@
 #include <string>
 
 #include "ipft/util/memorypool.hpp"
-namespace ipft {
+namespace solver_ipft {
 /**
  * @brief An interface defining a Point in a metric space
  * needs an equals method, and a metric defined on the space
@@ -81,4 +81,4 @@ class Point : public MemoryObject {
     virtual double epsilon() const = 0;
 };
 
-}  // namespace ipft
+}  // namespace solver_ipft

@@ -5,7 +5,7 @@
 #include "ipft/interface/pomdp.hpp"
 #include "ipft/solver/ipft.hpp"
 
-namespace ipft {
+namespace solver_ipft {
 class IpftValue;
 
 /* -------------------------------------------------------------------------- */
@@ -104,4 +104,4 @@ class BeliefInformationPolicy : public RolloutPolicy {
     virtual IpftValue rollout(Belief *belief, int depth) const;
 };
 
-}  // namespace ipft
+}  // namespace solver_ipft

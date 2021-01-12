@@ -10,7 +10,7 @@
 #include "ipft/util/debug.hpp"
 #include "ipft/util/output.hpp"
 
-namespace ipft {
+namespace solver_ipft {
 
 ParticleBelief::ParticleBelief(std::vector<State *> particles,
                                std::vector<State *> wp_particles,
@@ -326,4 +326,4 @@ State *ParticleBelief::std() const {
     return std;
 }
 
-}  // namespace ipft
+}  // namespace solver_ipft

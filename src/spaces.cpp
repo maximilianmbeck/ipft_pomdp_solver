@@ -1,6 +1,6 @@
 #include <ipft/interface/pomdp.hpp>
 #include <ipft/interface/spaces.hpp>
-namespace ipft {
+namespace solver_ipft {
 
 double State::weightSum(const std::vector<State*>& states) {
     double weight = 0;
@@ -80,4 +80,4 @@ bool State::weightCompare(State* state1, State* state2) {
     return state1->weight_ < state2->weight_;
 }
 
-}  // namespace ipft
+}  // namespace solver_ipft

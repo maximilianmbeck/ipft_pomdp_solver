@@ -7,7 +7,7 @@
 #include <ipft/interface/belief.hpp>
 #include <ipft/interface/pomdp.hpp>
 #include <ipft/interface/spaces.hpp>
-namespace ipft {
+namespace solver_ipft {
 
 /* -------------------------------------------------------------------------- */
 /*                         SearchStatistics interface                         */
@@ -119,4 +119,4 @@ class Solver {
     virtual History* copyHistory() const;
 };
 
-}  // namespace ipft
+}  // namespace solver_ipft

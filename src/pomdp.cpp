@@ -1,6 +1,6 @@
 #include <ipft/interface/pomdp.hpp>
 
-namespace ipft {
+namespace solver_ipft {
 
 POMDP::POMDP() {}
 
@@ -42,4 +42,4 @@ void POMDP::freeStates(const std::vector<State *> &states) const {
     }
 }
 
-}  // namespace ipft
+}  // namespace solver_ipft

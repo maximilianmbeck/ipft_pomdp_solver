@@ -9,7 +9,7 @@
 
 #include <chrono>
 
-namespace ipft {
+namespace solver_ipft {
 class Plannerbase {
 protected:
     Random* rand_;
@@ -58,4 +58,4 @@ public:
                                   const std::chrono::time_point<std::chrono::high_resolution_clock>& main_clock_start) const;
 };
 
-} // namespace ipft
+} // namespace solver_ipft

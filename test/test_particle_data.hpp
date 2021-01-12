@@ -5,7 +5,7 @@
 
 #include "test_ipft_objects.hpp"
 
-namespace ipft {
+namespace solver_ipft {
 namespace test {
 
 // The fixture for testing with particle beliefs / particle sets
@@ -176,4 +176,4 @@ class ParticleBeliefData : public IpftObjects {
     }
 };
 }  // namespace test
-}  // namespace ipft
+}  // namespace solver_ipft

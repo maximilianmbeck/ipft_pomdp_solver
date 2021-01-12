@@ -11,7 +11,7 @@
 
 namespace py = pybind11;
 
-namespace ipft {
+namespace solver_ipft {
 namespace pyadapters {
 
 /* --------------------------- py_conversions.cpp --------------------------- */
@@ -460,4 +460,4 @@ PYBIND11_MODULE(PYTHON_API_MODULE_NAME, m) {
 }
 
 }  // namespace pyadapters
-}  // namespace ipft
+}  // namespace solver_ipft

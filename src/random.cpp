@@ -3,7 +3,7 @@
 #include <cassert>
 #include <chrono>
 
-namespace ipft {
+namespace solver_ipft {
 
 /* -------------------------------------------------------------------------- */
 /*                               Implementations                              */
@@ -60,4 +60,4 @@ int Random::nextUniformInt(int n) const {
     return nextUniformInt(0, n - 1);
 }
 
-}  // namespace ipft
+}  // namespace solver_ipft

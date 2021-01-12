@@ -4,7 +4,7 @@
 #include <ipft/core/particle_reinvigoration.hpp>
 #include <numeric>
 
-namespace ipft {
+namespace solver_ipft {
 
 /* -------------------------------------------------------------------------- */
 /*                              NoReinvigoration                              */
@@ -89,4 +89,4 @@ ParticleReinvigorator* ObsAdaptiveReinvigorator::clone() const {
     return new ObsAdaptiveReinvigorator(this->model_, this->rand_);
 }
 
-}  // namespace ipft
+}  // namespace solver_ipft

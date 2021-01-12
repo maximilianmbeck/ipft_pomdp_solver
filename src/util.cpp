@@ -1,6 +1,6 @@
 #include <ipft/util/util.hpp>
 
-namespace ipft {
+namespace solver_ipft {
 namespace util {
 
 std::vector<double> weightedSampleVarianceToStd(const std::vector<double>& sampleVariance) {
@@ -12,4 +12,4 @@ std::vector<double> weightedSampleVarianceToStd(const std::vector<double>& sampl
     return std;
 }
 }  // namespace util
-}  // namespace ipft
+}  // namespace solver_ipft

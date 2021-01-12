@@ -1,6 +1,6 @@
 // #include <ipft/problems/driving_intersection.hpp>
 
-// namespace ipft {
+// namespace solver_ipft {
 // namespace driving {
 
 // /* -------------------------------------------------------------------------- */
@@ -144,4 +144,4 @@
 // }
 
 // }  // namespace driving
-// }  // namespace ipft
+// }  // namespace solver_ipft

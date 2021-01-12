@@ -6,7 +6,7 @@
 
 #include "ipft/core/solver.hpp"
 #include "ipft/solver/ipft.hpp"
-namespace ipft {
+namespace solver_ipft {
 
 /* -------------------------------------------------------------------------- */
 /*                              ToString classes                              */
@@ -87,4 +87,4 @@ std::string doubleVecToString(const std::vector<double>& vec) {
     return ss.str();
 }
 
-}  // namespace ipft
+}  // namespace solver_ipft

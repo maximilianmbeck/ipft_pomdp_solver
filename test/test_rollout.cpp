@@ -2,7 +2,7 @@
 
 #include "test_particle_data.hpp"
 
-namespace ipft {
+namespace solver_ipft {
 
 namespace test {
 
@@ -68,7 +68,7 @@ TEST_F(RolloutTest, BeliefInformationPolicyTest) {
 }
 
 }  // namespace test
-}  // namespace ipft
+}  // namespace solver_ipft
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

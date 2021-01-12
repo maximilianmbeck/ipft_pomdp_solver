@@ -5,7 +5,7 @@
 #include <ipft/core/pomdp_world.hpp>
 #include <ipft/simulation_statistics.hpp>
 
-namespace ipft {
+namespace solver_ipft {
 constexpr int round_step_separator_len_ = 90;
 
 SimulationStatistics::SimulationStatistics(POMDP* model, World* world, Solver* solver, std::ostream* out)
@@ -266,4 +266,4 @@ void SimulationStatistics::printStateActionSequence() const {
     *out_ << std::endl;
 }
 
-}  // namespace ipft
+}  // namespace solver_ipft

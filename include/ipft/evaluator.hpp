@@ -4,7 +4,7 @@
 
 #include "ipft/planner.hpp"
 
-namespace ipft {
+namespace solver_ipft {
 
 /* -------------------------------------------------------------------------- */
 /*                         Evaluation statistics class                        */
@@ -75,4 +75,4 @@ class Evaluator {
     virtual void saveEvaluationResults() const;
 };
 
-}  // namespace ipft
+}  // namespace solver_ipft

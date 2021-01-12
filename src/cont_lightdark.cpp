@@ -4,7 +4,7 @@
 #include <ipft/problems/cont_lightdark.hpp>
 #include <ipft/util/prob_densities.hpp>
 #include <ipft/util/random.hpp>
-namespace ipft {
+namespace solver_ipft {
 namespace cld {
 
 /* -------------------------------------------------------------------------- */
@@ -366,4 +366,4 @@ int ContLightDark::numActiveStates() const {
 }
 }  // namespace cld
 
-}  // namespace ipft
+}  // namespace solver_ipft

@@ -5,7 +5,7 @@
 
 #include "ipft/core/solver.hpp"
 
-namespace ipft {
+namespace solver_ipft {
 
 class POMDPWorld : public World {
 protected:
@@ -34,4 +34,4 @@ public:
     std::vector<State*> copyWorldStateSequence() const override;
 };
 
-} // namespace ipft
+} // namespace solver_ipft

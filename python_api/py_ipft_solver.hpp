@@ -6,7 +6,7 @@
 #include "py_node.hpp"
 #include "py_particle_belief.hpp"
 
-namespace ipft {
+namespace solver_ipft {
 namespace pyadapters {
 
 /**
@@ -72,4 +72,4 @@ class PyIpftCld : public PyIpft {
 };
 
 }  // namespace pyadapters
-}  // namespace ipft
+}  // namespace solver_ipft

@@ -6,7 +6,7 @@
 
 namespace py = pybind11;
 
-namespace ipft {
+namespace solver_ipft {
 namespace pyadapters {
 
 class PyParticleBelief {
@@ -25,4 +25,4 @@ class PyParticleBelief {
 };
 
 }  // namespace pyadapters
-}  // namespace ipft
+}  // namespace solver_ipft

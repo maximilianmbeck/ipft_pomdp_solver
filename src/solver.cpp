@@ -1,6 +1,6 @@
 #include <ipft/core/solver.hpp>
 
-namespace ipft {
+namespace solver_ipft {
 
 /* ----------------------------- Value printers ----------------------------- */
 
@@ -35,4 +35,4 @@ const VNode* Solver::getSearchTree() const {
     return root_;
 }
 
-}  // namespace ipft
+}  // namespace solver_ipft

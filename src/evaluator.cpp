@@ -6,7 +6,7 @@
 #include <fstream>
 #include <iomanip>
 
-namespace ipft {
+namespace solver_ipft {
 
 /* -------------------------------------------------------------------------- */
 /*                         Evaluation statistics class                        */
@@ -246,4 +246,4 @@ void Evaluator::saveEvaluationResults() const {
     this->eval_stats_->writeEvalutionResultsToFile(filename);
 }
 
-}  // namespace ipft
+}  // namespace solver_ipft

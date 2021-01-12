@@ -2,7 +2,7 @@
 
 #include "ipft/interface/spaces.hpp"
 
-namespace ipft {
+namespace solver_ipft {
 
 class Value;
 
@@ -37,4 +37,4 @@ struct ValuedAction {
     friend std::ostream& operator<<(std::ostream& os, const ValuedAction& va);
 };
 
-} // namespace ipft
+} // namespace solver_ipft

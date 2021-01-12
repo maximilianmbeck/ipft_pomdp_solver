@@ -4,7 +4,7 @@
 #include <ipft/interface/spaces.hpp>
 #include <ipft/util/random.hpp>
 
-namespace ipft {
+namespace solver_ipft {
 
 /* -------------------------------------------------------------------------- */
 /*                       ParticleReinvigorator interface                      */
@@ -69,4 +69,4 @@ class ObsAdaptiveReinvigorator : public ParticleReinvigorator {
     virtual ParticleReinvigorator* clone() const override;
 };
 
-}  // namespace ipft
+}  // namespace solver_ipft

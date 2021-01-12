@@ -5,7 +5,7 @@
 #include "ipft/interface/pomdp.hpp"
 #include "ipft/interface/spaces.hpp"
 
-namespace ipft {
+namespace solver_ipft {
 
 /**
  * @brief A class representing the action-observation history of a solver.
@@ -69,4 +69,4 @@ class History {
     std::string text() const;
 };
 
-}  // namespace ipft
+}  // namespace solver_ipft

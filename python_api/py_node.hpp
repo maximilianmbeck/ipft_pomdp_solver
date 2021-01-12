@@ -10,7 +10,7 @@
 
 namespace py = pybind11;
 
-namespace ipft {
+namespace solver_ipft {
 namespace pyadapters {
 // TODO maybe inherit from enable_shared_from_this
 class PyNode {
@@ -49,4 +49,4 @@ class PyQNode : public PyNode, public std::enable_shared_from_this<PyQNode> {
 };
 
 }  // namespace pyadapters
-}  // namespace ipft
+}  // namespace solver_ipft

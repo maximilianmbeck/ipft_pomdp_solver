@@ -6,7 +6,7 @@
 
 #include "py_node.hpp"
 
-namespace ipft {
+namespace solver_ipft {
 namespace pyadapters {
 
 class PyPlanner : public Planner {
@@ -27,4 +27,4 @@ class PyPlanner : public Planner {
 };
 
 }  // namespace pyadapters
-}  // namespace ipft
+}  // namespace solver_ipft

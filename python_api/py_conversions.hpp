@@ -8,7 +8,7 @@
 
 namespace py = pybind11;
 
-namespace ipft {
+namespace solver_ipft {
 namespace pyadapters {
 
 /* -------------------------------------------------------------------------- */
@@ -28,4 +28,4 @@ void particleSet2NpArrays(const std::vector<State*> particleSet, py::array_t<dou
 std::vector<State*> npArray2ParticleSet(const py::array_t<double>& unweightedParticleArray, const POMDP* model);
 
 }  // namespace pyadapters
-}  // namespace ipft
+}  // namespace solver_ipft

@@ -3,7 +3,7 @@
 #include <ipft/core/globals.hpp>
 #include <cmath>
 
-namespace ipft
+namespace solver_ipft
 {
 
     double NormalDistr::prob(double x, double mu, double sigma)
@@ -13,4 +13,4 @@ namespace ipft
         return p;
     }
 
-} // namespace ipft
+} // namespace solver_ipft

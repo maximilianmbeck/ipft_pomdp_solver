@@ -6,7 +6,7 @@
 
 #include "test_ipft_objects.hpp"
 
-namespace ipft {
+namespace solver_ipft {
 namespace test {
 
 // The fixture for testing class Ipft.
@@ -240,7 +240,7 @@ class IpftSolverTest : public IpftObjects {
 
 
 }  // namespace test
-}  // namespace ipft
+}  // namespace solver_ipft
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

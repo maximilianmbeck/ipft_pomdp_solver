@@ -2,7 +2,7 @@
 
 #include <ipft/plannerbase.hpp>
 
-namespace ipft {
+namespace solver_ipft {
 
 class Planner : public Plannerbase {
 protected:
@@ -49,4 +49,4 @@ protected:
     virtual bool takeAction(const ValuedAction& valuedAct);
 };
 
-} // namespace ipft
+} // namespace solver_ipft

@@ -5,7 +5,7 @@
 
 #include "ipft/core/solver.hpp"
 
-namespace ipft {
+namespace solver_ipft {
 /* -------------------------------------------------------------------------- */
 /*                             ValuedAction class                             */
 /* -------------------------------------------------------------------------- */
@@ -82,4 +82,4 @@ std::ostream& operator<<(std::ostream& os, const ValuedAction& va) {
     os << std::setfill(' ') << std::left << std::setw(70) << va.text();
     return os;
 }
-}  // namespace ipft
+}  // namespace solver_ipft

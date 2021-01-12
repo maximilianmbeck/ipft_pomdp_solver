@@ -9,7 +9,7 @@
 #include <ipft/interface/spaces.hpp>
 #include <ipft/util/random.hpp>
 
-namespace ipft {
+namespace solver_ipft {
 
 namespace cld {
 
@@ -170,4 +170,4 @@ class ContLightDark : public POMDP {
 };
 
 }  // namespace cld
-}  // namespace ipft
+}  // namespace solver_ipft

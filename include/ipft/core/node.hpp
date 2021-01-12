@@ -4,7 +4,7 @@
 #include "ipft/interface/belief.hpp"
 #include "ipft/interface/spaces.hpp"
 
-namespace ipft {
+namespace solver_ipft {
 
 /* -------------------------------------------------------------------------- */
 /*                                Node classes                                */
@@ -108,4 +108,4 @@ class QNode : public Node {
     bool isLeaf() const;
 };
 
-}  // namespace ipft
+}  // namespace solver_ipft

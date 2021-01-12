@@ -28,7 +28,7 @@
 // When you need to write per-test set-up and tear-down logic, you have the choice between using the test fixture constructor/destructor or SetUp()/TearDown(). The former is usually preferred, as it has the following benefits:
 // Like TEST(), the first argument is the test suite name, but for TEST_F() this must be the name of the test fixture class. You've probably guessed: _F is for fixture.
 
-namespace ipft {
+namespace solver_ipft {
 
 namespace test {
 
@@ -104,7 +104,7 @@ TEST(TestPoint, TestDoubleEpsilon) {
 
 }  // namespace test
 
-}  // namespace ipft
+}  // namespace solver_ipft
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);

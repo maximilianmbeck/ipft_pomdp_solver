@@ -3,7 +3,7 @@
 #include <ipft/interface/rollout.hpp>
 #include <ipft/util/debug.hpp>
 #include <ipft/util/random.hpp>
-namespace ipft {
+namespace solver_ipft {
 
 /* ------------------------- Default rollout policy ------------------------- */
 
@@ -110,4 +110,4 @@ void DeterministicActionChooser::reset() {
     round_ = 0;
 }
 
-}  // namespace ipft
+}  // namespace solver_ipft

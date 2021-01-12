@@ -3,7 +3,7 @@
 #include "ipft/core/density_estimation.hpp"
 #include "ipft/core/particle_belief.hpp"
 
-namespace ipft {
+namespace solver_ipft {
 
 /* -------------------------------- Interface ------------------------------- */
 
@@ -37,4 +37,4 @@ class EntropyInfGain : public DiscountedInformationGain {
     double computeEntropyEstimate(const ParticleBelief* b) const;
 };
 
-}  // namespace ipft
+}  // namespace solver_ipft

@@ -6,7 +6,7 @@
 #include <ipft/core/solver.hpp>
 #include <ipft/interface/rollout.hpp>
 
-namespace ipft {
+namespace solver_ipft {
 class RolloutPolicy;
 
 /* -------------------------------------------------------------------------- */
@@ -158,4 +158,4 @@ class Ipft : public Solver {
 
 double stopTime(const std::chrono::time_point<std::chrono::high_resolution_clock>& start);
 
-}  // namespace ipft
+}  // namespace solver_ipft

@@ -8,7 +8,7 @@
 #include <ipft/problems/cont_lightdark.hpp>
 #include <ipft/util/debug.hpp>
 
-namespace ipft {
+namespace solver_ipft {
 namespace test {
 
 class IpftObjects : public ::testing::Test {
@@ -48,4 +48,4 @@ class IpftObjects : public ::testing::Test {
 };
 
 }  // namespace test
-}  // namespace ipft
+}  // namespace solver_ipft

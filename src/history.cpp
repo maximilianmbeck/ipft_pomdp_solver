@@ -4,7 +4,7 @@
 #include <iomanip>
 #include <sstream>
 
-namespace ipft {
+namespace solver_ipft {
 // do not use (only for vector initialization)
 History::History() : model_(nullptr) {
 }
@@ -211,4 +211,4 @@ std::string History::text() const {
     return ss.str();
 }
 
-} // namespace ipft
+} // namespace solver_ipft

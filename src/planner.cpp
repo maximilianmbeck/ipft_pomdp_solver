@@ -1,7 +1,7 @@
 #include <glog/logging.h>
 
 #include <ipft/planner.hpp>
-namespace ipft {
+namespace solver_ipft {
 Planner::Planner() : step_(0), round_(0) {}
 
 Planner::~Planner() {
@@ -135,4 +135,4 @@ void Planner::resetPlanner() {
     this->sim_stats_ = new SimulationStatistics(this->model_, this->world_, this->solver_, &std::cout);
 }
 
-}  // namespace ipft
+}  // namespace solver_ipft

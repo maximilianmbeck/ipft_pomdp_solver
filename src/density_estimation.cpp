@@ -5,7 +5,7 @@
 #include <cmath>
 #include <ipft/util/util.hpp>
 
-namespace ipft {
+namespace solver_ipft {
 
 /* -------------------------------------------------------------------------- */
 /*                        Class KernelDensityEstimator                        */
@@ -97,4 +97,4 @@ double NormalKernel::multivariateValue(const State* s, const ParticleBelief* bel
     return value;
 }
 
-}  // namespace ipft
+}  // namespace solver_ipft

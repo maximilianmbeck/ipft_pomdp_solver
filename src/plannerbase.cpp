@@ -1,6 +1,6 @@
 #include "ipft/plannerbase.hpp"
 #include <glog/logging.h>
-namespace ipft {
+namespace solver_ipft {
 Plannerbase::Plannerbase() : model_(nullptr), world_(nullptr), solver_(nullptr) {
     this->rand_ = new Random();
 }
@@ -48,4 +48,4 @@ void Plannerbase::printPlanningEnd(
     std::cout << "Total time: " << elapsed.count() << "ms." << std::endl;
 }
 
-} // namespace ipft
+} // namespace solver_ipft

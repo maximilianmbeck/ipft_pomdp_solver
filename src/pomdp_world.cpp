@@ -1,6 +1,6 @@
 #include "ipft/core/pomdp_world.hpp"
 
-namespace ipft {
+namespace solver_ipft {
 POMDPWorld::POMDPWorld(const POMDP* model) : model_(model) {
 }
 
@@ -64,4 +64,4 @@ std::vector<State*> POMDPWorld::copyWorldStateSequence() const {
     return stateSeq;
 }
 
-}  // namespace ipft
+}  // namespace solver_ipft

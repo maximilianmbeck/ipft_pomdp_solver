@@ -1,6 +1,6 @@
 #include "ipft/core/node.hpp"
 
-namespace ipft {
+namespace solver_ipft {
 
 /* -------------------------------------------------------------------------- */
 /*                                 Node class                                 */
@@ -211,4 +211,4 @@ bool QNode::isLeaf() const {
     return this->obsChildren_.size() == 0;
 }
 
-}  // namespace ipft
+}  // namespace solver_ipft

@@ -2,7 +2,7 @@
 
 #include "ipft/core/particle_belief.hpp"
 
-namespace ipft {
+namespace solver_ipft {
 
 /* -------------------------------- Interface ------------------------------- */
 
@@ -71,4 +71,4 @@ public:
     double computeDensityValue(const State* s, const ParticleBelief* b) const override;
 };
 
-} // namespace ipft
+} // namespace solver_ipft

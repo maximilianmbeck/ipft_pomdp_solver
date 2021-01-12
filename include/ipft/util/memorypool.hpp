@@ -8,7 +8,7 @@
 
 // usage of MemoryPool explained in comments
 
-namespace ipft {
+namespace solver_ipft {
 
 class MemoryObject {
 public:
@@ -102,4 +102,4 @@ public:
     int num_allocated_;
 };
 
-} // namespace ipft
+} // namespace solver_ipft

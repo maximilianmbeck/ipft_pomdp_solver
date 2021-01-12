@@ -2,7 +2,7 @@
 
 #include <random>
 
-namespace ipft {
+namespace solver_ipft {
 
 /* -------------------------------------------------------------------------- */
 /*                                 Definitions                                */
@@ -39,4 +39,4 @@ private:
     mutable std::mt19937_64* _randEngine; // could also use mt19937_64 (maybe slightly faster, depends on compiler)
 };
 
-} // namespace ipft
+} // namespace solver_ipft

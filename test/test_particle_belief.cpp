@@ -8,7 +8,7 @@
 
 #include "test_particle_data.hpp"
 
-namespace ipft {
+namespace solver_ipft {
 namespace test {
 
 // The fixture for testing class ParticleBelief.
@@ -298,7 +298,7 @@ TEST_F(ParticleBeliefTest, WeightTest) {
 }
 
 }  // namespace test
-}  // namespace ipft
+}  // namespace solver_ipft
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

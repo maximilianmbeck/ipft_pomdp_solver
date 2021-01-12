@@ -3,7 +3,7 @@
 #include <cmath>
 #include <glog/logging.h>
 
-namespace ipft {
+namespace solver_ipft {
 // IPFT paper equation (3)
 // returns actually the negative entropy
 double EntropyInfGain::computeEntropyEstimate(const ParticleBelief* b) const {
@@ -33,4 +33,4 @@ double EntropyInfGain::computeDiscInfGain(double discFactor,
     return (discFactor * this->computeEntropyEstimate(bnext) - this->computeEntropyEstimate(b)); // no minus needed
 }
 
-} // namespace ipft
+} // namespace solver_ipft

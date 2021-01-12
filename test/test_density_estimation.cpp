@@ -4,7 +4,7 @@
 
 #include "test_particle_data.hpp"
 
-namespace ipft {
+namespace solver_ipft {
 namespace test {
 // The fixture for testing density estimation classes.
 class DensityEstimationTest : public ParticleBeliefData {
@@ -89,7 +89,7 @@ TEST_F(DensityEstimationTest, NormalKernelUnivariate) {
 //     EXPECT_EQ(0, 0);
 // }
 }  // namespace test
-}  // namespace ipft
+}  // namespace solver_ipft
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

@@ -4,7 +4,7 @@
 
 #include "ipft/core/particle_belief.hpp"
 
-namespace ipft {
+namespace solver_ipft {
 // Forward declarations
 class ParticleBelief;
 
@@ -35,4 +35,4 @@ class ParticleSetToString {
 
 std::string doubleVecToString(const std::vector<double>& vec);
 
-}  // namespace ipft
+}  // namespace solver_ipft

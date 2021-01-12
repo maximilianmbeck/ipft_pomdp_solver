@@ -3,7 +3,7 @@
 #include <ipft/problems/cont_lightdark.hpp>
 // #include <ipft/python_adapters/py_planner.hpp>
 #include "py_planner.hpp"
-namespace ipft {
+namespace solver_ipft {
 namespace pyadapters {
 
 class PyPlannerCld : public PyPlanner {
@@ -29,4 +29,4 @@ class PyPlannerCld : public PyPlanner {
 };
 
 }  // namespace pyadapters
-}  // namespace ipft
+}  // namespace solver_ipft

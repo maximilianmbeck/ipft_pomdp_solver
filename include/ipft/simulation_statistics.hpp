@@ -7,7 +7,7 @@
 #include "ipft/interface/pomdp.hpp"
 #include "ipft/interface/world.hpp"
 
-namespace ipft {
+namespace solver_ipft {
 
 class SimulationStatistics {
    protected:
@@ -64,4 +64,4 @@ class SimulationStatistics {
     std::vector<std::string> getStepResultsForTable(int step) const;
 };
 
-}  // namespace ipft
+}  // namespace solver_ipft

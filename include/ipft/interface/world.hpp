@@ -4,7 +4,7 @@
 
 // see despot
 
-namespace ipft {
+namespace solver_ipft {
 
 class World {
    protected:
@@ -53,4 +53,4 @@ class World {
     virtual std::vector<State*> copyWorldStateSequence() const = 0;
 };
 
-}  // namespace ipft
+}  // namespace solver_ipft

@@ -4,7 +4,7 @@
 #include "ipft/interface/belief.hpp"
 #include "ipft/util/random.hpp"
 
-namespace ipft {
+namespace solver_ipft {
 
 /* -------------------------------------------------------------------------- */
 /*                            ParticleBelief class                            */
@@ -78,4 +78,4 @@ class ParticleBelief : public Belief {
     virtual void reinvigorateParticlesAfterResampling(const Action& act, const Observation& obs);
 };
 
-}  // namespace ipft
+}  // namespace solver_ipft

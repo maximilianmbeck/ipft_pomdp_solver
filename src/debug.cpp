@@ -2,7 +2,7 @@
 
 #include "ipft/core/particle_belief.hpp"
 
-namespace ipft {
+namespace solver_ipft {
 
 namespace debug {
 
@@ -56,4 +56,4 @@ void freePointVec(std::vector<Point*> points) {
 
 }  // namespace debug
 
-}  // namespace ipft
+}  // namespace solver_ipft

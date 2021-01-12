@@ -1,6 +1,6 @@
 #pragma once
 
-namespace ipft {
+namespace solver_ipft {
 
 struct Config {
     // search parameters
@@ -54,4 +54,4 @@ struct Config {
     }
 };
 
-}  // namespace ipft
+}  // namespace solver_ipft

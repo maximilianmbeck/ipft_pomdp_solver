@@ -4,7 +4,7 @@
 
 #include "ipft/core/history.hpp"
 #include "ipft/interface/spaces.hpp"
-namespace ipft {
+namespace solver_ipft {
 
 class POMDP;
 
@@ -64,7 +64,7 @@ public:
     }
 };
 
-} // namespace ipft
+} // namespace solver_ipft
 
 //? Possible Belief representations / Belief update methods (see Thrun: Probabilistic Robotics)
 /**

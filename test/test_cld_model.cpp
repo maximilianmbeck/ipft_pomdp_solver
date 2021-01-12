@@ -5,7 +5,7 @@
 
 #include "test_ipft_objects.hpp"
 
-namespace ipft {
+namespace solver_ipft {
 namespace test {
 
 // The fixture for testing class CldModel.
@@ -207,7 +207,7 @@ TEST_F(CldModelTest, TestTransitionModel) {
 }
 
 }  // namespace test
-}  // namespace ipft
+}  // namespace solver_ipft
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

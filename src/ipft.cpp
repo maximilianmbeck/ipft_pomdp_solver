@@ -8,7 +8,7 @@
 #include <ipft/util/random.hpp>
 #include <limits>
 #include <sstream>
-namespace ipft {
+namespace solver_ipft {
 
 /* -------------------------------------------------------------------------- */
 /*                         IpftSearchStatistics class                         */
@@ -710,4 +710,4 @@ double stopTime(const std::chrono::time_point<std::chrono::high_resolution_clock
     }
 }
 
-}  // namespace ipft
+}  // namespace solver_ipft
