@@ -9,9 +9,8 @@
 /*                          Driving POMDP Definition                          */
 /* -------------------------------------------------------------------------- */
 
-namespace ipft {
 namespace driving {
-
+using namespace ipft;
 /* -------------------------------------------------------------------------- */
 /*                       Defintions of Driving constants                      */
 /* -------------------------------------------------------------------------- */
@@ -138,4 +137,3 @@ class Driving : public POMDP {
 };
 
 }  // namespace driving
-}  // namespace ipft
