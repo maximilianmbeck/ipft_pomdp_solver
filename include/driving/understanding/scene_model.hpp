@@ -1,13 +1,14 @@
 #pragma once
 
-#include <interpolated_distance/
+#include <interpolated_distance/interpolated_distance_function.hpp>
+
+namespace solver_ipft {
 
 namespace driving {
 
 namespace understanding {
 
 class Route {
-
 };
 
 class SceneModel {
@@ -20,3 +21,4 @@ class SceneModel {
 }  // namespace understanding
 
 }  // namespace driving
+}  // namespace solver_ipft

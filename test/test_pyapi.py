@@ -1,9 +1,9 @@
 import unittest
 
-from ipft import PyConversionTest
-from ipft import PyPlannerCld
-from ipft import PyParticleBelief
-from ipft import PyNode, PyVNode, PyQNode
+from solver_ipft import PyConversionTest
+from solver_ipft import PyPlannerCld
+from solver_ipft import PyParticleBelief
+from solver_ipft import PyNode, PyVNode, PyQNode
 
 import numpy as np
 

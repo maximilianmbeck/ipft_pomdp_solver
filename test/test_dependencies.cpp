@@ -11,8 +11,6 @@
 #include <interpolated_distance/interpolated_distance_function.hpp>
 #include <vector>
 
-namespace ipft {
-
 // A google test function (uncomment the next function, add code and
 // change the names TestGroupName and TestName)
 // TEST(${pkgname}, TestName)
@@ -84,8 +82,6 @@ TEST(InterpolatedDistance, Arclengths) {
     auto length = interpolated_distance.maxArclength();
     ASSERT_DOUBLE_EQ(length, 5.0);  // arc_length
 }
-
-}  // namespace ipft
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
