@@ -148,44 +148,44 @@ class IpftSolverTest : public IpftObjects {
 // [ Info: [UCB] [1 Act]: [UCB1: 41.92745259898567] = [V: -17.90249516734541 (-40.6119701352586|22.70947496791319)] + [ucbT: 59.82994776633108][C:19]
 // [ Info: [UCB] [3 Act]: [UCB1: 43.55983176119865] = [V: -26.139948083051006 (-56.522833889549844|30.382885806498837)] + [ucbT: 69.69977984424966][C:14]
 // [ Info: [SIM] select [-3 Act]
-// TEST_F(IpftSolverTest, TestEval1txtRound10Step4) {
-//     std::vector<double> numbers = {3.9433,
-//                                    3.1378,
-//                                    0.2911,
-//                                    -1.6948,
-//                                    1.1413,
-//                                    3.2896,
-//                                    2.1801,
-//                                    2.9403,
-//                                    3.0115,
-//                                    4.5241,
-//                                    -0.1786,
-//                                    3.6636,
-//                                    3.2806,
-//                                    3.5872,
-//                                    2.1970,
-//                                    4.3526,
-//                                    3.2905,
-//                                    3.4663,
-//                                    -3.0771,
-//                                    2.1328};
-//     std::vector<State*> states = debug::doubleVec2StateVec(numbers, this->model_);
-//     ParticleBelief* initBel = new ParticleBelief(states, false, this->model_, this->rand_, new NoReinvigoration());
+TEST_F(IpftSolverTest, TestEval1txtRound10Step4) {
+    std::vector<double> numbers = {3.9433,
+                                   3.1378,
+                                   0.2911,
+                                   -1.6948,
+                                   1.1413,
+                                   3.2896,
+                                   2.1801,
+                                   2.9403,
+                                   3.0115,
+                                   4.5241,
+                                   -0.1786,
+                                   3.6636,
+                                   3.2806,
+                                   3.5872,
+                                   2.1970,
+                                   4.3526,
+                                   3.2905,
+                                   3.4663,
+                                   -3.0771,
+                                   2.1328};
+    std::vector<State*> states = debug::doubleVec2StateVec(numbers, this->model_);
+    ParticleBelief* initBel = new ParticleBelief(states, false, this->model_, this->rand_, new NoReinvigoration());
 
-//     this->solver_ = new Ipft(this->model_, initBel, this->rand_, new BeliefInformationPolicy(this->model_, this->rand_));
+    this->solver_ = new Ipft(this->model_, initBel, this->rand_, new BeliefInformationPolicy(this->model_, this->rand_));
 
-//     ValuedAction valuedAct = this->solver_->search();
-//     SearchStatistics* ss = this->solver_->getSearchStatistics();
-//     LOG(INFO) << ss->text();
-//     LOG(INFO) << valuedAct;
-//     delete ss;
+    ValuedAction valuedAct = this->solver_->search();
+    SearchStatistics* ss = this->solver_->getSearchStatistics();
+    LOG(INFO) << ss->text();
+    LOG(INFO) << valuedAct;
+    delete ss;
 
-//     // Expect action -3 (corresponds to action index 0)(from julia IPFT)
-//     EXPECT_EQ(static_cast<int>(cld::CLDAction::NEG3), valuedAct.action_);
+    // Expect action -3 (corresponds to action index 0)(from julia IPFT)
+    EXPECT_EQ(static_cast<int>(cld::CLDAction::NEG3), valuedAct.action_);
 
-//     //? Result:
-//     // on multiple runs the solver always chooses -3
-// }
+    //? Result:
+    // on multiple runs the solver always chooses -3
+}
 
 //* Results of julia IPFT (one exemplary round)
 // [ Info: [UCB] [-3 Act]: [UCB1: 50.93705900385379] = [V: -29.000914474164897 (-27.087096475102317|-1.9138179990625785)] + [ucbT: 79.93797347801869][C:11]
