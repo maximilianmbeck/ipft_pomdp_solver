@@ -41,6 +41,9 @@ class RolloutPolicy  // TODO: make abstraction for general rollout policy for al
     }
     virtual ~RolloutPolicy() {
         delete actionChooser_;
+        if (infGainRewardCalculator_ != nullptr) {
+            delete infGainRewardCalculator_;
+        }
     }
 
     virtual IpftValue rollout(Belief *belief,
@@ -84,24 +87,33 @@ class DeterministicActionChooser : public ActionChooser {
     void reset();
 };
 
+/* --------------------------- BeliefRolloutPolicy -------------------------- */
+
+// Belief based rollout
+class BeliefRolloutPolicy : public RolloutPolicy {
+   public:
+    BeliefRolloutPolicy(const POMDP *model, const ActionChooser *actionChooser, const DiscountedInformationGain *infGainRewardCalculator)
+        : RolloutPolicy(model, actionChooser, infGainRewardCalculator) {}
+
+    virtual ~BeliefRolloutPolicy() {}
+
+    virtual IpftValue rollout(Belief *belief, int depth) const;
+};
+
 /* ------------------------- Default rollout policy ------------------------- */
 
 // Belief based rollout with information reward computation
-class BeliefInformationPolicy : public RolloutPolicy {
+class BeliefInformationPolicy : public BeliefRolloutPolicy {
    public:
     BeliefInformationPolicy(const POMDP *model, const Random *rand)
-        : RolloutPolicy(model, new RandomActionChooser(rand)) {
-        this->infGainRewardCalculator_ = new EntropyInfGain();  // default information reward calculator
+        : BeliefRolloutPolicy(model, new RandomActionChooser(rand), new EntropyInfGain()) {
     }
     BeliefInformationPolicy(const POMDP *model, const ActionChooser *actionChooser)
-        : RolloutPolicy(model, actionChooser) {
-        this->infGainRewardCalculator_ = new EntropyInfGain();  // default information reward calculator
+        : BeliefRolloutPolicy(model, actionChooser, new EntropyInfGain()) {
     }
-    virtual ~BeliefInformationPolicy() {
-        delete this->infGainRewardCalculator_;
-    }
+    virtual ~BeliefInformationPolicy() {}
 
-    virtual IpftValue rollout(Belief *belief, int depth) const;
+    // virtual IpftValue rollout(Belief *belief, int depth) const;
 };
 
 }  // namespace solver_ipft

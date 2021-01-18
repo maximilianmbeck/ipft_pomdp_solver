@@ -7,7 +7,7 @@ namespace solver_ipft {
 
 /* ------------------------- Default rollout policy ------------------------- */
 
-IpftValue BeliefInformationPolicy::rollout(Belief* belief, int depth) const {
+IpftValue BeliefRolloutPolicy::rollout(Belief* belief, int depth) const {
     int rolloutIteration = 0;  // start index = 0, since rollout is called with value = locReward + gamma * rollout()
                                // [gamma already present in first iteration]
     IpftValue value;           // default constructor initializes to zero
@@ -43,10 +43,13 @@ IpftValue BeliefInformationPolicy::rollout(Belief* belief, int depth) const {
         this->model_->freeState(statePosterior);
 
         // information reward calculation
-        double informationReward =
-            this->infGainRewardCalculator_->computeDiscInfGain(Globals::config.inf_discount_gamma,
-                                                               static_cast<const ParticleBelief*>(bNext),
-                                                               static_cast<const ParticleBelief*>(belief));
+        double informationReward = 0.0;
+        if (this->infGainRewardCalculator_ != nullptr) {
+            informationReward =
+                this->infGainRewardCalculator_->computeDiscInfGain(Globals::config.inf_discount_gamma,
+                                                                   static_cast<const ParticleBelief*>(bNext),
+                                                                   static_cast<const ParticleBelief*>(belief));
+        }
 
         CHECK(!std::isnan(informationReward)) << "Information reward is nan.";
 
