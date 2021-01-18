@@ -18,11 +18,17 @@ Solver::Solver(const POMDP* model, Belief* belief) : model_(model), belief_(beli
     this->history_->addInitialBelief(initialBelief);
 }
 
+Solver::Solver(const POMDP* model) : model_(model), belief_(nullptr), root_(nullptr) {
+    this->history_ = new History(this->model_);
+}
+
 Solver::~Solver() {
     if (root_ != nullptr) {
         delete root_;
     }
-    delete belief_;
+    if (belief_ != nullptr) {
+        delete belief_;
+    }
     delete history_;
 }
 

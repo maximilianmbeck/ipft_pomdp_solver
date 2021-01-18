@@ -119,6 +119,7 @@ class Ipft : public Solver {
 
    public:
     Ipft(const POMDP* model, Belief* belief, const Random* rand, RolloutPolicy* rp);
+    Ipft(const POMDP* model, const Random* rand, RolloutPolicy* rp, DiscountedInformationGain* infGainRewardCalc);
     virtual ~Ipft();
 
     /* ---------------------------- solver interface ---------------------------- */

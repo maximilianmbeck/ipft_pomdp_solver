@@ -68,6 +68,7 @@ class Solver {
 
    public:
     Solver(const POMDP* model, Belief* belief);
+    Solver(const POMDP* model);
 
     virtual ~Solver();
 

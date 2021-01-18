@@ -253,6 +253,10 @@ Ipft::Ipft(const POMDP* model, Belief* belief, const Random* rand, RolloutPolicy
     infGainRewardCalculator_ = new EntropyInfGain();  // default information gain calculator
 }
 
+Ipft::Ipft(const POMDP* model, const Random* rand, RolloutPolicy* rp, DiscountedInformationGain* infGainRewardCalc)
+    : Solver(model), rand_(rand), rolloutPolicy_(rp), infGainRewardCalculator_(infGainRewardCalc) {
+}
+
 Ipft::~Ipft() {
     delete rolloutPolicy_;
     delete infGainRewardCalculator_;
@@ -285,7 +289,9 @@ void Ipft::setBelief(Belief* b) {
     this->history_ = new History(this->model_);
 
     // clear belief
-    delete this->belief_;
+    if (this->belief_ != nullptr) {
+        delete this->belief_;
+    }
 
     // set new belief
     this->belief_ = b;
