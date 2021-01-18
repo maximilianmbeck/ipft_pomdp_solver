@@ -113,4 +113,10 @@ void DeterministicActionChooser::reset() {
     round_ = 0;
 }
 
+/* ----------------- DeterministicSingleActionChooser class ----------------- */
+
+Action DeterministicSingleActionChooser::chooseAction(const Belief* belief) const {
+    return this->deterministicAction;
+}
+
 }  // namespace solver_ipft

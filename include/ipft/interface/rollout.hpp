@@ -87,6 +87,16 @@ class DeterministicActionChooser : public ActionChooser {
     void reset();
 };
 
+class DeterministicSingleActionChooser : public ActionChooser {
+   protected:
+    Action deterministicAction;
+
+   public:
+    DeterministicSingleActionChooser(const Action &act) : deterministicAction(act) {}
+    virtual ~DeterministicSingleActionChooser() {}
+    virtual Action chooseAction(const Belief *belief) const override;
+};
+
 /* --------------------------- BeliefRolloutPolicy -------------------------- */
 
 // Belief based rollout
