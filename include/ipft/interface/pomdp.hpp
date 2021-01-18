@@ -47,7 +47,9 @@ class POMDP {
      * @param action    Action to be taken
      * @return double   Reward for taking action in state
      */
-    virtual double reward(const State& state, const Action& action) const = 0;
+    virtual double reward(const State& state, const Action& action) const;
+
+    virtual double reward(const State& state, const Action& action, const State& statePosterior) const;
 
     virtual bool terminalState(const State& statePosterior, const Action& action) const = 0;
 

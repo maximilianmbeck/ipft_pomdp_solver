@@ -42,7 +42,7 @@ void POMDPWorld::setState(State* state) {
 bool POMDPWorld::executeAction(const Action& action, Observation*& obs) {
     // transition world state
     State* stateP = this->model_->transition(*this->state_, action);
-    stepReward_ = this->model_->reward(*this->state_, action);
+    stepReward_ = this->model_->reward(*this->state_, action, *stateP);
     Observation* o = this->model_->observation(*stateP);
     // obs.set(o->get(0), 0); // necessary if obs passed by reference
     obs = o;

@@ -42,4 +42,12 @@ void POMDP::freeStates(const std::vector<State *> &states) const {
     }
 }
 
+double POMDP::reward(const State &state, const Action &action) const {
+    return 0.0;
+}
+
+double POMDP::reward(const State &state, const Action &action, const State &statePosterior) const {
+    return reward(state, action);
+}
+
 }  // namespace solver_ipft

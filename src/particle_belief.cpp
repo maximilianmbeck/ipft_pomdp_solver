@@ -135,17 +135,18 @@ double ParticleBelief::update(const Action &action, const Observation &obs) {
     bool terminalBelief = false;
     for (int i = 0; i < this->particles_.size(); i++) {
         State *state = this->particles_[i];
-        double reward = this->model_->reward(*state, action);
+
         // state posterior / next state
         State *stateP = this->model_->transition(*state, action);
         double prob = this->model_->obsProb(*stateP, obs);
         bool terminal = this->model_->terminalState(*stateP, action);
 
         // reward calculation (calculates the first term of equation (1) in IPFT paper)
+        double reward = this->model_->reward(*state, action, *stateP);
         total_old_weight += state->weight_;
         total_state_reward += reward * state->weight_;
         // update state weight
-        // stateP->weight_ = state->weight_ * prob;  // TODO: (this is probably correct, mbeck) but: compare with weight update before reward calculation???
+        // stateP->weight_ = state->weight_ * prob;  // use this state update, if states are not resampled in every timestep
         stateP->weight_ = prob;
         total_new_weight += prob;
 
@@ -207,50 +208,6 @@ double ParticleBelief::update(const Action &action, const Observation &obs) {
     // log belief update result
     DLOG(INFO) << "[PF] " << std::setfill(' ') << std::setw(7) << std::left << "new " << this->text();
     DLOG_IF(ERROR, debug::allParticlesEqual(this)) << "[PF] After resampling: All particles equal to " << *(resampledPart[0]);
-
-    // Resampling needed?
-    // if (this->particles_.size() <
-    //     num_particles_) // Resample if particle set is smaller than the fixed particle set size
-    // {
-    //     State::normalizeWeights(this->particles_, total_updated_weight);
-    //     std::vector<State *> resampledPart = this->sample(num_particles_);
-    //     this->model_->freeStates(this->particles_);
-    //     this->particles_ =
-    //         resampledPart; //? effective number of particles could still be too small -> TODO: handle this case
-
-    //     DLOG_IF(WARNING, debug::allParticlesEqual(this))
-    //         << "After resampling due to particle deletion: All particles equal to " << *(resampledPart[0]);
-    // }
-    // else // Resample if effective particle size is small
-    // {
-    //     assert(this->particles_.size() == num_particles_);
-    //     // Compute Neff (effective number of particles approximation) and normalize weights
-    //     // see "Probabilistic Robotics" p.85/86: if variance of the weights is high resampling should be performed
-    //     // see e.g. Arumpalam for computation of Neff
-    //     double weight_square_sum = 0;
-    //     for (int i = 0; i < this->particles_.size(); i++)
-    //     {
-    //         State *particle = this->particles_[i];
-    //         // Normalize weights
-    //         double newPartWeight = particle->weight_ / total_updated_weight;
-    //         weight_square_sum += newPartWeight * newPartWeight;
-    //         particle->weight_ = newPartWeight;
-    //     }
-    //     // Resample if the effective number of particles is "small"
-    //     double num_effective_particles = 1.0 / weight_square_sum;
-    //     if (num_effective_particles < this->num_particles_ / 2.0)
-    //     {
-    //         // number of effective particles smaller than half of the number of particles
-    //         std::vector<State *> resampledPart = this->sample(num_particles_);
-
-    //         DLOG_IF(WARNING, debug::allParticlesEqual(this))
-    //             << "After resampling due to paricle deprivation: All particles equal to " << *(resampledPart[0]);
-
-    //         // free old particles
-    //         this->model_->freeStates(this->particles_);
-    //         this->particles_ = resampledPart;
-    //     }
-    // }
 
     // update belief terminated
     this->beliefTerminated_ = terminalBelief;
