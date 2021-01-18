@@ -37,4 +37,14 @@ class EntropyInfGain : public DiscountedInformationGain {
     double computeEntropyEstimate(const ParticleBelief* b) const;
 };
 
+class NoInfGain : public DiscountedInformationGain {
+   public:
+    NoInfGain() {}
+    virtual ~NoInfGain() {}
+
+    double computeDiscInfGain(double discFactor,
+                              const ParticleBelief* bnext,
+                              const ParticleBelief* b) const override;
+};
+
 }  // namespace solver_ipft

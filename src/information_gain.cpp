@@ -1,9 +1,13 @@
 #include "ipft/core/information_gain.hpp"
 
-#include <cmath>
 #include <glog/logging.h>
 
+#include <cmath>
+
 namespace solver_ipft {
+
+/* -------------------------- EntropyInfGain class -------------------------- */
+
 // IPFT paper equation (3)
 // returns actually the negative entropy
 double EntropyInfGain::computeEntropyEstimate(const ParticleBelief* b) const {
@@ -18,7 +22,7 @@ double EntropyInfGain::computeEntropyEstimate(const ParticleBelief* b) const {
             temp2 = std::log(temp1);
         } else {
             LOG(WARNING) << "density value = " << temp1 << "<= 0";
-            temp2 = -1e10; // avoid temp2 being -inf (since log(0) = -inf)
+            temp2 = -1e10;  // avoid temp2 being -inf (since log(0) = -inf)
         }
         weight = s->weight_;
         entropyValue += s->weight_ * temp2;
@@ -30,7 +34,14 @@ double EntropyInfGain::computeEntropyEstimate(const ParticleBelief* b) const {
 double EntropyInfGain::computeDiscInfGain(double discFactor,
                                           const ParticleBelief* bnext,
                                           const ParticleBelief* b) const {
-    return (discFactor * this->computeEntropyEstimate(bnext) - this->computeEntropyEstimate(b)); // no minus needed
+    return (discFactor * this->computeEntropyEstimate(bnext) - this->computeEntropyEstimate(b));  // no minus needed
 }
 
-} // namespace solver_ipft
+/* ----------------------------- NoInfGain class ---------------------------- */
+
+double NoInfGain::computeDiscInfGain(double discFactor,
+                                     const ParticleBelief* bnext,
+                                     const ParticleBelief* b) const {
+    return 0.0;
+}
+}  // namespace solver_ipft
