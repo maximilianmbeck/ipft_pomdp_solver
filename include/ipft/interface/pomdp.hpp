@@ -22,7 +22,7 @@ class POMDP {
      * Used to generate states in the initial belief or the true starting state of a POMDP-based world.
      * @return State* the starting state
      */
-    virtual State* createStartState() const = 0;
+    virtual State* createStartState() const;
 
     /**
      * @brief Returns the initial belief.
@@ -30,7 +30,7 @@ class POMDP {
      * @param type      type of the initial belief (e.g. Gaussian)
      * @return Belief*  the initial belief
      */
-    virtual Belief* initialBelief(std::string type) const = 0;
+    virtual Belief* initialBelief(std::string type) const;
 
     virtual State* transition(const State& state, const Action& action) const = 0;
 
@@ -72,7 +72,7 @@ class POMDP {
      * "current" means: the dimension of the states to be created next, if model does not change.
      * @return int number of dimensions of the state space
      */
-    virtual int numDimStateSpace() const = 0;
+    virtual int numDimStateSpace() const;
 
     /**
      * @brief Returns states in the near of the State state. Used for particle reinvigoration.
@@ -82,9 +82,9 @@ class POMDP {
      * contains the parameter state)
      * @return std::vector<State*> the set of similar states including the parameter state
      */
-    virtual std::vector<State*> similarStates(const State& state, int count) const = 0;
+    virtual std::vector<State*> similarStates(const State& state, int count) const;
 
-    virtual void newParticle(State* particle, const std::vector<State*>& particleSet, const Action& act, const Observation& obs) const = 0;
+    virtual void newParticle(State* particle, const std::vector<State*>& particleSet, const Action& act, const Observation& obs) const;
 
     /**
      * [Optional] default returns empty vector

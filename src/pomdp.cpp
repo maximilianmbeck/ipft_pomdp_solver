@@ -1,4 +1,5 @@
 #include <ipft/interface/pomdp.hpp>
+#include <stdexcept>
 
 namespace solver_ipft {
 
@@ -42,12 +43,40 @@ void POMDP::freeStates(const std::vector<State *> &states) const {
     }
 }
 
+/* -------------------------- dummy implementations ------------------------- */
+
 double POMDP::reward(const State &state, const Action &action) const {
+    throw std::runtime_error("Method not supported!");
     return 0.0;
 }
 
 double POMDP::reward(const State &state, const Action &action, const State &statePosterior) const {
     return reward(state, action);
+}
+
+State *POMDP::createStartState() const {
+    throw std::runtime_error("Method not supported!");
+    return nullptr;
+}
+
+Belief *POMDP::initialBelief(std::string type) const {
+    throw std::runtime_error("Method not supported!");
+    return nullptr;
+}
+
+int POMDP::numDimStateSpace() const {
+    throw std::runtime_error("Method not supported!");
+    return 0;
+}
+
+void POMDP::newParticle(State *particle, const std::vector<State *> &particleSet, const Action &act, const Observation &obs) const {
+    throw std::runtime_error("Method not supported!");
+}
+
+std::vector<State *> POMDP::similarStates(const State &state, int count) const {
+    throw std::runtime_error("Method not supported!");
+    std::vector<State *> vec;
+    return vec;
 }
 
 }  // namespace solver_ipft
