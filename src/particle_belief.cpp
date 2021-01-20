@@ -258,20 +258,16 @@ std::vector<State *> ParticleBelief::sample(int num, const std::vector<State *> 
 }
 
 std::vector<State *> ParticleBelief::sample(int num) const {
-    return this->sample(num, this->particles_);  // TODO: maybe from weighted_posterior_particles_
+    return this->sample(num, this->particles_);  // TODO: maybe from weighted_posterior_particles_ (for this: check constructor, i.e. make sure that wp_particles are always valid)
 }
 
 State *ParticleBelief::sample() const {
     return this->sample(1).back();
 }
 
-// std::vector<double> ParticleBelief::weightedParticleMean() const {
-//     return State::weightedMean(this->particles_);
-// }
-
-// std::vector<double> ParticleBelief::weightedParticleVariance() const {
-//     return State::weightedVariance(this->particles_);
-// }
+ParticleBelief *ParticleBelief::sampleParticleBelief(int num) const {
+    return new ParticleBelief(this->sample(num), this->beliefTerminated_, this->model_, this->rand_, this->afterResampleReinvigorator_->clone());
+}
 
 State *ParticleBelief::mean() const {
     return State::weightedMean(this->particles_, this->model_);
@@ -281,6 +277,13 @@ State *ParticleBelief::std() const {
     State *std = State::weightedVariance(this->particles_, this->model_);
     State::varToStd(std);
     return std;
+}
+
+void ParticleBelief::setReinvigorationStrategy(const ParticleReinvigorator *reinvigorator) {
+    if (this->afterResampleReinvigorator_ != nullptr) {
+        delete this->afterResampleReinvigorator_;
+    }
+    this->afterResampleReinvigorator_ = reinvigorator;
 }
 
 }  // namespace solver_ipft

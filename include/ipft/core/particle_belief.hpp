@@ -46,6 +46,8 @@ class ParticleBelief : public Belief {
 
     virtual State* sample() const override;
 
+    virtual ParticleBelief* sampleParticleBelief(int num) const override;
+
     virtual double update(const Action& action, const Observation& obs);
 
     virtual std::string text(const std::vector<State*>& particleSet) const;
@@ -61,13 +63,11 @@ class ParticleBelief : public Belief {
 
     virtual double particleWeightSum() const;
 
-    // virtual std::vector<double> weightedParticleMean() const;
-
-    // virtual std::vector<double> weightedParticleVariance() const;
-
     virtual State* mean() const override;
 
     virtual State* std() const override;
+
+    virtual void setReinvigorationStrategy(const ParticleReinvigorator* reinvigorator);
 
     friend std::ostream& operator<<(std::ostream& os, const ParticleBelief& partBelief);
 

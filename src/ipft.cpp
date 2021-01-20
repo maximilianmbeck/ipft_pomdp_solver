@@ -337,10 +337,9 @@ ValuedAction Ipft::search(double timeout) {
     do {
         DLOG(INFO) << "[SEARCH] start simulation(" << num_sims << ")";
         // sample search particle set for root
-        std::vector<State*> searchParticles =
-            static_cast<ParticleBelief*>(this->belief_)
-                ->sample(Globals::config.num_search_particles);  // sample from solver belief a belief with less particles
-        Belief* b = new ParticleBelief(searchParticles, this->belief_->isTerminalBelief(), this->model_, this->rand_, new NoReinvigoration());
+        ParticleBelief* b = this->belief_->sampleParticleBelief(Globals::config.num_search_particles);
+        b->setReinvigorationStrategy(new NoReinvigoration());
+
         DLOG(INFO) << "[SEARCH] sampled search particle set: " << b->detailedText();
         this->root_->setBelief(b);
         IpftValue val = simulate(this->root_, Globals::config.search_depth);

@@ -7,6 +7,7 @@
 namespace solver_ipft {
 
 class POMDP;
+class ParticleBelief;
 
 /**
  * @brief A class representing an interface for the belief
@@ -34,6 +35,14 @@ public:
      * @return State* the sampled state
      */
     virtual State* sample() const = 0;
+
+    /**
+     * @brief Generates a particle-based representation of the belief consisting of num particles
+     * 
+     * @param num the number of particles
+     * @return ParticleBelief* the samples particle belief / set
+     */
+    virtual ParticleBelief* sampleParticleBelief(int num) const = 0;
 
     /**
      * @brief Update the belief
