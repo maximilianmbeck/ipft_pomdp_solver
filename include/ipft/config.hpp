@@ -52,6 +52,40 @@ struct Config {
           record_statistics(true),
           print_search_step_results(true) {
     }
+
+    Config(int search_depth_,
+           int time_per_move_,
+           int max_simulation_count_,
+           int num_search_particles_,
+           int num_solver_particles_,
+           int sim_len_,
+           int eval_len_,
+           double pw_k_obs_,
+           double pw_alpha_obs_,
+           double min_particle_std_,
+           double discount_gamma_,
+           double inf_discount_gamma_,
+           double explore_constant_c_,
+           double inf_gather_constant_lambda_,
+           bool record_statistics,
+           bool print_search_step_results)
+        : search_depth(search_depth_),
+          time_per_move(time_per_move_),                // default 1000
+          max_simulation_count(max_simulation_count_),  // default 1000
+          num_search_particles(num_search_particles_),  // default 20
+          num_solver_particles(num_solver_particles_),  // in sample_trajectory.jl: 10000
+          sim_len(sim_len_),
+          eval_len(eval_len_),
+          pw_k_obs(pw_k_obs_),          // default 5.0
+          pw_alpha_obs(pw_alpha_obs_),  // default 1/20
+          min_particle_std(min_particle_std_),
+          discount_gamma(discount_gamma_),
+          inf_discount_gamma(inf_discount_gamma_),                  // 1.0 means undiscounted
+          explore_constant_c(explore_constant_c_),                  // default 100.0
+          inf_gather_constant_lambda(inf_gather_constant_lambda_),  // default 60
+          record_statistics(record_statistics),
+          print_search_step_results(print_search_step_results) {
+    }
 };
 
 }  // namespace solver_ipft
