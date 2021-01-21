@@ -65,7 +65,7 @@ class POMDP {
      * @param act the action index
      * @return ActionValue& the action value (concrete type must be defined with the concrete model)
      */
-    virtual std::unique_ptr<ActionValue> valueOfAction(const Action& act) const = 0;
+    virtual std::unique_ptr<ActionValue> valueOfAction(const Action& act) const;
 
     /**
      * @brief Returns the (current) number of dimensions of the state space.

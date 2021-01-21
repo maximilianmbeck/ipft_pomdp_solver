@@ -79,4 +79,9 @@ std::vector<State *> POMDP::similarStates(const State &state, int count) const {
     return vec;
 }
 
+std::unique_ptr<ActionValue> POMDP::valueOfAction(const Action &act) const {
+    throw std::runtime_error("Method not supported!");
+    return nullptr;
+}
+
 }  // namespace solver_ipft
