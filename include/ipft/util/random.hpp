@@ -9,7 +9,7 @@ namespace solver_ipft {
 /* -------------------------------------------------------------------------- */
 
 class Random {
-public:
+   public:
     Random();
     Random(int seedOffset);
     // Destructor
@@ -17,6 +17,13 @@ public:
 
     static Random* gen();
 
+    /**
+     * @brief Returns a sample from normal distribution
+     * 
+     * @param mu        mean
+     * @param sigma     stddev (standarddeviation) 
+     * @return double   the sample
+     */
     double nextNormal(const double& mu = 0, const double& sigma = 1.0) const;
 
     double nextUniform(const double& min = 0, const double& max = 1.0) const;
@@ -33,10 +40,9 @@ public:
     //     return vec[NextInt(vec.size())];
     // }
 
-
-private:
+   private:
     static Random* _rand;
-    mutable std::mt19937_64* _randEngine; // could also use mt19937_64 (maybe slightly faster, depends on compiler)
+    mutable std::mt19937_64* _randEngine;  // could also use mt19937_64 (maybe slightly faster, depends on compiler)
 };
 
-} // namespace solver_ipft
+}  // namespace solver_ipft

@@ -48,7 +48,7 @@ class ParticleBelief : public Belief {
 
     virtual ParticleBelief* sampleParticleBelief(int num) const override;
 
-    virtual double update(const Action& action, const Observation& obs);
+    virtual double update(const Action& action, const Observation& obs) override;
 
     virtual std::string text(const std::vector<State*>& particleSet) const;
     virtual std::string text() const override;
