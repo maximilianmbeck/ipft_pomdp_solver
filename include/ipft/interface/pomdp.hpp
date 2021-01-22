@@ -38,7 +38,7 @@ class POMDP {
 
     virtual double obsProb(const State& statePosterior, const Observation& obs) const = 0;
 
-    virtual double maxPossibleWeight(const Action& act, const Observation& obs) const = 0;
+    virtual double maxPossibleWeight(const Action& act, const Observation& obs) const;
 
     /**
      * @brief Returns the reward for taking an action at a state

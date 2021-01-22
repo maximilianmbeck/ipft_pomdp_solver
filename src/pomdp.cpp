@@ -84,4 +84,9 @@ std::unique_ptr<ActionValue> POMDP::valueOfAction(const Action &act) const {
     return nullptr;
 }
 
+double POMDP::maxPossibleWeight(const Action &act, const Observation &obs) const {
+    throw std::runtime_error("Method not supported!");
+    return 0.0;
+}
+
 }  // namespace solver_ipft
