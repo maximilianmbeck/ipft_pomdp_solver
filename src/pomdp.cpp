@@ -46,7 +46,7 @@ void POMDP::freeStates(const std::vector<State *> &states) const {
 /* -------------------------- dummy implementations ------------------------- */
 
 double POMDP::reward(const State &state, const Action &action) const {
-    throw std::runtime_error("Method not supported!");
+    throw std::runtime_error("POMDP::Reward not supported!");
     return 0.0;
 }
 
@@ -55,37 +55,37 @@ double POMDP::reward(const State &state, const Action &action, const State &stat
 }
 
 State *POMDP::createStartState() const {
-    throw std::runtime_error("Method not supported!");
+    throw std::runtime_error("POMDP::createStartState not supported!");
     return nullptr;
 }
 
 Belief *POMDP::initialBelief(std::string type) const {
-    throw std::runtime_error("Method not supported!");
+    throw std::runtime_error("POMDP::initialBelief not supported!");
     return nullptr;
 }
 
 int POMDP::numDimStateSpace() const {
-    throw std::runtime_error("Method not supported!");
+    throw std::runtime_error("POMDP::numDimStateSpace not supported!");
     return 0;
 }
 
 void POMDP::newParticle(State *particle, const std::vector<State *> &particleSet, const Action &act, const Observation &obs) const {
-    throw std::runtime_error("Method not supported!");
+    throw std::runtime_error("POMDP::newParticle not supported!");
 }
 
 std::vector<State *> POMDP::similarStates(const State &state, int count) const {
-    throw std::runtime_error("Method not supported!");
+    throw std::runtime_error("POMDP::similarStates not supported!");
     std::vector<State *> vec;
     return vec;
 }
 
 std::unique_ptr<ActionValue> POMDP::valueOfAction(const Action &act) const {
-    throw std::runtime_error("Method not supported!");
+    throw std::runtime_error("POMDP::valueOfAction not supported!");
     return nullptr;
 }
 
 double POMDP::maxPossibleWeight(const Action &act, const Observation &obs) const {
-    throw std::runtime_error("Method not supported!");
+    throw std::runtime_error("POMDP::maxPossibleWeight not supported!");
     return 0.0;
 }
 
