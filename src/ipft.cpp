@@ -52,8 +52,8 @@ std::string IpftSearchStatistics::text() const {
     ss << this->printValuedActions();
     ss << secSep << "Action-Observation-Sequences" << endl;
     ss << this->printActionObservationSequences();
-    // ss << secSep << "Time(" << this->time_search << "ms)" << endl;
-    // ss << this->printTimes();
+    ss << secSep << "Time(" << this->time_search << "ms)" << endl;
+    ss << this->printTimes();
     ss << secSep << "Nodes/Visits on level (" << to_string(this->num_tree_vnodes) << "nodes, "
        << to_string(this->num_simulations) << "sims)" << endl;
     ss << printNodeStats();

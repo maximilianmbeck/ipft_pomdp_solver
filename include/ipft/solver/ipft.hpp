@@ -115,7 +115,7 @@ class Ipft : public Solver {
     RolloutPolicy* rolloutPolicy_;
     DiscountedInformationGain* infGainRewardCalculator_;
 
-    mutable IpftSearchStatistics* stats_;
+    mutable IpftSearchStatistics* stats_;  // stats is never deleted! Make sure that getSearchStatistics is always called if record_statistics == true and pointer is deallocated later
 
    public:
     Ipft(const POMDP* model, Belief* belief, const Random* rand, RolloutPolicy* rp);
