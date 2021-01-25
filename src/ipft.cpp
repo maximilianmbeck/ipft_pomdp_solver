@@ -14,13 +14,6 @@ namespace solver_ipft {
 /*                         IpftSearchStatistics class                         */
 /* -------------------------------------------------------------------------- */
 
-/* --------------------- IpftSearchStatistics functions --------------------- */
-
-IpftSearchStatistics::~IpftSearchStatistics() {
-    // if (root_belief != nullptr)
-    //     delete root_belief;
-}
-
 /* ---------------------- IpftSearchStatistics printers --------------------- */
 
 std::ostream& operator<<(std::ostream& os, const IpftSearchStatistics& statistics) {
@@ -76,7 +69,7 @@ std::string IpftSearchStatistics::printValuedActions() const {
             oChar = optimalChar;
         }
         ss << right << setw(width1) << setfill(fillChar) << oChar << setw(1) << " ";
-        ss << this->valuedActions[i] << this->actionSequences[i] << endl;
+        ss << left << setw(15) << setfill(fillChar) << this->model_->to_string(this->valuedActions[i].action_) << this->valuedActions[i] << this->actionSequences[i] << endl;
     }
     return ss.str();
 }
@@ -323,7 +316,7 @@ ValuedAction Ipft::search(double timeout) {
     // initialize root for search
     if (this->root_ == nullptr) {
         if (Globals::config.record_statistics) {
-            stats_ = new IpftSearchStatistics();  // reset statistics
+            stats_ = new IpftSearchStatistics(this->model_);  // reset statistics
             // stats_->root_belief = static_cast<ParticleBelief*>(b->clone());
         }
         this->root_ = createVNode(nullptr, nullptr, nullptr, 0);

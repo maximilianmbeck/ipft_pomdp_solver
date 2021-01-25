@@ -15,9 +15,10 @@ namespace solver_ipft {
 
 class SearchStatistics {
    public:
+    const POMDP* model_;
     ValuedAction optimalAction;  // contains optimal action + optimal value
     std::vector<ValuedAction> valuedActions;
-    SearchStatistics() {
+    SearchStatistics(const POMDP* model) : model_(model) {
     }
     virtual ~SearchStatistics() {
     }

@@ -30,8 +30,9 @@ class IpftSearchStatistics : public SearchStatistics {
     // ParticleBelief* root_belief;
     std::vector<History> actionSequences;
 
-    IpftSearchStatistics()
-        : time_search(0.0),
+    IpftSearchStatistics(const POMDP* model)
+        : SearchStatistics(model),
+          time_search(0.0),
           time_node_selection(0.0),
           time_backup(0.0),
           time_belief_update(0.0),
@@ -48,7 +49,10 @@ class IpftSearchStatistics : public SearchStatistics {
               // num_vnodes_on_level.resize(Globals::config.search_depth);
           };
 
-    virtual ~IpftSearchStatistics();
+    virtual ~IpftSearchStatistics() {
+        // if (root_belief != nullptr)
+        //     delete root_belief;
+    }
 
     // IpftSearchStatistics(const IpftSearchStatistics &other);
 
