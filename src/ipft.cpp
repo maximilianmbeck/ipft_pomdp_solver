@@ -427,7 +427,6 @@ IpftValue Ipft::simulate(VNode* vnode, int depth) {
     }
 
     //* Particle filter and reward calculation
-    double stateReward;
     // get copy of current belief (bNext is b')
     Belief* bNext = vnode->getBelief();
     this->stats_->time_node_selection += stopTime(startNodeSel);  // time_node_selection
@@ -435,7 +434,7 @@ IpftValue Ipft::simulate(VNode* vnode, int depth) {
     // particle filter update belief / propagate belief forward in time (through model) and calculate reward
     auto startBelUpdate = std::chrono::high_resolution_clock::now();  // time_belief_update
     Action act = actionNode->getAction();
-    stateReward = bNext->update(act, *obs);
+    double stateReward = bNext->update(act, *obs);
     this->stats_->time_belief_update += stopTime(startBelUpdate);  // time_belief_update
 
     // calculate information gathering reward term
@@ -489,6 +488,7 @@ IpftValue Ipft::simulate(VNode* vnode, int depth) {
 
     // log discounted recursive reward
     DLOG(INFO) << "[SIM] disc. recursive reward " << discRecReward;
+    DLOG(INFO) << "[SIM] acc. disc. recursive reward " << accDiscountedReward;
 
     // for logging only
     Value* oldVNodeVal = vnode->getValueObj();
