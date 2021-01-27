@@ -30,12 +30,12 @@ void SimulationStatistics::initRound(int round) {
     *out_ << roundHeaderSep << " Round " << round << std::endl;
     // print initial world state
     *out_ << "Initial state: ";
-    *out_ << this->model_->to_string(*(this->world_->getCurrentState()));
+    *out_ << this->model_->to_string(this->world_->getCurrentState());
     *out_ << std::endl;
     // print initial solver belief
     Belief* solverBel = this->solver_->getBelief();
     *out_ << "Initial solver belief: ";
-    *out_ << this->model_->to_string(*solverBel);
+    *out_ << this->model_->to_string(solverBel);
     *out_ << std::endl;
     //! DEBUG:
     // *out_ << solverBel->detailedText();
@@ -90,13 +90,13 @@ void SimulationStatistics::initStep(int round, int step) {
     // print previous world state
     *out_ << "- Prev. world state = ";
     State* s = this->world_->getCurrentState();
-    *out_ << this->model_->to_string(*s);
+    *out_ << this->model_->to_string(s);
     *out_ << std::endl;
 
     // print previous belief of solver
     Belief* solverBel = this->solver_->getBelief();
     *out_ << "- Prev. solver belief = ";
-    *out_ << this->model_->to_string(*solverBel);
+    *out_ << this->model_->to_string(solverBel);
     *out_ << std::endl;
     //! DEBUG:
     // *out_ << solverBel->detailedText();
@@ -124,12 +124,12 @@ void SimulationStatistics::summarizeExecuteAction(const Action& act, const Obser
     // print state (state is recorded in world object)
     *out_ << "- New world state = ";
     State* s = this->world_->getCurrentState();
-    *out_ << this->model_->to_string(*s);
+    *out_ << this->model_->to_string(s);
     *out_ << std::endl;
 
     // print observation (observation is recorded in solver history)
     *out_ << "- Observation = ";
-    *out_ << this->model_->to_string(obs);
+    *out_ << this->model_->to_string(&obs);
     *out_ << std::endl;
 
     // record and print obs prob
@@ -147,7 +147,7 @@ void SimulationStatistics::summarizeBeliefUpdate() {
     //print belief of solver (belief is recorded in solver history)
     Belief* solverBel = this->solver_->getBelief();
     *out_ << "- new solver belief = ";
-    *out_ << this->model_->to_string(*solverBel);
+    *out_ << this->model_->to_string(solverBel);
     *out_ << std::endl;
     //! DEBUG:
     // *out_ << solverBel->detailedText();
@@ -260,7 +260,7 @@ std::vector<std::string> SimulationStatistics::getStepResultsForTable(int step) 
 void SimulationStatistics::printStateActionSequence() const {
     *out_ << "State Trajectory: " << std::endl;
     for (int i = 0; i < this->world_hist_.size(); i++) {
-        *out_ << this->model_->to_string(*(world_hist_[i]));
+        *out_ << this->model_->to_string(world_hist_[i]);
         *out_ << std::endl;
     }
     *out_ << std::endl;

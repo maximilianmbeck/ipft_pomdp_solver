@@ -406,8 +406,8 @@ IpftValue Ipft::simulate(VNode* vnode, int depth) {
     this->model_->freeState(statePosterior);
 
     // log observation generation
-    DLOG(INFO) << "[SIM] generate " << model_->to_string(*o)
-               << " from " << model_->to_string(*s) << model_->to_string(actionNode->getAction()) << model_->to_string(*statePosterior);
+    DLOG(INFO) << "[SIM] generate " << model_->to_string(o)
+               << " from " << model_->to_string(s) << model_->to_string(actionNode->getAction()) << model_->to_string(statePosterior);
 
     if (actionNode->children().size() <= pw_limit) {
         // log new obs node
@@ -423,7 +423,7 @@ IpftValue Ipft::simulate(VNode* vnode, int depth) {
         obs = o;
 
         // log observation selection
-        DLOG(INFO) << "[SIM] select " << model_->to_string(*(obsNode->obsEdge_)) << " and replace by " << model_->to_string(*obs);
+        DLOG(INFO) << "[SIM] select " << model_->to_string((obsNode->obsEdge_)) << " and replace by " << model_->to_string(obs);
     }
 
     //* Particle filter and reward calculation
@@ -500,7 +500,7 @@ IpftValue Ipft::simulate(VNode* vnode, int depth) {
     actionNode->updateValueCount(accDiscountedReward);
 
     // log backup
-    DLOG(INFO) << "[SIM][BU] " << std::setfill(' ') << std::setw(15) << std::right << model_->to_string(*(vnode->obsEdge_))
+    DLOG(INFO) << "[SIM][BU] " << std::setfill(' ') << std::setw(15) << std::right << model_->to_string(vnode->obsEdge_)
                << " on level " << Globals::config.search_depth - depth << ": "
                << *(vnode->getValueRef()) << " = " << *oldVNodeVal << "<-" << accDiscountedReward << "|[C: " << vnode->getCount() << "]";
     DLOG(INFO) << "[SIM][BU] " << std::setfill(' ') << std::setw(15) << std::right << model_->to_string(actionNode->getAction())

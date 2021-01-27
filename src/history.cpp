@@ -202,7 +202,7 @@ std::string History::text() const {
     for (int i = 0; i < this->size(); i++) {
         ss << right << setw(7) << "(" + to_string(i) + ") - " << this->actions_[i]; // << endl; // setw next line 7
         ss << right << setw(3) << " - " << *(static_cast<ParticleBelief*>(this->beliefs_[i])) << " - "
-           << this->model_->to_string(*(this->observations_[i]));
+           << this->model_->to_string(this->observations_[i]);
         if (i < (this->size() - 1)) {
             ss << endl;
         }

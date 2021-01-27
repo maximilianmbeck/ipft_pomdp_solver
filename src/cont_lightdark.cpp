@@ -292,20 +292,20 @@ void ContLightDark::newParticle(State *particle, const std::vector<State *> &par
 }
 
 /* ---------------------------- Display function ---------------------------- */
-std::string ContLightDark::to_string(const State &state) const {
+std::string ContLightDark::to_string(const State *state) const {
     std::stringstream ss;
     ss.precision(cldPrec);
-    const CLDState *cldState = static_cast<const CLDState *>(&state);
+    const CLDState *cldState = static_cast<const CLDState *>(state);
     if (cldState != nullptr)
         ss << "[" << *cldState << " State]";
     else
         ss << "[ NULL State]";
     return ss.str();
 }
-std::string ContLightDark::to_string(const Observation &obs) const {
+std::string ContLightDark::to_string(const Observation *obs) const {
     std::stringstream ss;
     ss.precision(cldPrec);
-    const CLDObs *cldObs = static_cast<const CLDObs *>(&obs);
+    const CLDObs *cldObs = static_cast<const CLDObs *>(obs);
     if (cldObs != nullptr)
         ss << "[" << *cldObs << " Obs]";
     else
@@ -319,8 +319,8 @@ std::string ContLightDark::to_string(const Action &action) const {
     ss << "[" << std::setfill(' ') << std::setw(2) << std::right << cldAct.get(0) << " Act]";
     return ss.str();
 }
-std::string ContLightDark::to_string(const Belief &belief) const {
-    return belief.text();
+std::string ContLightDark::to_string(const Belief *belief) const {
+    return belief->text();
 }
 
 /* ----------------------- Memory management functions ---------------------- */

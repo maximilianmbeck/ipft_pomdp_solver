@@ -124,7 +124,7 @@ double ParticleBelief::update(const Action &action, const Observation &obs) {
 
     // log belief update
     DLOG(INFO) << "[PF] " << std::setfill(' ') << std::setw(7) << std::left << "update " << this->text()
-               << " with " << model_->to_string(action) << model_->to_string(obs);
+               << " with " << model_->to_string(action) << model_->to_string(&obs);
 
     std::vector<State *> predictedParticles;
     double total_state_reward = 0;

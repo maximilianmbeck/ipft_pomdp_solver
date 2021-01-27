@@ -111,13 +111,13 @@ class POMDP {
     /*                              Display functions                             */
     /* -------------------------------------------------------------------------- */
 
-    virtual std::string to_string(const State& state) const = 0;
+    virtual std::string to_string(const State* state) const = 0;
 
-    virtual std::string to_string(const Observation& obs) const = 0;
+    virtual std::string to_string(const Observation* obs) const = 0;
 
     virtual std::string to_string(const Action& action) const = 0;
 
-    virtual std::string to_string(const Belief& belief) const = 0;
+    virtual std::string to_string(const Belief* belief) const = 0;
 
     /* -------------------------------------------------------------------------- */
     /*                              Memory management                             */

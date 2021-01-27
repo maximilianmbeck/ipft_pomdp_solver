@@ -153,10 +153,10 @@ class ContLightDark : public POMDP {
     double obsModelSigma(const double &statePos) const;
 
     /* ---------------------------- Display function ---------------------------- */
-    std::string to_string(const State &state) const override;
-    std::string to_string(const Observation &obs) const override;
+    std::string to_string(const State *state) const override;
+    std::string to_string(const Observation *obs) const override;
     std::string to_string(const Action &action) const override;  // TODO consider using CLDActionValue
-    std::string to_string(const Belief &belief) const override;
+    std::string to_string(const Belief *belief) const override;
 
     /* ---------------------------- Memory management --------------------------- */
     Observation *allocateObs() const override;
