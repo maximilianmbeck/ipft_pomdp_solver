@@ -43,7 +43,7 @@ py::array_t<double> value2NpArray(const Value& value) {
     return std::move(npArr);
 }
 
-void particleSet2NpArrays(const std::vector<State*> particleSet, py::array_t<double>& particles, py::array_t<double>& weights) {
+void particleSet2NpArrays(const std::vector<State*>& particleSet, py::array_t<double>& particles, py::array_t<double>& weights) {
     CHECK_GT(particleSet.size(), 0) << "Particle set empty!";
     int num_particles = particleSet.size();
     int dim = particleSet[0]->dimensions();
