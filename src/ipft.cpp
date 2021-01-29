@@ -471,9 +471,9 @@ IpftValue Ipft::simulate(VNode* vnode, int depth) {
     } else  // already existing child VNode is selected
     {
         assert(obsNode != nullptr);
-        // set observation in vnode to obs, previous obs is discarded
+        // set observation in vnode to obs, previous obs is archived
         obsNode->setObs(obs);
-        // set belief in vnode to bNext, previous belief is discarded
+        // set belief in vnode to bNext, previous belief is archived
         obsNode->setBelief(bNext);
 
         // simulate

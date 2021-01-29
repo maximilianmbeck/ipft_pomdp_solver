@@ -67,10 +67,17 @@ VNode::VNode(const POMDP* model, QNode* parent, Observation* obs, Belief* belief
 }
 
 VNode::~VNode() {
+    // free observations
     if (obsEdge_ != nullptr) {
         this->model_->freeObs(obsEdge_);
     }
+    this->model_->freeObss(this->obs_archive_);
+    // free beliefs
     delete this->belief_;
+    for (int i = 0; i < this->belief_archive_.size(); i++) {
+        delete this->belief_archive_[i];
+    }
+    // free children nodes
     for (int i = 0; i < this->actChildren_.size(); i++) {
         delete this->actChildren_[i];
     }
@@ -81,7 +88,9 @@ Observation* VNode::getObservationObj() const {
 }
 
 void VNode::setObs(Observation* obs) {
-    this->model_->freeObs(this->obsEdge_);
+    if (this->obsEdge_ != nullptr) {
+        this->obs_archive_.push_back(this->obsEdge_);
+    }
     this->obsEdge_ = obs;
 }
 
@@ -90,7 +99,9 @@ Belief* VNode::getBelief() const {
 }
 
 void VNode::setBelief(Belief* belief) {
-    if (this->belief_ != nullptr) delete this->belief_;
+    if (this->belief_ != nullptr) {
+        this->belief_archive_.push_back(this->belief_);
+    };
     this->belief_ = belief;
 }
 

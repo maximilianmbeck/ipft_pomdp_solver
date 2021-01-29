@@ -55,6 +55,8 @@ class VNode : public Node {
    protected:
     QNode* parent_;
     std::vector<QNode*> actChildren_;
+    std::vector<Belief*> belief_archive_;    // holds all previousely sampled beliefs in this node
+    std::vector<Observation*> obs_archive_;  // holds all previously sampled observations for this node
 
    public:
     VNode(const POMDP* model, QNode* parent, Observation* obs, Belief* belief, int level);
