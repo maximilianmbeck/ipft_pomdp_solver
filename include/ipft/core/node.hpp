@@ -50,13 +50,13 @@ class QNode;
 class VNode : public Node {
    public:
     Belief* belief_;
-    Observation* obsEdge_;  // the input edge to this VNode
+    Observation* obsEdge_;                   // the input edge to this VNode
+    std::vector<Belief*> belief_archive_;    // holds all previousely sampled beliefs in this node (first sampled -> index 0)
+    std::vector<Observation*> obs_archive_;  // holds all previously sampled observations for this node (first sampled -> index 0)
 
    protected:
     QNode* parent_;
     std::vector<QNode*> actChildren_;
-    std::vector<Belief*> belief_archive_;    // holds all previousely sampled beliefs in this node
-    std::vector<Observation*> obs_archive_;  // holds all previously sampled observations for this node
 
    public:
     VNode(const POMDP* model, QNode* parent, Observation* obs, Belief* belief, int level);
