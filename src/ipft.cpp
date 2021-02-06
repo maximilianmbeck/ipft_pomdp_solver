@@ -435,6 +435,7 @@ IpftValue Ipft::simulate(VNode* vnode, int depth) {
     auto startBelUpdate = std::chrono::high_resolution_clock::now();  // time_belief_update
     Action act = actionNode->getAction();
     double stateReward = bNext->update(act, *obs);
+    CHECK(!std::isnan(stateReward)) << "State reward is nan.";
     this->stats_->time_belief_update += stopTime(startBelUpdate);  // time_belief_update
 
     // calculate information gathering reward term
@@ -446,6 +447,7 @@ IpftValue Ipft::simulate(VNode* vnode, int depth) {
                                                            static_cast<const ParticleBelief*>(bNext),
                                                            static_cast<const ParticleBelief*>(b));
     delete b;
+    CHECK(!std::isnan(informationReward)) << "Information reward is nan.";
     this->stats_->time_information_gain_computation += stopTime(startInfGain);  // time_information_gain_computation
 
     // local reward

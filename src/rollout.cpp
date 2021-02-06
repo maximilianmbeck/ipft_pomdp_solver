@@ -37,6 +37,8 @@ IpftValue BeliefRolloutPolicy::rollout(Belief* belief, int depth) const {
 
         double stateReward = bNext->update(act, *obs);
 
+        CHECK(!std::isnan(stateReward)) << "State reward is nan.";
+
         // free unused variables
         this->model_->freeObs(obs);
         this->model_->freeState(s);
