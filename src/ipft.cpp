@@ -565,7 +565,7 @@ ValuedAction Ipft::optimalAction(const VNode* vnode) const {
             val = curNodeVal;
         }
     }
-    CHECK(astar.action_ != -1) << "Cannot select optimal action!";
+    CHECK_NE(static_cast<int>(astar.action_), -1) << "Cannot select optimal action!";
     return astar;
 }
 // imitation of julia implementation
