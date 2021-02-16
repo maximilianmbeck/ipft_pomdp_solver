@@ -309,6 +309,7 @@ ValuedAction Ipft::search(double timeout) {
     using namespace std::chrono;
     // checking preconditions
     if (this->belief_->isTerminalBelief()) {
+        LOG(FATAL) << "Treesearch with terminal belief!";
         // return no action
         return ValuedAction();
     }
