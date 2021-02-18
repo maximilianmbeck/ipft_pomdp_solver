@@ -36,8 +36,8 @@ std::mt19937_64* Random::engine() const {
     return this->_randEngine;
 }
 
-double Random::nextNormal(const double& mu, const double& sigma) const {
-    std::normal_distribution<> nd(mu, sigma);
+double Random::nextNormal(const double& mean, const double& stddev) const {
+    std::normal_distribution<> nd(mean, stddev);
     return nd(*(this->_randEngine));
 }
 
