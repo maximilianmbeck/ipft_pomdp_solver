@@ -8,6 +8,7 @@
 #include <ipft/util/random.hpp>
 #include <limits>
 #include <sstream>
+#include <stdexcept>
 namespace solver_ipft {
 
 /* -------------------------------------------------------------------------- */
@@ -189,7 +190,8 @@ double IpftValue::getWeightedComponent(int index) const {
             return Globals::config.inf_gather_constant_lambda * value[index];
             break;
         default:
-            return std::numeric_limits<double>::quiet_NaN();
+            throw std::out_of_range("IpftValue has only valid indices 0 and 1.");
+            // return std::numeric_limits<double>::quiet_NaN();
             break;
     }
 }
