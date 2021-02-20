@@ -344,6 +344,12 @@ ValuedAction Ipft::search(double timeout) {
         auto end = high_resolution_clock::now();
         elapsed = end - start;
 
+        // convergence evaluation
+        if (Globals::config.convergence_eval) {
+            this->stats_->timesteps.push_back(elapsed.count());
+            this->stats_->valuedActionsPerTimestep.push_back(this->root_->getValuedActions());
+        }
+
     } while (
         (elapsed.count() < Globals::config.time_per_move) &&
         (num_sims <

@@ -30,6 +30,10 @@ class IpftSearchStatistics : public SearchStatistics {
     // ParticleBelief* root_belief;
     std::vector<History> actionSequences;
 
+    // convergence eval
+    std::vector<double> timesteps;
+    std::vector<std::vector<ValuedAction>> valuedActionsPerTimestep;
+
     IpftSearchStatistics(const POMDP* model)
         : SearchStatistics(model),
           time_search(0.0),

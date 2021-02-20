@@ -33,6 +33,7 @@ struct Config {
 
     // record statistics
     bool record_statistics;
+    bool convergence_eval;           // after each episode (call to simulate) time and Q-val stats are recorded
     bool print_search_step_results;  // verbose output of each search tree
 
     Config()
@@ -50,6 +51,7 @@ struct Config {
           explore_constant_c(100.0),         // default 100.0
           inf_gather_constant_lambda(60.0),  // default 60
           record_statistics(true),
+          convergence_eval(false),
           print_search_step_results(true) {
     }
 
@@ -68,6 +70,7 @@ struct Config {
            double explore_constant_c_,
            double inf_gather_constant_lambda_,
            bool record_statistics,
+           bool convergence_eval,
            bool print_search_step_results)
         : search_depth(search_depth_),
           time_per_move(time_per_move_),                // default 1000
@@ -84,6 +87,7 @@ struct Config {
           explore_constant_c(explore_constant_c_),                  // default 100.0
           inf_gather_constant_lambda(inf_gather_constant_lambda_),  // default 60
           record_statistics(record_statistics),
+          convergence_eval(convergence_eval),
           print_search_step_results(print_search_step_results) {
     }
 };
