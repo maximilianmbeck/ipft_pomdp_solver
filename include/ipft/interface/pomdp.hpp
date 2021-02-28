@@ -36,7 +36,9 @@ class POMDP {
 
     virtual Observation* observation(const State& statePosterior) const = 0;
 
-    virtual double obsProb(const State& statePosterior, const Observation& obs) const = 0;
+    virtual double obsProb(const State& statePosterior, const Observation& obs) const;
+
+    virtual double obsProb(const State& state, const Action& action, const State& statePosterior, const Observation& obs) const;
 
     virtual double maxPossibleWeight(const Action& act, const Observation& obs) const;
 

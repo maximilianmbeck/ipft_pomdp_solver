@@ -45,6 +45,15 @@ void POMDP::freeStates(const std::vector<State *> &states) const {
 
 /* -------------------------- dummy implementations ------------------------- */
 
+double POMDP::obsProb(const State &statePosterior, const Observation &obs) const {
+    throw std::runtime_error("POMDP::obsProb not supported!");
+    return 0.0;
+}
+
+double POMDP::obsProb(const State &state, const Action &action, const State &statePosterior, const Observation &obs) const {
+    return obsProb(statePosterior, obs);
+}
+
 double POMDP::reward(const State &state, const Action &action) const {
     throw std::runtime_error("POMDP::Reward not supported!");
     return 0.0;
