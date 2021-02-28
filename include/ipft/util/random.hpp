@@ -32,7 +32,7 @@ class Random {
     int nextUniformInt(int n) const;
     int nextUniformInt(int min, int max) const;
 
-    int nextDiscrProbDistrInt(const std::vector<double>& discreteProbDistr) const;
+    int nextDiscrProbDistrInt(const std::vector<double>& discreteProbDistrWeights) const;
 
     std::mt19937_64* engine() const;
 
