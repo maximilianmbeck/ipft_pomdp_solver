@@ -32,6 +32,8 @@ class Random {
     int nextUniformInt(int n) const;
     int nextUniformInt(int min, int max) const;
 
+    int nextDiscrProbDistrInt(const std::vector<double>& discreteProbDistr) const;
+
     std::mt19937_64* engine() const;
 
     // template <class T>

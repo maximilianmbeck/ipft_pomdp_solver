@@ -1,8 +1,10 @@
 #include "ipft/util/random.hpp"
 
+#include <glog/logging.h>
+
+#include <algorithm>
 #include <cassert>
 #include <chrono>
-
 namespace solver_ipft {
 
 /* -------------------------------------------------------------------------- */
@@ -58,6 +60,35 @@ int Random::nextUniformInt(int min, int max) const {
 int Random::nextUniformInt(int n) const {
     assert(n > 0);
     return nextUniformInt(0, n - 1);
+}
+
+int Random::nextDiscrProbDistrInt(const std::vector<double>& discreteProbDistr) const {
+    // check discrete probability distribution
+    double totalProb = 0.0;
+    for (int i = 0; i < discreteProbDistr.size(); i++) {
+        totalProb += discreteProbDistr[i];
+    }
+    CHECK_DOUBLE_EQ(totalProb, 1.0);
+    CHECK_GT(totalProb, 0) << ": Invalid probability distribution!";
+
+    // generate accumulated probs
+    std::vector<double> accProbDistr(discreteProbDistr.size());
+    int index = 0;
+    double accProb = 0.0;
+    std::generate(accProbDistr.begin(), accProbDistr.end(), [&discreteProbDistr, &index, &accProb]() -> double {
+        accProb += discreteProbDistr[index];
+        index++;
+        return accProb;
+    });
+    // sample rand num uniformly from [0;1]
+    double sample = this->nextUniform(0.0, 1.0);
+    // find route index (the interval in which the sampled number falls)
+    for (int i = 0; i < accProbDistr.size(); i++) {
+        if (sample < accProbDistr[i]) {
+            return i;
+        }
+    }
+    LOG(FATAL) << "Random number generation failed!";
 }
 
 }  // namespace solver_ipft
