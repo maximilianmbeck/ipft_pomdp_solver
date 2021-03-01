@@ -86,6 +86,14 @@ class POMDP {
      */
     virtual std::vector<State*> similarStates(const State& state, int count) const;
 
+    /**
+     * @brief Replaces @param particle with a resampled particle around the current observation @param obs
+     * 
+     * @param particle the particle to replace
+     * @param particleSet the unweighted / resampled particle set --> all weights must be 1/N_particles
+     * @param act current action
+     * @param obs current observation
+     */
     virtual void newParticle(State* particle, const std::vector<State*>& particleSet, const Action& act, const Observation& obs) const;
 
     /**
