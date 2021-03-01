@@ -6,24 +6,30 @@
 namespace solver_ipft {
 
 bool Point::equals(const Point& p) const {
+    throw std::runtime_error("Point::equals not supported!");
     return false;
 }
 
 int Point::dimensions() const {
+    throw std::runtime_error("Point::dimensions not supported!");
     return -1;
 }
 
 double Point::get(int dim) const {
+    throw std::runtime_error("Point::get not supported!");
     return std::nan("");
 }
 
 void Point::set(const double& p, int dim) {
+    throw std::runtime_error("Point::set not supported!");
 }
 
 void Point::reset() {
+    throw std::runtime_error("Point::reset not supported!");
 }
 
 std::string Point::text() const {
+    throw std::runtime_error("Point::text not supported!");
     return std::string("Not implemented");
 }
 
