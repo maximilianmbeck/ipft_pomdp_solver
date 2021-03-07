@@ -72,7 +72,7 @@ bool ObsAdaptiveReinvigorator::particleReinvigorationNeeded(const std::vector<St
     return this->n_replaced > 0;
 }
 std::vector<State*> ObsAdaptiveReinvigorator::reinvigorate(const std::vector<State*>& particleSet, const Action& act, const Observation& obs) const {
-    LOG(WARNING) << "[PF] Number of particles replaced: " << this->n_replaced;  // TODO change LOG type
+    DLOG(WARNING) << "[PF] Number of particles replaced: " << this->n_replaced;
     // pick randomly (uniformly) n_replaced particles from the particle set
     // create an vector holding all the indices for the particle set ([0:particleSet.size()-1])
     std::vector<int> indices(particleSet.size());
