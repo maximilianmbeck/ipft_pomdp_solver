@@ -396,10 +396,11 @@ IpftValue Ipft::simulate(VNode* vnode, int depth) {
     QNode* actionNode = ucbActionSelection(vnode);
 
     // log action selection
-    DLOG(INFO) << "[SIM] select " << model_->to_string(actionNode->getAction());
+    DLOG(INFO) << "[SIM] select " << model_->to_string(actionNode->getAction()) << ", N(ha)=" << actionNode->getCount();
 
     //* Progressive widening for Observation space
     double pw_limit = Globals::config.pw_k_obs * std::pow(actionNode->getCount(), Globals::config.pw_alpha_obs);
+    DLOG(INFO) << "[SIM][PW] num children C(ha)=" << actionNode->children().size() << " -> PW limit obs space: " << pw_limit;
     bool new_obs_sampled = false;
     VNode* obsNode = nullptr;    // the next observation node after the action node
     Observation* obs = nullptr;  // observation for the particle filter update
