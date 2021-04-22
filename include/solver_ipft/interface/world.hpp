@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ipft/interface/spaces.hpp"
+#include "solver_ipft/interface/spaces.hpp"
 
 // see despot
 

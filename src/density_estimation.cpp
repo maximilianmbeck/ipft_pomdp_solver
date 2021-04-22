@@ -1,9 +1,9 @@
-#include "ipft/core/density_estimation.hpp"
+#include "solver_ipft/core/density_estimation.hpp"
 
 #include <glog/logging.h>
 
 #include <cmath>
-#include <ipft/util/util.hpp>
+#include <solver_ipft/util/util.hpp>
 
 namespace solver_ipft {
 

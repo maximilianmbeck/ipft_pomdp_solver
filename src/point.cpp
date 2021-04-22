@@ -1,7 +1,7 @@
 #include <glog/logging.h>
 
 #include <cmath>
-#include <ipft/interface/point.hpp>
+#include <solver_ipft/interface/point.hpp>
 
 namespace solver_ipft {
 

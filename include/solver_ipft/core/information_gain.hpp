@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ipft/core/density_estimation.hpp"
-#include "ipft/core/particle_belief.hpp"
+#include "solver_ipft/core/density_estimation.hpp"
+#include "solver_ipft/core/particle_belief.hpp"
 
 namespace solver_ipft {
 

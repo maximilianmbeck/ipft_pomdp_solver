@@ -5,8 +5,8 @@
 
 #include "py_particle_belief.hpp"
 
-// #include <ipft/core/node.hpp>
-// #include <ipft/python_adapters/py_particle_belief.hpp>
+// #include <solver_ipft/core/node.hpp>
+// #include <solver_ipft/python_adapters/py_particle_belief.hpp>
 
 namespace py = pybind11;
 

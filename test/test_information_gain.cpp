@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <ipft/core/information_gain.hpp>
+#include <solver_ipft/core/information_gain.hpp>
 
 #include "test_particle_data.hpp"
 

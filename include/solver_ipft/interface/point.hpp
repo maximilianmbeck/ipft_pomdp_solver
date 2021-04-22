@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 
-#include "ipft/util/memorypool.hpp"
+#include "solver_ipft/util/memorypool.hpp"
 namespace solver_ipft {
 /**
  * @brief An interface defining a Point in a metric space

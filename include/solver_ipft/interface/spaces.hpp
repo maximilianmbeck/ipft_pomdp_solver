@@ -4,8 +4,8 @@
 
 #include <glog/logging.h>
 
-#include <ipft/core/globals.hpp>
-#include <ipft/interface/point.hpp>
+#include <solver_ipft/core/globals.hpp>
+#include <solver_ipft/interface/point.hpp>
 
 namespace solver_ipft {
 

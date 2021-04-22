@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ipft/core/particle_reinvigoration.hpp"
-#include "ipft/interface/belief.hpp"
-#include "ipft/util/random.hpp"
+#include "solver_ipft/core/particle_reinvigoration.hpp"
+#include "solver_ipft/interface/belief.hpp"
+#include "solver_ipft/util/random.hpp"
 
 namespace solver_ipft {
 

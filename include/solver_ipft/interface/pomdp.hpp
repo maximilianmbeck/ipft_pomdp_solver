@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include "ipft/core/globals.hpp"
-#include "ipft/interface/spaces.hpp"
+#include "solver_ipft/core/globals.hpp"
+#include "solver_ipft/interface/spaces.hpp"
 
 namespace solver_ipft {
 class Belief;

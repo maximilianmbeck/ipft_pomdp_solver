@@ -1,8 +1,8 @@
 #pragma once
 
-#include <ipft/interface/pomdp.hpp>
-#include <ipft/interface/spaces.hpp>
-#include <ipft/util/random.hpp>
+#include <solver_ipft/interface/pomdp.hpp>
+#include <solver_ipft/interface/spaces.hpp>
+#include <solver_ipft/util/random.hpp>
 
 namespace solver_ipft {
 

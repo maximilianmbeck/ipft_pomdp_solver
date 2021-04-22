@@ -1,9 +1,9 @@
 #include <iomanip>
-#include <ipft/core/particle_belief.hpp>
-#include <ipft/interface/belief.hpp>
-#include <ipft/problems/cont_lightdark.hpp>
-#include <ipft/util/prob_densities.hpp>
-#include <ipft/util/random.hpp>
+#include <solver_ipft/core/particle_belief.hpp>
+#include <solver_ipft/interface/belief.hpp>
+#include <solver_ipft/problems/cont_lightdark.hpp>
+#include <solver_ipft/util/prob_densities.hpp>
+#include <solver_ipft/util/random.hpp>
 namespace solver_ipft {
 namespace cld {
 

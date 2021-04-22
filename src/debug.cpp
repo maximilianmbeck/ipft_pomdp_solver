@@ -1,6 +1,6 @@
-#include "ipft/util/debug.hpp"
+#include "solver_ipft/util/debug.hpp"
 
-#include "ipft/core/particle_belief.hpp"
+#include "solver_ipft/core/particle_belief.hpp"
 
 namespace solver_ipft {
 

@@ -1,4 +1,4 @@
-#include "ipft/core/pomdp_world.hpp"
+#include "solver_ipft/core/pomdp_world.hpp"
 
 namespace solver_ipft {
 POMDPWorld::POMDPWorld(const POMDP* model) : model_(model) {

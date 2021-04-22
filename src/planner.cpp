@@ -1,6 +1,6 @@
 #include <glog/logging.h>
 
-#include <ipft/planner.hpp>
+#include <solver_ipft/planner.hpp>
 namespace solver_ipft {
 Planner::Planner() : step_(0), round_(0) {}
 

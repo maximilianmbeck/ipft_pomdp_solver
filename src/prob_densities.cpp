@@ -1,7 +1,7 @@
 
-#include <ipft/util/prob_densities.hpp>
-#include <ipft/core/globals.hpp>
 #include <cmath>
+#include <solver_ipft/core/globals.hpp>
+#include <solver_ipft/util/prob_densities.hpp>
 
 namespace solver_ipft
 {

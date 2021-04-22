@@ -2,7 +2,7 @@
 #include <pybind11/numpy.h>
 #include <pybind11/pybind11.h>
 
-#include <ipft/core/particle_belief.hpp>
+#include <solver_ipft/core/particle_belief.hpp>
 
 namespace py = pybind11;
 

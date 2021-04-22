@@ -1,9 +1,9 @@
 #pragma once
 
-#include <ipft/interface/pomdp.hpp>
-#include <ipft/interface/rollout.hpp>
-#include <ipft/interface/spaces.hpp>
-#include <ipft/util/random.hpp>
+#include <solver_ipft/interface/pomdp.hpp>
+#include <solver_ipft/interface/rollout.hpp>
+#include <solver_ipft/interface/spaces.hpp>
+#include <solver_ipft/util/random.hpp>
 
 /* -------------------------------------------------------------------------- */
 /*                          Driving POMDP Definition                          */

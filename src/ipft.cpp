@@ -3,10 +3,10 @@
 #include <chrono>
 #include <cmath>
 #include <iomanip>
-#include <ipft/solver/ipft.hpp>
-#include <ipft/util/debug.hpp>
-#include <ipft/util/random.hpp>
 #include <limits>
+#include <solver_ipft/solver/ipft.hpp>
+#include <solver_ipft/util/debug.hpp>
+#include <solver_ipft/util/random.hpp>
 #include <sstream>
 #include <stdexcept>
 namespace solver_ipft {

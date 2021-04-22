@@ -1,4 +1,4 @@
-#include "ipft/plannerbase.hpp"
+#include "solver_ipft/plannerbase.hpp"
 #include <glog/logging.h>
 namespace solver_ipft {
 Plannerbase::Plannerbase() : model_(nullptr), world_(nullptr), solver_(nullptr) {

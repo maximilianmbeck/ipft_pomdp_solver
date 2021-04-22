@@ -1,8 +1,8 @@
 #include <glog/logging.h>
 
-#include <ipft/interface/rollout.hpp>
-#include <ipft/util/debug.hpp>
-#include <ipft/util/random.hpp>
+#include <solver_ipft/interface/rollout.hpp>
+#include <solver_ipft/util/debug.hpp>
+#include <solver_ipft/util/random.hpp>
 namespace solver_ipft {
 
 /* ------------------------- Default rollout policy ------------------------- */

@@ -7,9 +7,9 @@
 //
 #include <gtest/gtest.h>
 
-#include <ipft/interface/spaces.hpp>
-#include <ipft/problems/cont_lightdark.hpp>
-#include <ipft/util/debug.hpp>
+#include <solver_ipft/interface/spaces.hpp>
+#include <solver_ipft/problems/cont_lightdark.hpp>
+#include <solver_ipft/util/debug.hpp>
 #include <vector>
 
 // A google test function (uncomment the next function, add code and

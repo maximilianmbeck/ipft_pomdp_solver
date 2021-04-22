@@ -1,4 +1,4 @@
-#include "ipft/core/information_gain.hpp"
+#include "solver_ipft/core/information_gain.hpp"
 
 #include <glog/logging.h>
 

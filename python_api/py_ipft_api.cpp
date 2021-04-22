@@ -1,6 +1,6 @@
 #include <pybind11/pybind11.h>
 
-#include <ipft/util/debug.hpp>
+#include <solver_ipft/util/debug.hpp>
 
 #include "py_conversions.hpp"
 #include "py_ipft_solver.hpp"

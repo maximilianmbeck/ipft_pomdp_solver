@@ -1,10 +1,10 @@
 #pragma once
 
 #include <chrono>
-#include <ipft/config.hpp>
-#include <ipft/core/information_gain.hpp>
-#include <ipft/core/solver.hpp>
-#include <ipft/interface/rollout.hpp>
+#include <solver_ipft/config.hpp>
+#include <solver_ipft/core/information_gain.hpp>
+#include <solver_ipft/core/solver.hpp>
+#include <solver_ipft/interface/rollout.hpp>
 
 namespace solver_ipft {
 class RolloutPolicy;

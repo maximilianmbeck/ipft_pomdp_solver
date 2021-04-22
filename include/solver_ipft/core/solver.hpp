@@ -1,12 +1,12 @@
 #pragma once
 
 #include <iostream>
-#include <ipft/core/history.hpp>
-#include <ipft/core/node.hpp>
-#include <ipft/core/valued_action.hpp>
-#include <ipft/interface/belief.hpp>
-#include <ipft/interface/pomdp.hpp>
-#include <ipft/interface/spaces.hpp>
+#include <solver_ipft/core/history.hpp>
+#include <solver_ipft/core/node.hpp>
+#include <solver_ipft/core/valued_action.hpp>
+#include <solver_ipft/interface/belief.hpp>
+#include <solver_ipft/interface/pomdp.hpp>
+#include <solver_ipft/interface/spaces.hpp>
 namespace solver_ipft {
 
 /* -------------------------------------------------------------------------- */

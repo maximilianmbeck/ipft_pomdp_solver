@@ -1,7 +1,7 @@
 #pragma once
 #include <gtest/gtest.h>
 
-#include <ipft/util/debug.hpp>
+#include <solver_ipft/util/debug.hpp>
 
 #include "test_ipft_objects.hpp"
 

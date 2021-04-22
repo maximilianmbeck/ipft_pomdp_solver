@@ -2,9 +2,9 @@
 #include <pybind11/numpy.h>
 #include <pybind11/pybind11.h>
 
-#include <ipft/core/solver.hpp>
-#include <ipft/interface/pomdp.hpp>
-#include <ipft/interface/spaces.hpp>
+#include <solver_ipft/core/solver.hpp>
+#include <solver_ipft/interface/pomdp.hpp>
+#include <solver_ipft/interface/spaces.hpp>
 
 namespace py = pybind11;
 

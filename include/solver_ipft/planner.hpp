@@ -1,17 +1,17 @@
 #pragma once
 
-#include <ipft/plannerbase.hpp>
+#include <solver_ipft/plannerbase.hpp>
 
 namespace solver_ipft {
 
 class Planner : public Plannerbase {
-protected:
+   protected:
     int step_;
     int round_;
 
     SimulationStatistics* sim_stats_;
 
-public:
+   public:
     Planner();
 
     virtual ~Planner();
@@ -37,7 +37,7 @@ public:
      */
     virtual int runPlanning(int argc, char* argv[]);
 
-protected:
+   protected:
     /**
      * @brief Loop the search-execute-update process for a given number of steps
      *
@@ -49,4 +49,4 @@ protected:
     virtual bool takeAction(const ValuedAction& valuedAct);
 };
 
-} // namespace solver_ipft
+}  // namespace solver_ipft

@@ -1,4 +1,4 @@
-#include "ipft/core/node.hpp"
+#include "solver_ipft/core/node.hpp"
 
 namespace solver_ipft {
 

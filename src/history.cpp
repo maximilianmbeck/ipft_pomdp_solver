@@ -1,5 +1,5 @@
-#include "ipft/core/history.hpp"
-#include "ipft/core/particle_belief.hpp"
+#include "solver_ipft/core/history.hpp"
+#include "solver_ipft/core/particle_belief.hpp"
 
 #include <iomanip>
 #include <sstream>

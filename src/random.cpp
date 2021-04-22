@@ -1,4 +1,4 @@
-#include "ipft/util/random.hpp"
+#include "solver_ipft/util/random.hpp"
 
 #include <glog/logging.h>
 

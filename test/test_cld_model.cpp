@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
-#include <ipft/interface/spaces.hpp>
-#include <ipft/util/util.hpp>
+#include <solver_ipft/interface/spaces.hpp>
+#include <solver_ipft/util/util.hpp>
 
 #include "test_ipft_objects.hpp"
 

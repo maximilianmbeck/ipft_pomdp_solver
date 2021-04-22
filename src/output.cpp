@@ -1,11 +1,11 @@
-#include "ipft/util/output.hpp"
+#include "solver_ipft/util/output.hpp"
 
 #include <iomanip>
-#include <ipft/util/util.hpp>
+#include <solver_ipft/util/util.hpp>
 #include <sstream>
 
-#include "ipft/core/solver.hpp"
-#include "ipft/solver/ipft.hpp"
+#include "solver_ipft/core/solver.hpp"
+#include "solver_ipft/solver/ipft.hpp"
 namespace solver_ipft {
 
 /* -------------------------------------------------------------------------- */

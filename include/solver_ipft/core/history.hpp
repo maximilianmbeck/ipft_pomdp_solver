@@ -1,9 +1,9 @@
 #pragma once
 
-#include "ipft/core/valued_action.hpp"
-#include "ipft/interface/belief.hpp"
-#include "ipft/interface/pomdp.hpp"
-#include "ipft/interface/spaces.hpp"
+#include "solver_ipft/core/valued_action.hpp"
+#include "solver_ipft/interface/belief.hpp"
+#include "solver_ipft/interface/pomdp.hpp"
+#include "solver_ipft/interface/spaces.hpp"
 
 namespace solver_ipft {
 

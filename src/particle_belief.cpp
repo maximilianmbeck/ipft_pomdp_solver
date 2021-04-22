@@ -3,12 +3,12 @@
 #include <algorithm>
 #include <cmath>
 #include <iomanip>
-#include <ipft/core/particle_belief.hpp>
+#include <solver_ipft/core/particle_belief.hpp>
 #include <sstream>
 
-#include "ipft/core/globals.hpp"
-#include "ipft/util/debug.hpp"
-#include "ipft/util/output.hpp"
+#include "solver_ipft/core/globals.hpp"
+#include "solver_ipft/util/debug.hpp"
+#include "solver_ipft/util/output.hpp"
 
 namespace solver_ipft {
 

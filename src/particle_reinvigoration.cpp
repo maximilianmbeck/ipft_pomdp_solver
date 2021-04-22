@@ -1,8 +1,8 @@
 #include <glog/logging.h>
 
 #include <algorithm>
-#include <ipft/core/particle_reinvigoration.hpp>
 #include <numeric>
+#include <solver_ipft/core/particle_reinvigoration.hpp>
 
 namespace solver_ipft {
 

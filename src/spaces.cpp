@@ -1,5 +1,5 @@
-#include <ipft/interface/pomdp.hpp>
-#include <ipft/interface/spaces.hpp>
+#include <solver_ipft/interface/pomdp.hpp>
+#include <solver_ipft/interface/spaces.hpp>
 namespace solver_ipft {
 
 double State::weightSum(const std::vector<State*>& states) {

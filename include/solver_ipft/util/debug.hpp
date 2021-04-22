@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ipft/interface/belief.hpp"
+#include "solver_ipft/interface/belief.hpp"
 
 namespace solver_ipft {
 
@@ -68,6 +68,6 @@ void freeStateVec(std::vector<State*> states);
 
 void freePointVec(std::vector<Point*> points);
 
-} // namespace debug
+}  // namespace debug
 
-} // namespace solver_ipft
+}  // namespace solver_ipft

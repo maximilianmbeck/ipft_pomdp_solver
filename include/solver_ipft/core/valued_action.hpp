@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ipft/interface/spaces.hpp"
+#include "solver_ipft/interface/spaces.hpp"
 
 namespace solver_ipft {
 
@@ -37,4 +37,4 @@ struct ValuedAction {
     friend std::ostream& operator<<(std::ostream& os, const ValuedAction& va);
 };
 
-} // namespace solver_ipft
+}  // namespace solver_ipft

@@ -1,23 +1,21 @@
 #pragma once
 
-#include <ipft/simulation_statistics.hpp>
-#include <ipft/core/solver.hpp>
-#include <ipft/interface/pomdp.hpp>
-#include <ipft/interface/world.hpp>
-
-#include <ipft/util/random.hpp>
-
 #include <chrono>
+#include <solver_ipft/core/solver.hpp>
+#include <solver_ipft/interface/pomdp.hpp>
+#include <solver_ipft/interface/world.hpp>
+#include <solver_ipft/simulation_statistics.hpp>
+#include <solver_ipft/util/random.hpp>
 
 namespace solver_ipft {
 class Plannerbase {
-protected:
+   protected:
     Random* rand_;
     POMDP* model_;
     World* world_;
     Solver* solver_;
 
-public:
+   public:
     Plannerbase();
 
     virtual ~Plannerbase();
@@ -58,4 +56,4 @@ public:
                                   const std::chrono::time_point<std::chrono::high_resolution_clock>& main_clock_start) const;
 };
 
-} // namespace solver_ipft
+}  // namespace solver_ipft

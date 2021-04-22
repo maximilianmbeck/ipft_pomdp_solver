@@ -1,20 +1,19 @@
 #pragma once
 
-#include "ipft/interface/pomdp.hpp"
-#include "ipft/interface/world.hpp"
-
-#include "ipft/core/solver.hpp"
+#include "solver_ipft/core/solver.hpp"
+#include "solver_ipft/interface/pomdp.hpp"
+#include "solver_ipft/interface/world.hpp"
 
 namespace solver_ipft {
 
 class POMDPWorld : public World {
-protected:
+   protected:
     const POMDP* model_;
     std::vector<State*> stateSequence_;
 
-    double stepReward_; // reward of the last step
+    double stepReward_;  // reward of the last step
 
-public:
+   public:
     POMDPWorld(const POMDP* model);
 
     virtual ~POMDPWorld();
@@ -34,4 +33,4 @@ public:
     std::vector<State*> copyWorldStateSequence() const override;
 };
 
-} // namespace solver_ipft
+}  // namespace solver_ipft

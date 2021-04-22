@@ -1,12 +1,12 @@
 #pragma once
 #include <gtest/gtest.h>
 
-#include <ipft/core/particle_belief.hpp>
-#include <ipft/core/solver.hpp>
-#include <ipft/interface/pomdp.hpp>
-#include <ipft/interface/world.hpp>
-#include <ipft/problems/cont_lightdark.hpp>
-#include <ipft/util/debug.hpp>
+#include <solver_ipft/core/particle_belief.hpp>
+#include <solver_ipft/core/solver.hpp>
+#include <solver_ipft/interface/pomdp.hpp>
+#include <solver_ipft/interface/world.hpp>
+#include <solver_ipft/problems/cont_lightdark.hpp>
+#include <solver_ipft/util/debug.hpp>
 
 namespace solver_ipft {
 namespace test {

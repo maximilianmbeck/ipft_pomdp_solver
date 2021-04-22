@@ -1,7 +1,7 @@
 #pragma once
 #include <pybind11/pybind11.h>
 
-#include <ipft/solver/ipft.hpp>
+#include <solver_ipft/solver/ipft.hpp>
 
 #include "py_node.hpp"
 #include "py_particle_belief.hpp"

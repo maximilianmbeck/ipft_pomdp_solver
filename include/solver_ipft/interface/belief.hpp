@@ -1,9 +1,9 @@
 #pragma once
 
-#include "ipft/core/globals.hpp"
+#include <solver_ipft/core/globals.hpp>
 
-#include "ipft/core/history.hpp"
-#include "ipft/interface/spaces.hpp"
+#include "solver_ipft/core/history.hpp"
+#include "solver_ipft/interface/spaces.hpp"
 namespace solver_ipft {
 
 class POMDP;
@@ -14,10 +14,10 @@ class ParticleBelief;
  * (the underscore after the attributes follows the Python convention for private members)
  */
 class Belief {
-public:
+   public:
     const POMDP* model_;
 
-public:
+   public:
     Belief(const POMDP* model) : model_(model){};
     virtual ~Belief(){};
 
@@ -73,7 +73,7 @@ public:
     }
 };
 
-} // namespace solver_ipft
+}  // namespace solver_ipft
 
 //? Possible Belief representations / Belief update methods (see Thrun: Probabilistic Robotics)
 /**

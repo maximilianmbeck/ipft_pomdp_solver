@@ -1,4 +1,4 @@
-#include "ipft/core/globals.hpp"
+#include "solver_ipft/core/globals.hpp"
 
 namespace solver_ipft {
 

@@ -1,4 +1,4 @@
-#include <ipft/interface/pomdp.hpp>
+#include <solver_ipft/interface/pomdp.hpp>
 #include <stdexcept>
 
 namespace solver_ipft {

@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <ipft/core/density_estimation.hpp>
+#include <solver_ipft/core/density_estimation.hpp>
 
 #include "test_particle_data.hpp"
 

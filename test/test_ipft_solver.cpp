@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 
-#include <ipft/core/pomdp_world.hpp>
-#include <ipft/util/util.hpp>
 #include <limits>
+#include <solver_ipft/core/pomdp_world.hpp>
+#include <solver_ipft/util/util.hpp>
 
 #include "test_ipft_objects.hpp"
 

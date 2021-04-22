@@ -2,8 +2,8 @@
 
 #include <cmath>
 #include <iomanip>
-#include <ipft/core/pomdp_world.hpp>
-#include <ipft/simulation_statistics.hpp>
+#include <solver_ipft/core/pomdp_world.hpp>
+#include <solver_ipft/simulation_statistics.hpp>
 
 namespace solver_ipft {
 constexpr int round_step_separator_len_ = 90;
