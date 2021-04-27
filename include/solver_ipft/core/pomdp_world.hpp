@@ -8,6 +8,7 @@ namespace solver_ipft {
 
 class POMDPWorld : public World {
 protected:
+  State *state_{nullptr};
   const POMDP *model_;
   std::vector<State *> stateSequence_;
 

@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 
-#include "solver_ipft/util/memorypool.hpp"
+#include <solver_ipft/util/memorypool.hpp>
 namespace solver_ipft {
 /**
  * @brief An interface defining a Point in a metric space
@@ -11,36 +11,38 @@ namespace solver_ipft {
  *
  */
 class Point : public MemoryObject {
-   public:
-    Point(){};
-    virtual ~Point(){};
+public:
+  Point() : MemoryObject() {}
+  virtual ~Point() = default;
 
-    virtual bool equals(const Point& p) const;
+  Point(const Point &) = default;
+  Point(Point &&) = default;
+  Point &operator=(const Point &) = default;
+  Point &operator=(Point &&) = default;
 
-    virtual int dimensions() const;
+  virtual bool equals(const Point &p) const;
 
-    virtual double get(int dim) const;
+  virtual int dimensions() const;
 
-    virtual void set(const double& p, int dim);
+  virtual double get(int dim) const;
 
-    virtual void reset();
+  virtual void set(const double &p, int dim);
 
-    // don't do this Points should be only allocated through the POMDP model
-    // virtual Point* clone() const = 0;
+  virtual void reset();
 
-    virtual std::string text() const;
+  virtual std::string text() const;
 
-    friend std::ostream& operator<<(std::ostream& os, const Point& p) {
-        os << p.text();
-        return os;
-    }
+  friend std::ostream &operator<<(std::ostream &os, const Point &p) {
+    os << p.text();
+    return os;
+  }
 
-    static std::vector<double> mean(const std::vector<Point*>& points);
+  static std::vector<double> mean(const std::vector<Point *> &points);
 
-    static std::vector<double> variance(const std::vector<Point*>& points);
+  static std::vector<double> variance(const std::vector<Point *> &points);
 
-   private:
-    virtual double epsilon() const;
+private:
+  virtual double epsilon() const;
 };
 
-}  // namespace solver_ipft
+} // namespace solver_ipft

@@ -12,28 +12,38 @@ namespace solver_ipft {
 class POMDP;
 
 class State : public Point {
-   public:
-    State() : weight_(1.0){};
-    virtual ~State(){};
-    double weight_;
+public:
+  double weight_{1.0};
 
-    static double weightSum(const std::vector<State*>& states);
+public:
+  State() = default;
+  ~State() override = default;
 
-    static void normalizeWeights(const std::vector<State*>& states, const double& total_weight);
+  State(const State &) = default;
+  State(State &&) = default;
+  State &operator=(const State &) = default;
+  State &operator=(State &&) = default;
 
-    static void normalizeWeights(const std::vector<State*>& states);
+  static double weightSum(const std::vector<State *> &states);
 
-    static State* weightedMean(const std::vector<State*>& states, const POMDP* model);
+  static void normalizeWeights(const std::vector<State *> &states,
+                               const double &total_weight);
 
-    static State* weightedVariance(const std::vector<State*>& states, const POMDP* model);
+  static void normalizeWeights(const std::vector<State *> &states);
 
-    static void varToStd(State* varState);
+  static State *weightedMean(const std::vector<State *> &states,
+                             const POMDP *model);
 
-    static bool weightCompare(State* state1, State* state2);
+  static State *weightedVariance(const std::vector<State *> &states,
+                                 const POMDP *model);
+
+  static void varToStd(State *varState);
+
+  static bool weightCompare(State *state1, State *state2);
 };
 
-typedef Point Observation;
-// action space assumed to be discrete not continuous at first (later maybe point too)
-typedef int Action;
-typedef Point ActionValue;
-}  // namespace solver_ipft
+using Observation = Point;
+// action space assumed to be discrete
+using Action = int;
+using ActionValue = Point;
+} // namespace solver_ipft
