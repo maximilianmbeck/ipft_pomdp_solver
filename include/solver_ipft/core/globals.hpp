@@ -6,7 +6,7 @@
 #include <limits>
 #include <solver_ipft/interface/spaces.hpp>
 
-#include "solver_ipft/config.hpp"
+#include <solver_ipft/config.hpp>
 
 namespace solver_ipft {
 

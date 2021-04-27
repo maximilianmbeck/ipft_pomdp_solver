@@ -1,50 +1,65 @@
 #pragma once
 
-#include "solver_ipft/core/density_estimation.hpp"
-#include "solver_ipft/core/particle_belief.hpp"
+#include <solver_ipft/core/density_estimation.hpp>
+#include <solver_ipft/core/particle_belief.hpp>
 
 namespace solver_ipft {
 
 /* -------------------------------- Interface ------------------------------- */
 
 class DiscountedInformationGain {
-   public:
-    DiscountedInformationGain(){};
-    virtual ~DiscountedInformationGain(){};
+public:
+  DiscountedInformationGain() = default;
+  virtual ~DiscountedInformationGain() = default;
 
-    virtual double computeDiscInfGain(double discFactor,
-                                      const ParticleBelief* bnext,
-                                      const ParticleBelief* b) const = 0;
+  DiscountedInformationGain(const DiscountedInformationGain &) = delete;
+  DiscountedInformationGain(DiscountedInformationGain &&) = delete;
+  DiscountedInformationGain &
+  operator=(const DiscountedInformationGain &) = delete;
+  DiscountedInformationGain &operator=(DiscountedInformationGain &&) = delete;
+
+  virtual double computeDiscInfGain(double discFactor,
+                                    const ParticleBelief *bnext,
+                                    const ParticleBelief *b) const = 0;
 };
 
 /* ------------------- Classes implementing the interface ------------------- */
 
 class EntropyInfGain : public DiscountedInformationGain {
-   private:
-    DensityEstimator* densEstimator;
+private:
+  std::unique_ptr<DensityEstimator> densEstimator;
 
-   public:
-    EntropyInfGain() {
-        densEstimator = new KernelDensityEstimator();  // default density estimator
-    };
-    virtual ~EntropyInfGain() {
-        delete densEstimator;
-    };
+public:
+  EntropyInfGain() {
+    densEstimator =
+        std::make_unique<KernelDensityEstimator>(); // default density estimator
+  };
+  ~EntropyInfGain() override = default;
 
-    double computeDiscInfGain(double discFactor, const ParticleBelief* bnext, const ParticleBelief* b) const override;
+  EntropyInfGain(const EntropyInfGain &) = delete;
+  EntropyInfGain(EntropyInfGain &&) = delete;
+  EntropyInfGain &operator=(const EntropyInfGain &) = delete;
+  EntropyInfGain &operator=(EntropyInfGain &&) = delete;
 
-    // protected:
-    double computeEntropyEstimate(const ParticleBelief* b) const;
+  double computeDiscInfGain(double discFactor, const ParticleBelief *bnext,
+                            const ParticleBelief *b) const override;
+
+  // protected:
+  double computeEntropyEstimate(const ParticleBelief *b) const;
 };
 
 class NoInfGain : public DiscountedInformationGain {
-   public:
-    NoInfGain() {}
-    virtual ~NoInfGain() {}
+public:
+  NoInfGain() = default;
+  ~NoInfGain() override = default;
 
-    double computeDiscInfGain(double discFactor,
-                              const ParticleBelief* bnext,
-                              const ParticleBelief* b) const override;
+  NoInfGain(const NoInfGain &) = delete;
+  NoInfGain(NoInfGain &&) = delete;
+  NoInfGain &operator=(const NoInfGain &) = delete;
+  NoInfGain &operator=(NoInfGain &&) = delete;
+
+  double computeDiscInfGain(double discFactor, const ParticleBelief *bnext,
+                            const ParticleBelief *b) const override;
 };
 
-}  // namespace solver_ipft
+} // namespace solver_ipft

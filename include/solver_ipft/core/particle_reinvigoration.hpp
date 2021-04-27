@@ -11,14 +11,19 @@ namespace solver_ipft {
 /* -------------------------------------------------------------------------- */
 
 class ParticleReinvigorator {
-   protected:
-    const POMDP* model_;
+protected:
+  const POMDP *model_;
 
-   public:
-    ParticleReinvigorator(const POMDP* model) : model_(model) {}
-    virtual bool particleReinvigorationNeeded(const std::vector<State*>& particleSet, const Action& act, const Observation& obs) const = 0;
-    virtual std::vector<State*> reinvigorate(const std::vector<State*>& particleSet, const Action& act, const Observation& obs) const = 0;
-    virtual ParticleReinvigorator* clone() const = 0;
+public:
+  explicit ParticleReinvigorator(const POMDP *model) : model_(model) {}
+  virtual bool
+  particleReinvigorationNeeded(const std::vector<State *> &particleSet,
+                               const Action &act,
+                               const Observation &obs) const = 0;
+  virtual std::vector<State *>
+  reinvigorate(const std::vector<State *> &particleSet, const Action &act,
+               const Observation &obs) const = 0;
+  virtual ParticleReinvigorator *clone() const = 0;
 };
 
 /* -------------------------------------------------------------------------- */
@@ -26,11 +31,15 @@ class ParticleReinvigorator {
 /* -------------------------------------------------------------------------- */
 
 class NoReinvigoration final : public ParticleReinvigorator {
-   public:
-    NoReinvigoration() : ParticleReinvigorator(nullptr) {}
-    bool particleReinvigorationNeeded(const std::vector<State*>& particleSet, const Action& act, const Observation& obs) const final;
-    std::vector<State*> reinvigorate(const std::vector<State*>& particleSet, const Action& act, const Observation& obs) const final;
-    virtual ParticleReinvigorator* clone() const override;
+public:
+  NoReinvigoration() : ParticleReinvigorator(nullptr) {}
+  bool particleReinvigorationNeeded(const std::vector<State *> &particleSet,
+                                    const Action &act,
+                                    const Observation &obs) const final;
+  std::vector<State *> reinvigorate(const std::vector<State *> &particleSet,
+                                    const Action &act,
+                                    const Observation &obs) const final;
+  ParticleReinvigorator *clone() const override;
 };
 
 /* -------------------------------------------------------------------------- */
@@ -38,35 +47,46 @@ class NoReinvigoration final : public ParticleReinvigorator {
 /* -------------------------------------------------------------------------- */
 
 class SimpleParticleReinvigorator : public ParticleReinvigorator {
-   public:
-    SimpleParticleReinvigorator(const POMDP* model) : ParticleReinvigorator(model) {}
-    virtual bool particleReinvigorationNeeded(const std::vector<State*>& particleSet, const Action& act, const Observation& obs) const override;
-    virtual std::vector<State*> reinvigorate(const std::vector<State*>& particleSet, const Action& act, const Observation& obs) const override;
-    virtual ParticleReinvigorator* clone() const override;
+public:
+  explicit SimpleParticleReinvigorator(const POMDP *model)
+      : ParticleReinvigorator(model) {}
+  bool particleReinvigorationNeeded(const std::vector<State *> &particleSet,
+                                    const Action &act,
+                                    const Observation &obs) const override;
+  std::vector<State *> reinvigorate(const std::vector<State *> &particleSet,
+                                    const Action &act,
+                                    const Observation &obs) const override;
+  ParticleReinvigorator *clone() const override;
 
-   private:
-    bool allParticlesEqual(const std::vector<State*>& particleSet) const;
+private:
+  bool allParticlesEqual(const std::vector<State *> &particleSet) const;
 };
 
 /* -------------------------------------------------------------------------- */
 /*                          ObsAdaptiveReinvigorator                          */
 /* -------------------------------------------------------------------------- */
-// reimplementation of obs_adaptive_pf.jl from SunbergTypes (https://github.com/zsunberg/ContinuousPOMDPTreeSearchExperiments.jl/blob/master/src/updaters.jl)
+// reimplementation of obs_adaptive_pf.jl from SunbergTypes
+// (https://github.com/zsunberg/ContinuousPOMDPTreeSearchExperiments.jl/blob/master/src/updaters.jl)
 // model needs to have methods newParticle() and maxPossibleWeight()
 class ObsAdaptiveReinvigorator : public ParticleReinvigorator {
-   public:
-    static constexpr double max_frac_replaced = 0.05;
+public:
+  static constexpr double max_frac_replaced = 0.05;
 
-   protected:
-    const Random* rand_;
-    mutable int n_replaced;
+protected:
+  const Random *rand_;
+  mutable int n_replaced;
 
-   public:
-    ObsAdaptiveReinvigorator(const POMDP* model, const Random* rand) : ParticleReinvigorator(model), rand_(rand) {}
-    // particleSet must be weighted and unnormalized
-    virtual bool particleReinvigorationNeeded(const std::vector<State*>& particleSet, const Action& act, const Observation& obs) const override;
-    virtual std::vector<State*> reinvigorate(const std::vector<State*>& particleSet, const Action& act, const Observation& obs) const override;
-    virtual ParticleReinvigorator* clone() const override;
+public:
+  ObsAdaptiveReinvigorator(const POMDP *model, const Random *rand)
+      : ParticleReinvigorator(model), rand_(rand), n_replaced(0) {}
+  // particleSet must be weighted and unnormalized
+  bool particleReinvigorationNeeded(const std::vector<State *> &particleSet,
+                                    const Action &act,
+                                    const Observation &obs) const override;
+  std::vector<State *> reinvigorate(const std::vector<State *> &particleSet,
+                                    const Action &act,
+                                    const Observation &obs) const override;
+  ParticleReinvigorator *clone() const override;
 };
 
-}  // namespace solver_ipft
+} // namespace solver_ipft

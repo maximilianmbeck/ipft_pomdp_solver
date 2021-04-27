@@ -14,15 +14,13 @@ namespace solver_ipft {
 /* -------------------------------------------------------------------------- */
 
 class SearchStatistics {
-   public:
-    const POMDP* model_;
-    ValuedAction optimalAction;  // contains optimal action + optimal value
-    std::vector<ValuedAction> valuedActions;
-    SearchStatistics(const POMDP* model) : model_(model) {
-    }
-    virtual ~SearchStatistics() {
-    }
-    virtual std::string text() const = 0;
+public:
+  const POMDP *model_;
+  ValuedAction optimalAction; // contains optimal action + optimal value
+  std::vector<ValuedAction> valuedActions;
+  explicit SearchStatistics(const POMDP *model) : model_(model) {}
+
+  virtual std::string text() const = 0;
 };
 
 /* -------------------------------------------------------------------------- */
@@ -30,27 +28,22 @@ class SearchStatistics {
 /* -------------------------------------------------------------------------- */
 
 class Value {
-   public:
-    Value() {
-    }
-    Value(double v) {
-    }
-    virtual ~Value() {
-    }
+public:
+  Value() = default;
 
-    virtual void add(const Value& val) = 0;
-    virtual void update(const Value& val, int count) = 0;
-    virtual void set(const Value& val) = 0;
-    virtual void setComponent(int index, const double& val) = 0;
-    virtual double getRawComponent(int index) const = 0;
-    virtual double getWeightedComponent(int index) const = 0;
-    virtual int getComponentCount() const = 0;
-    virtual std::string text() const = 0;
+  virtual void add(const Value &val) = 0;
+  virtual void update(const Value &val, int count) = 0;
+  virtual void set(const Value &val) = 0;
+  virtual void setComponent(int index, const double &val) = 0;
+  virtual double getRawComponent(int index) const = 0;
+  virtual double getWeightedComponent(int index) const = 0;
+  virtual int getComponentCount() const = 0;
+  virtual std::string text() const = 0;
 
-    virtual double total() const = 0;
-    virtual Value* clone() const = 0;
+  virtual double total() const = 0;
+  virtual Value *clone() const = 0;
 
-    friend std::ostream& operator<<(std::ostream& os, const Value& v);
+  friend std::ostream &operator<<(std::ostream &os, const Value &v);
 };
 
 /* -------------------------------------------------------------------------- */
@@ -61,64 +54,75 @@ class Value {
 class VNode;
 
 class Solver {
-   protected:
-    const POMDP* model_;
-    Belief* belief_;
-    VNode* root_;
-    History* history_;  // contains only the action, not the action value
+protected:
+  const POMDP *model_;
+  Belief *belief_;
+  VNode *root_;
+  History *history_; // contains only the action, not the action value
 
-   public:
-    Solver(const POMDP* model, Belief* belief);
-    Solver(const POMDP* model);
+public:
+  Solver(const POMDP *model, Belief *belief);
+  explicit Solver(const POMDP *model);
 
-    virtual ~Solver();
+  virtual ~Solver();
 
-    /**
-     * @brief
-     * Find the optimal action for current belief, and optionally return the
-     * found value for the action. Return the value Globals::NEG_INFTY if the
-     * value is not to be used.
-     *
-     * @return ValuedAction
-     */
-    virtual ValuedAction search() = 0;
+  Solver(const Solver &) = delete;
+  Solver(Solver &&) = delete;
+  Solver &operator=(const Solver &) = delete;
+  Solver &operator=(Solver &&) = delete;
 
-    /**
-     * @brief Returns a pointer to the root of the search tree, memory is still managed by the solver
-     * 
-     * @return const VNode* the root of the search tree
-     */
-    const VNode* getSearchTree() const;
+  /**
+   * @brief
+   * Find the optimal action for current belief, and optionally return the
+   * found value for the action. Return the value Globals::NEG_INFTY if the
+   * value is not to be used.
+   *
+   * @return ValuedAction
+   */
+  virtual ValuedAction search() = 0;
 
-    /**
-     * @brief
-     * Update current belief, history, and any other internal states that is
-     * needed for Search() to function correctly.
-     *
-     * @param action selected by the previous search
-     * @param obs the observation received from the environment
-     */
-    virtual void beliefUpdate(const Action& action, const Observation& obs) = 0;
+  /**
+   * @brief Returns a pointer to the root of the search tree, memory is still
+   * managed by the solver
+   *
+   * @return const VNode* the root of the search tree
+   */
+  const VNode *getSearchTree() const;
 
-    /**
-     * @brief Set the Belief object
-     * Set initial belief for planning. Make sure internal states associated with
-     * initial belief are reset. In particular, history need to be cleaned, and
-     * allocated memory from previous searches need to be cleaned if not.
-     * @param b
-     */
-    virtual void setBelief(Belief* b) = 0;
-    virtual Belief* getBelief() const = 0;
+  /**
+   * @brief
+   * Update current belief, history, and any other internal states that is
+   * needed for Search() to function correctly.
+   *
+   * @param action selected by the previous search
+   * @param obs the observation received from the environment
+   */
+  virtual void beliefUpdate(const Action &action, const Observation &obs) = 0;
 
-    /**
-     * @brief Returns the search statistics
-     *
-     * @return SearchStatistics* the search statistics object (parent type, exact type is specified at runtime by the
-     * respective solver)
-     */
-    virtual SearchStatistics* getSearchStatistics() const = 0;
+  /**
+   * @brief Set the Belief object
+   * Set initial belief for planning. Make sure internal states associated with
+   * initial belief are reset. In particular, history need to be cleaned, and
+   * allocated memory from previous searches need to be cleaned if not.
+   * @param b the new belief
+   */
+  virtual void setBelief(Belief *b) = 0;
+  virtual Belief *getBelief() const = 0;
 
-    virtual History* copyHistory() const;
+  /**
+   * @brief Returns the search statistics
+   *
+   * @return SearchStatistics* the search statistics object (parent type, exact
+   * type is specified at runtime by the respective solver)
+   */
+  virtual SearchStatistics *getSearchStatistics() const = 0;
+
+  /**
+   * @brief returns a copy of the History object
+   *
+   * @return History* copy of the History object
+   */
+  virtual History *copyHistory() const;
 };
 
-}  // namespace solver_ipft
+} // namespace solver_ipft
