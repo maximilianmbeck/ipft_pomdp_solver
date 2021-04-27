@@ -20,14 +20,15 @@ namespace cld {
 constexpr double epsilonCLDState = 1e-6;
 constexpr double epsilonCLDObs = 1e-6;
 constexpr int numberOfActions = 5;
-constexpr double muInitial = 0.0;      // see MA Fischer p.87 + continuous_ld.jl
-constexpr double sigmaInitial = 10.0;  // see MA Fischer p.87 + continuous_ld.jl
+constexpr double muInitial = 0.0;     // see MA Fischer p.87 + continuous_ld.jl
+constexpr double sigmaInitial = 10.0; // see MA Fischer p.87 + continuous_ld.jl
 constexpr double sigmaTransition = 0.1;
 constexpr double lightSourceLoc = 10.0;
 constexpr double goalRegion = 0.0;
-constexpr int actToValueMap[5] = {-3, -1, 0, 1, 3};  // TODO replace any direct access to this array by CLDActionValue class
+constexpr int actToValueMap[5] = {-3, -1, 0, 1, 3}; // discrete actions
 
-constexpr int cldPrec = 4;  // precision of state and observation outputs / prints
+constexpr int cldPrec =
+    4; // precision of state and observation outputs / prints
 
 /* -------------------------------------------------------------------------- */
 /*             Definitions of state, observation and action space             */
@@ -35,86 +36,65 @@ constexpr int cldPrec = 4;  // precision of state and observation outputs / prin
 
 // continuous state space
 class CLDState : public State {
-   public:
-    CLDState() : posState(0){};
-    CLDState(double state) : posState(state){};
-    virtual ~CLDState() = default;
+public:
+  CLDState() = default;
+  explicit CLDState(double state) : posState(state){};
 
-    bool equals(const Point &p) const override;
+  bool equals(const Point &p) const override;
 
-    // double distanceTo(const Point &p) const override;
+  int dimensions() const override;
 
-    int dimensions() const override;
+  void reset() override;
 
-    void reset() override;
+  std::string text() const override;
 
-    // bool operator<(const Point &rhs) const override;
+  double get(int dim = 0) const override;
 
-    // bool operator==(const Point &rhs) const override;
+  void set(const double &p, int dim = 0) override;
 
-    std::string text() const override;
+  friend std::ostream &operator<<(std::ostream &os, const CLDState &p);
 
-    double get(int dim = 0) const override;
+private:
+  double posState{0};
 
-    void set(const double &p, int dim = 0) override;
-
-    friend std::ostream &operator<<(std::ostream &os, const CLDState &p);
-
-   private:
-    double posState;
-
-    double epsilon() const override;
+  double epsilon() const override;
 };
 
 // continuous observation space
 class CLDObs : public Observation {
-   public:
-    CLDObs() : posObs(0){};
-    CLDObs(double obs) : posObs(obs){};
-    virtual ~CLDObs() = default;
+public:
+  CLDObs() = default;
+  explicit CLDObs(double obs) : posObs(obs){};
 
-    bool equals(const Point &p) const override;
+  bool equals(const Point &p) const override;
 
-    // double distanceTo(const Point &p) const override;
+  int dimensions() const override;
 
-    int dimensions() const override;
+  void reset() override;
 
-    void reset() override;
+  std::string text() const override;
 
-    // bool operator<(const Point &rhs) const override;
+  double get(int dim = 0) const override;
 
-    // bool operator==(const Point &rhs) const override;
+  void set(const double &p, int dim = 0) override;
 
-    std::string text() const override;
+  friend std::ostream &operator<<(std::ostream &os, const CLDObs &p);
 
-    double get(int dim = 0) const override;
+private:
+  double posObs{0};
 
-    void set(const double &p, int dim = 0) override;
-
-    friend std::ostream &operator<<(std::ostream &os, const CLDObs &p);
-
-   private:
-    double posObs;
-
-    double epsilon() const override;
+  double epsilon() const override;
 };
 
 // Scoped declaration of discrete action space
-enum class CLDAction {
-    NEG3 = 0,
-    NEG1 = 1,
-    ZERO = 2,
-    POS1 = 3,
-    POS3 = 4
-};
+enum class CLDAction { NEG3 = 0, NEG1 = 1, ZERO = 2, POS1 = 3, POS3 = 4 };
 
 // action value class
 class CLDActionValue : public CLDObs {
-   public:
-    CLDActionValue(const Action &act);
-    virtual ~CLDActionValue() = default;
+public:
+  explicit CLDActionValue(const Action &act);
 
-    friend std::ostream &operator<<(std::ostream &os, const CLDActionValue &p);
+  friend std::ostream &operator<<(std::ostream &os, const CLDActionValue &p);
 };
 
 /* -------------------------------------------------------------------------- */
@@ -122,52 +102,59 @@ class CLDActionValue : public CLDObs {
 /* -------------------------------------------------------------------------- */
 
 class ContLightDark : public POMDP {
-   protected:
-    mutable MemoryPool<CLDState> state_memory_pool_;
-    mutable MemoryPool<CLDObs> obs_memory_pool_;
-    const Random *rand_;
+protected:
+  mutable MemoryPool<CLDState> state_memory_pool_;
+  mutable MemoryPool<CLDObs> obs_memory_pool_;
+  const Random *rand_;
 
-   public:
-    ContLightDark(const Random *rand) : rand_(rand){};
-    virtual ~ContLightDark();
+public:
+  explicit ContLightDark(const Random *rand) : rand_(rand){};
 
-    /* ----------------------- Simulative model functions ----------------------- */
-    State *createStartState() const override;
-    Belief *initialBelief(std::string type = "DEFAULT") const override;
+  /* ----------------------- Simulative model functions -----------------------
+   */
+  State *createStartState() const override;
+  Belief *initialBelief(std::string type = "DEFAULT") const override;
 
-    State *transition(const State &state, const Action &action) const override;
-    Observation *observation(const State &statePosterior) const override;
-    double obsProb(const State &statePosterior, const Observation &obs) const override;
-    double maxPossibleWeight(const Action &act, const Observation &obs) const override;
-    double reward(const State &state, const Action &action) const override;
-    bool terminalState(const State &statePosterior, const Action &action) const override;
+  State *transition(const State &state, const Action &action) const override;
+  Observation *observation(const State &statePosterior) const override;
+  double obsProb(const State &statePosterior,
+                 const Observation &obs) const override;
+  double maxPossibleWeight(const Action &act,
+                           const Observation &obs) const override;
+  double reward(const State &state, const Action &action) const override;
+  bool terminalState(const State &statePosterior,
+                     const Action &action) const override;
 
-    int numActions() const override;
-    std::unique_ptr<ActionValue> valueOfAction(const Action &act) const override;
+  int numActions() const override;
+  std::unique_ptr<ActionValue> valueOfAction(const Action &act) const override;
 
-    int numDimStateSpace() const override;
-    std::vector<State *> similarStates(const State &state, int count) const override;
-    void newParticle(State *particle, const std::vector<State *> &particleSet, const Action &act, const Observation &obs) const override;
+  int numDimStateSpace() const override;
+  std::vector<State *> similarStates(const State &state,
+                                     int count) const override;
+  void newParticle(State *particle, const std::vector<State *> &particleSet,
+                   const Action &act, const Observation &obs) const override;
 
-    // only for this model
-    double obsModelSigma(const double &statePos) const;
+  // only for this model
+  double obsModelSigma(const double &statePos) const;
 
-    /* ---------------------------- Display function ---------------------------- */
-    std::string to_string(const State *state) const override;
-    std::string to_string(const Observation *obs) const override;
-    std::string to_string(const Action &action) const override;  // TODO consider using CLDActionValue
-    std::string to_string(const Belief *belief) const override;
+  /* ---------------------------- Display function ----------------------------
+   */
+  std::string to_string(const State *state) const override;
+  std::string to_string(const Observation *obs) const override;
+  std::string to_string(const Action &action) const override;
+  std::string to_string(const Belief *belief) const override;
 
-    /* ---------------------------- Memory management --------------------------- */
-    Observation *allocateObs() const override;
-    State *allocateState() const override;
-    Observation *copyObs(const Observation *obs) const override;
-    State *copyState(const State *state) const override;
-    void freeObs(Observation *obs) const override;
-    void freeState(State *state) const override;
-    int numActiveObs() const override;
-    int numActiveStates() const override;
+  /* ---------------------------- Memory management ---------------------------
+   */
+  Observation *allocateObs() const override;
+  State *allocateState() const override;
+  Observation *copyObs(const Observation *obs) const override;
+  State *copyState(const State *state) const override;
+  void freeObs(Observation *obs) const override;
+  void freeState(State *state) const override;
+  int numActiveObs() const override;
+  int numActiveStates() const override;
 };
 
-}  // namespace cld
-}  // namespace solver_ipft
+} // namespace cld
+} // namespace solver_ipft
