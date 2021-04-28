@@ -11,41 +11,40 @@ namespace solver_ipft {
 /* -------------------------------------------------------------------------- */
 
 class EvaluationStatistics {
-   protected:
-    std::ostream* out_;
+protected:
+  std::ostream *out_;
 
-   public:
-    int round_count_;
+public:
+  int round_count_;
 
-    // std::vector<SimulationStatistics*> round_results_;
-    std::vector<int> step_counts_;
-    std::vector<double> total_disc_rewards_;
-    std::vector<double> total_undisc_rewards_;
+  // std::vector<SimulationStatistics*> round_results_;
+  std::vector<int> step_counts_;
+  std::vector<double> total_disc_rewards_;
+  std::vector<double> total_undisc_rewards_;
 
-    double total_eval_time;  // in seconds
+  double total_eval_time; // in seconds
 
-    std::chrono::time_point<std::chrono::high_resolution_clock> eval_clock_start;
+  std::chrono::time_point<std::chrono::high_resolution_clock> eval_clock_start;
 
-   public:
-    EvaluationStatistics(std::ostream* out);
+public:
+  explicit EvaluationStatistics(std::ostream *out);
 
-    virtual ~EvaluationStatistics();
+  void initEvaluation();
 
-    void initEvaluation();
+  void summarizeRound(SimulationStatistics *round_stats);
 
-    void summarizeRound(SimulationStatistics* round_stats);
+  void endEvaluation();
 
-    void endEvaluation();
+  void printRewardStatistics(std::ostream &out) const;
 
-    void printRewardStatistics(std::ostream& out) const;
+  void averageRoundReward(double &discountedAvg, double &undiscountedAvg) const;
 
-    void averageRoundReward(double& discountedAvg, double& undiscountedAvg) const;
+  void stderrRoundReward(double &discountedStderr,
+                         double &undiscountedStderr) const;
 
-    void stderrRoundReward(double& discountedStderr, double& undiscountedStderr) const;
+  virtual void writeEvalutionResultsToFile(const std::string &filename) const;
 
-    virtual void writeEvalutionResultsToFile(const std::string& filename) const;
-
-    virtual void printEvaluationResults(std::ostream& os) const;
+  virtual void printEvaluationResults(std::ostream &os) const;
 };
 
 /* -------------------------------------------------------------------------- */
@@ -53,26 +52,28 @@ class EvaluationStatistics {
 /* -------------------------------------------------------------------------- */
 
 class Evaluator {
-   protected:
-    Planner* planner_;
+protected:
+  Planner *planner_;
 
-    EvaluationStatistics* eval_stats_;
+  EvaluationStatistics *eval_stats_;
 
-    int round_;
+  int round_;
 
-   public:
-    Evaluator(Planner* planner);
-    virtual ~Evaluator();
+public:
+  explicit Evaluator(Planner *planner);
+  virtual ~Evaluator();
 
-    virtual int runEvaluation(int argc, char* argv[]);
+  virtual int runEvaluation(int argc, char *argv[]);
 
-   protected:
-    virtual void runEvaluationLoop();
+protected:
+  virtual void runEvaluationLoop();
 
-    virtual void printEvaluationEnd(int num_rounds,
-                                    const std::chrono::time_point<std::chrono::high_resolution_clock>& main_clock_start) const;
+  virtual void printEvaluationEnd(
+      int num_rounds,
+      const std::chrono::time_point<std::chrono::high_resolution_clock>
+          &main_clock_start) const;
 
-    virtual void saveEvaluationResults() const;
+  virtual void saveEvaluationResults() const;
 };
 
-}  // namespace solver_ipft
+} // namespace solver_ipft

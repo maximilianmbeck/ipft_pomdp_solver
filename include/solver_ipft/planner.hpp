@@ -5,48 +5,53 @@
 namespace solver_ipft {
 
 class Planner : public Plannerbase {
-   protected:
-    int step_;
-    int round_;
+protected:
+  int step_;
+  int round_;
 
-    SimulationStatistics* sim_stats_;
+  SimulationStatistics *sim_stats_;
 
-   public:
-    Planner();
+public:
+  Planner();
 
-    virtual ~Planner();
+  ~Planner() override;
 
-    /**
-     * @brief Perform one search-execute-update step
-     *
-     */
-    virtual bool runStep();
+  Planner(const Planner &) = delete;
+  Planner(Planner &&) = delete;
+  Planner &operator=(const Planner &) = delete;
+  Planner &operator=(Planner &&) = delete;
 
-    virtual void initializePlanner();
+  /**
+   * @brief Perform one search-execute-update step
+   *
+   */
+  virtual bool runStep();
 
-    virtual void runPlanningLoop();
+  virtual void initializePlanner();
 
-    virtual void resetPlanner();
+  virtual void runPlanningLoop();
 
-    // Return a pointer to the true sim stats object (ownership stays in planner)
-    virtual SimulationStatistics* getSimulationStatsRef() const;
+  virtual void resetPlanner();
 
-    /**
-     * @brief Run and evaluate POMDP planning for a given number of rounds
-     *
-     */
-    virtual int runPlanning(int argc, char* argv[]);
+  // Return a pointer to the true sim stats object (ownership stays in planner)
+  virtual SimulationStatistics *getSimulationStatsRef() const;
 
-   protected:
-    /**
-     * @brief Loop the search-execute-update process for a given number of steps
-     *
-     */
-    virtual void planningLoop();
+  /**
+   * @brief Run and evaluate POMDP planning for a given number of rounds
+   *
+   */
+  virtual int runPlanning(int argc, char *argv[]);
 
-    virtual ValuedAction findAction();
+protected:
+  /**
+   * @brief Loop the search-execute-update process for a given number of steps
+   *
+   */
+  virtual void planningLoop();
 
-    virtual bool takeAction(const ValuedAction& valuedAct);
+  virtual ValuedAction findAction();
+
+  virtual bool takeAction(const ValuedAction &valuedAct);
 };
 
-}  // namespace solver_ipft
+} // namespace solver_ipft
