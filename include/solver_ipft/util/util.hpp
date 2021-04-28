@@ -5,7 +5,8 @@ namespace solver_ipft {
 
 namespace util {
 
-std::vector<double> weightedSampleVarianceToStd(const std::vector<double>& sampleVariance);
-}  // namespace util
+std::vector<double>
+weightedSampleVarianceToStd(const std::vector<double> &sampleVariance);
+} // namespace util
 
-}  // namespace solver_ipft
+} // namespace solver_ipft
