@@ -27,7 +27,6 @@ public:
 
   std::vector<int> num_visits_vnodes_on_level;
   std::vector<int> num_vnodes_on_level;
-  // ParticleBelief* root_belief;
   std::vector<History> actionSequences;
 
   // convergence eval
@@ -75,6 +74,12 @@ protected:
 public:
   IpftValue();
   IpftValue(const double &stateValue, const double &informationValue);
+
+  ~IpftValue() override = default;
+  IpftValue(const IpftValue &) = default;
+  IpftValue(IpftValue &&) = default;
+  IpftValue &operator=(const IpftValue &) = default;
+  IpftValue &operator=(IpftValue &&) = default;
 
   void add(const Value &val) override;
   void update(const Value &val, int count) override;
