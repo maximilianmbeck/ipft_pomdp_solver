@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "solver_ipft/core/particle_belief.hpp"
+#include <solver_ipft/core/particle_belief.hpp>
 
 namespace solver_ipft {
 // Forward declarations

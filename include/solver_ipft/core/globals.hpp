@@ -1,7 +1,5 @@
 #pragma once
 
-//! helper functions, constants go here
-
 #include <cmath>
 #include <limits>
 #include <solver_ipft/interface/spaces.hpp>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "solver_ipft/interface/spaces.hpp"
+#include <solver_ipft/interface/spaces.hpp>
 
 namespace solver_ipft {
 

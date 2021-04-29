@@ -1,6 +1,6 @@
 #pragma once
 
-#include "solver_ipft/interface/belief.hpp"
+#include <solver_ipft/interface/belief.hpp>
 
 namespace solver_ipft {
 

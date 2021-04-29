@@ -20,10 +20,7 @@ protected:
   Value *value_;        // value of the node
 public:
   Node(const POMDP *model, int level)
-      : model_(model), treelevel_(level), count_(0), value_(nullptr) {
-  } // TODO(max): value_(nullptr) is very likely to cause errors (find a better
-    // solution) after creation of a node the value must be initialized
-    // manually!!
+      : model_(model), treelevel_(level), count_(0), value_(nullptr) {}
   virtual ~Node();
   Node(const Node &other) = delete;
   Node(Node &&other) noexcept = delete;

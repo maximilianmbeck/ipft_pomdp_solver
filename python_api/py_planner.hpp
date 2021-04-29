@@ -1,7 +1,6 @@
 #pragma once
-#include <solver_ipft/planner.hpp>
-// #include <solver_ipft/python_adapters/py_node.hpp>
 #include <memory>
+#include <solver_ipft/planner.hpp>
 #include <vector>
 
 #include "py_node.hpp"

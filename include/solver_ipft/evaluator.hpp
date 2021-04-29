@@ -2,7 +2,7 @@
 
 #include <chrono>
 
-#include "solver_ipft/planner.hpp"
+#include <solver_ipft/planner.hpp>
 
 namespace solver_ipft {
 

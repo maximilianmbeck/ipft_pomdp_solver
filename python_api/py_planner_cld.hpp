@@ -1,8 +1,7 @@
 #pragma once
+#include "py_planner.hpp"
 #include <solver_ipft/core/pomdp_world.hpp>
 #include <solver_ipft/problems/cont_lightdark.hpp>
-// #include <solver_ipft/python_adapters/py_planner.hpp>
-#include "py_planner.hpp"
 namespace solver_ipft {
 namespace pyadapters {
 

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "solver_ipft/core/information_gain.hpp"
-#include "solver_ipft/core/node.hpp"
-#include "solver_ipft/interface/pomdp.hpp"
-#include "solver_ipft/solver/ipft.hpp"
+#include <solver_ipft/core/information_gain.hpp>
+#include <solver_ipft/core/node.hpp>
+#include <solver_ipft/interface/pomdp.hpp>
+#include <solver_ipft/solver/ipft.hpp>
 
 namespace solver_ipft {
 class IpftValue;

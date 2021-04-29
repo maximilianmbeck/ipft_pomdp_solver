@@ -3,9 +3,9 @@
 #include <chrono>
 #include <vector>
 
-#include "solver_ipft/core/solver.hpp"
-#include "solver_ipft/interface/pomdp.hpp"
-#include "solver_ipft/interface/world.hpp"
+#include <solver_ipft/core/solver.hpp>
+#include <solver_ipft/interface/pomdp.hpp>
+#include <solver_ipft/interface/world.hpp>
 
 namespace solver_ipft {
 

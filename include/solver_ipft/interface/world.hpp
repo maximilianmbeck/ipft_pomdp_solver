@@ -1,8 +1,6 @@
 #pragma once
 
-#include "solver_ipft/interface/spaces.hpp"
-
-// see despot
+#include <solver_ipft/interface/spaces.hpp>
 
 namespace solver_ipft {
 
