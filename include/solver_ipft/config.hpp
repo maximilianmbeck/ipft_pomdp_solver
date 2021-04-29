@@ -42,12 +42,12 @@ struct Config {
   bool print_search_step_results; // verbose output of each search tree
 
   Config()
-      : search_depth(20), time_per_move(1000), // default 1000
+      : search_depth(10), time_per_move(1000), // default 1000
         max_simulation_count(100000),          // default 1000
         num_search_particles(20),              // default 20
         num_solver_particles(10000),           // in sample_trajectory.jl: 10000
-        sim_len(40), eval_len(100), pw_k_obs(5.0), // default 5.0
-        pw_alpha_obs(0.05),                        // default 1/20
+        sim_len(40), eval_len(10), pw_k_obs(5.0), // default 5.0
+        pw_alpha_obs(0.05),                       // default 1/20
         min_particle_std(0.1), discount_gamma(0.95),
         inf_discount_gamma(1.0),          // 1.0 means undiscounted
         explore_constant_c(100.0),        // default 100.0
