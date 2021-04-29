@@ -48,9 +48,9 @@ public:
 
   std::string text() const override;
 
-  double get(int dim = 0) const override;
+  double get(int dim) const override;
 
-  void set(const double &p, int dim = 0) override;
+  void set(const double &p, int dim) override;
 
   friend std::ostream &operator<<(std::ostream &os, const CLDState &p);
 
@@ -74,9 +74,9 @@ public:
 
   std::string text() const override;
 
-  double get(int dim = 0) const override;
+  double get(int dim) const override;
 
-  void set(const double &p, int dim = 0) override;
+  void set(const double &p, int dim) override;
 
   friend std::ostream &operator<<(std::ostream &os, const CLDObs &p);
 
@@ -113,7 +113,7 @@ public:
   /* ----------------------- Simulative model functions -----------------------
    */
   State *createStartState() const override;
-  Belief *initialBelief(std::string type = "DEFAULT") const override;
+  Belief *initialBelief(const std::string &type) const override;
 
   State *transition(const State &state, const Action &action) const override;
   Observation *observation(const State &statePosterior) const override;

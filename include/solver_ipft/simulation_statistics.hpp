@@ -47,7 +47,7 @@ public:
   void initRound(int round);
 
   void endRound(int step_count, History *solver_hist,
-                std::vector<State *> world_hist);
+                const std::vector<State *> &world_hist);
 
   /**
    * @brief Saves step statistics and prints them out if specified

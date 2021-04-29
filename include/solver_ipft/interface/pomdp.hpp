@@ -38,7 +38,7 @@ public:
    * @param type      type of the initial belief (e.g. Gaussian)
    * @return Belief*  the initial belief
    */
-  virtual Belief *initialBelief(std::string type) const;
+  virtual Belief *initialBelief(const std::string &type) const;
 
   virtual State *transition(const State &state, const Action &action) const = 0;
 

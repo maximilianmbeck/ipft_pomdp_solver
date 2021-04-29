@@ -30,6 +30,12 @@ public:
 class Value {
 public:
   Value() = default;
+  virtual ~Value() = default;
+
+  Value(const Value &) = default;
+  Value(Value &&) = default;
+  Value &operator=(const Value &) = default;
+  Value &operator=(Value &&) = default;
 
   virtual void add(const Value &val) = 0;
   virtual void update(const Value &val, int count) = 0;

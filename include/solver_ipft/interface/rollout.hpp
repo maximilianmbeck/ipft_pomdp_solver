@@ -87,7 +87,7 @@ protected:
   mutable int round_;
 
 public:
-  explicit DeterministicActionChooser(std::vector<Action> actions);
+  explicit DeterministicActionChooser(const std::vector<Action> &actions);
 
   ~DeterministicActionChooser() override = default;
 

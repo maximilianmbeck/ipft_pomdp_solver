@@ -16,6 +16,13 @@ protected:
 
 public:
   explicit ParticleReinvigorator(const POMDP *model) : model_(model) {}
+  virtual ~ParticleReinvigorator() = default;
+
+  ParticleReinvigorator(const ParticleReinvigorator &) = default;
+  ParticleReinvigorator(ParticleReinvigorator &&) = default;
+  ParticleReinvigorator &operator=(const ParticleReinvigorator &) = default;
+  ParticleReinvigorator &operator=(ParticleReinvigorator &&) = default;
+
   virtual bool
   particleReinvigorationNeeded(const std::vector<State *> &particleSet,
                                const Action &act,

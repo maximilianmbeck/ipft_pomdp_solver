@@ -15,14 +15,14 @@ protected:
   std::ostream *out_;
 
 public:
-  int round_count_;
+  int round_count_{0};
 
   // std::vector<SimulationStatistics*> round_results_;
   std::vector<int> step_counts_;
   std::vector<double> total_disc_rewards_;
   std::vector<double> total_undisc_rewards_;
 
-  double total_eval_time; // in seconds
+  double total_eval_time{0.0}; // in seconds
 
   std::chrono::time_point<std::chrono::high_resolution_clock> eval_clock_start;
 
