@@ -1,9 +1,7 @@
-#include "solver_ipft/core/valued_action.hpp"
-
 #include <iomanip>
+#include <solver_ipft/core/solver.hpp>
+#include <solver_ipft/core/valued_action.hpp>
 #include <sstream>
-
-#include "solver_ipft/core/solver.hpp"
 
 namespace solver_ipft {
 /* -------------------------------------------------------------------------- */

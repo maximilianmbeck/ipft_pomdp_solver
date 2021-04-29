@@ -8,37 +8,11 @@ namespace test {
 
 // The fixture for testing class RolloutPolicy and its child classes.
 class RolloutTest : public ParticleBeliefData {
-   protected:
-    // You can remove any or all of the following functions if their bodies would
-    // be empty.
-
-    const int depth = 20;
-    const int N_r = 10000;  // number of rollouts
-    const double deltaStateReward = 3.0;
-    const double deltaInfReward = 2.0;
-
-    RolloutTest() {
-        // You can do set-up work for each test here.
-    }
-
-    ~RolloutTest() override {
-        // You can do clean-up work that doesn't throw exceptions here.
-    }
-
-    // If the constructor and destructor are not enough for setting up
-    // and cleaning up each test, you can define the following methods:
-
-    void SetUp() override {
-        // Code here will be called immediately after the constructor (right
-        // before each test).
-    }
-
-    void TearDown() override {
-        // Code here will be called immediately after each test (right
-        // before the destructor).
-    }
-
-    // Class members declared here can be used by all tests in the test suite
+protected:
+  const int depth = 20;
+  const int N_r = 10000; // number of rollouts
+  const double deltaStateReward = 3.0;
+  const double deltaInfReward = 2.0;
 };
 
 TEST_F(RolloutTest, BeliefInformationPolicyTest) {

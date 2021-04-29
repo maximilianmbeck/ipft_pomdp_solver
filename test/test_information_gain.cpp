@@ -10,13 +10,9 @@ namespace test {
 // The fixture for testing class ParticleBelief.
 class InformationGainTest : public ParticleBeliefData {
    protected:
-    // You can remove any or all of the following functions if their bodies would
-    // be empty.
-
     ParticleBelief *belErr1StepNext;
 
     InformationGainTest() {
-        // You can do set-up work for each test here.
         std::vector<double> numbers = {3.0643,
                                        3.0643,
                                        3.0643,
@@ -43,24 +39,9 @@ class InformationGainTest : public ParticleBeliefData {
     }
 
     ~InformationGainTest() override {
-        // You can do clean-up work that doesn't throw exceptions here.
         delete belErr1StepNext;
     }
 
-    // If the constructor and destructor are not enough for setting up
-    // and cleaning up each test, you can define the following methods:
-
-    void SetUp() override {
-        // Code here will be called immediately after the constructor (right
-        // before each test).
-    }
-
-    void TearDown() override {
-        // Code here will be called immediately after each test (right
-        // before the destructor).
-    }
-
-    // Class members declared here can be used by all tests in the test suite
 };
 
 TEST_F(InformationGainTest, EntropyTest) {

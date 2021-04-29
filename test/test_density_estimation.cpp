@@ -8,33 +8,7 @@ namespace solver_ipft {
 namespace test {
 // The fixture for testing density estimation classes.
 class DensityEstimationTest : public ParticleBeliefData {
-   protected:
-    // You can remove any or all of the following functions if their bodies would
-    // be empty.
-
-    DensityEstimationTest() {
-    }
-
-    virtual ~DensityEstimationTest() override {
-        // You can do clean-up work that doesn't throw exceptions here.
-    }
-
-    // If the constructor and destructor are not enough for setting up
-    // and cleaning up each test, you can define the following methods:
-
-    void SetUp() override {
-        // Code here will be called immediately after the constructor (right
-        // before each test).
-    }
-
-    void TearDown() override {
-        // Code here will be called immediately after each test (right
-        // before the destructor).
-    }
-
-    // Class members declared here can be used by all tests in the test suite
 };
-
 /* ---------------------------- Univariate tests ---------------------------- */
 
 // Tests if the univariate RoT-Bandwidth selector works properly
@@ -66,28 +40,6 @@ TEST_F(DensityEstimationTest, NormalKernelUnivariate) {
     // value from python scipy.stats.gaussian_kde = 0.1725006
 }
 
-// // Tests if the univariate Kernel Density Estimation works properly
-// TEST_F(DensityEstimationTest, KDEUnivariate) {
-//     EXPECT_EQ(0, 0);
-// }
-
-// /* --------------------------- Multivariate tests --------------------------- */
-// //! currently not supported, since no multivariate model implemented
-
-// // Tests if the multivariate RoT-Bandwidth selector works properly
-// TEST_F(DensityEstimationTest, RotBandwidthMultivariate) {
-//     EXPECT_EQ(0, 0);
-// }
-
-// // Tests if the multivariate NormalKernel works properly
-// TEST_F(DensityEstimationTest, NormalKernelMultivariate) {
-//     EXPECT_EQ(0, 0);
-// }
-
-// // Tests if the multivariate Kernel Density Estimation works properly
-// TEST_F(DensityEstimationTest, KDEMultivariate) {
-//     EXPECT_EQ(0, 0);
-// }
 }  // namespace test
 }  // namespace solver_ipft
 
