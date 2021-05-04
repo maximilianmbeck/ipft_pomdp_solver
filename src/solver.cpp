@@ -11,30 +11,19 @@ std::ostream &operator<<(std::ostream &os, const Value &v) {
 
 /* --------------------- Solver function implementations -------------------- */
 
-Solver::Solver(const POMDP *model, Belief *belief)
-    : model_(model), belief_(belief), root_(nullptr) {
-  this->history_ = new History(this->model_);
+Solver::Solver(std::shared_ptr<POMDP> model, std::unique_ptr<Belief> &&belief)
+    : model_(std::move(model)), belief_(std::move(belief)), root_(nullptr),
+      history_(std::make_unique<History>(model_)) {
   // add initial belief to history
-  Belief *initialBelief = this->belief_->clone();
-  this->history_->addInitialBelief(initialBelief);
+  auto initialBelief = this->belief_->clone();
+  this->history_->addInitialBelief(std::move(initialBelief));
 }
 
-Solver::Solver(const POMDP *model)
-    : model_(model), belief_(nullptr), root_(nullptr) {
-  this->history_ = new History(this->model_);
-}
+Solver::Solver(std::shared_ptr<POMDP> model)
+    : Solver(std::move(model), nullptr) {}
 
-Solver::~Solver() {
-  delete root_;
-  delete belief_;
-  delete history_;
-}
+History Solver::copyHistory() const { return *this->history_; }
 
-History *Solver::copyHistory() const {
-  auto hist = new History(*(this->history_));
-  return hist;
-}
-
-const VNode *Solver::getSearchTree() const { return root_; }
+std::shared_ptr<VNode> Solver::getSearchTree() const { return this->root_; }
 
 } // namespace solver_ipft

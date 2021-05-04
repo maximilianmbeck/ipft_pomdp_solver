@@ -12,7 +12,8 @@ namespace solver_ipft {
 
 /* ---------------------- ParticleSetToString class ---------------------- */
 
-ParticleSetToString::ParticleSetToString(const POMDP *model) : model_(model) {}
+ParticleSetToString::ParticleSetToString(std::shared_ptr<POMDP> model)
+    : model_(std::move(model)) {}
 
 std::string
 ParticleSetToString::shortDescription(const std::vector<State *> &particleSet,

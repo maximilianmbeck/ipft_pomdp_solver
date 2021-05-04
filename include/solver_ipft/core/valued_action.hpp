@@ -12,14 +12,14 @@ class Value;
 
 struct ValuedAction {
   Action action_;
-  Value *value_;
+  std::unique_ptr<Value> value_;
   int count_;
   // index no action / invalid action constructor
   ValuedAction();
   // no value/count constructor
   explicit ValuedAction(Action _action);
   // regular constructor
-  ValuedAction(Action _action, Value *_value, int _count);
+  ValuedAction(Action _action, std::unique_ptr<Value> &&_value, int _count);
   // copy constructor
   ValuedAction(const ValuedAction &other);
   // assignment operator

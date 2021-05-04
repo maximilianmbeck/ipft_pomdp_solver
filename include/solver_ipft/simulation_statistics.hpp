@@ -11,9 +11,9 @@ namespace solver_ipft {
 
 class SimulationStatistics {
 protected:
-  POMDP *model_;
-  World *world_;
-  Solver *solver_;
+  const std::shared_ptr<POMDP> model_;
+  const std::shared_ptr<World> world_;
+  const std::shared_ptr<Solver> solver_;
 
   std::ostream *out_;
 
@@ -27,15 +27,16 @@ public:
 
   std::vector<double> state_rewards_;
   std::vector<double> obs_probs_;
-  std::vector<SearchStatistics *> search_stats_;
-  History *solver_hist_;
+  std::vector<std::unique_ptr<SearchStatistics>> search_stats_;
+  History solver_hist_;
   std::vector<State *> world_hist_;
 
   double total_round_time; // in ms
 
 public:
-  SimulationStatistics(POMDP *model, World *world, Solver *solver,
-                       std::ostream *out);
+  SimulationStatistics(std::shared_ptr<POMDP> model,
+                       std::shared_ptr<World> world,
+                       std::shared_ptr<Solver> solver, std::ostream *out);
 
   virtual ~SimulationStatistics();
 
@@ -46,8 +47,8 @@ public:
 
   void initRound(int round);
 
-  void endRound(int step_count, History *solver_hist,
-                const std::vector<State *> &world_hist);
+  void endRound(int step_count, History &&solver_hist,
+                std::vector<State *> &&world_hist);
 
   /**
    * @brief Saves step statistics and prints them out if specified

@@ -1,30 +1,33 @@
-#include "solver_ipft/core/globals.hpp"
-#include "solver_ipft/util/debug.hpp"
-#include "solver_ipft/util/output.hpp"
 #include <algorithm>
 #include <cmath>
 #include <glog/logging.h>
 #include <iomanip>
+#include <solver_ipft/core/globals.hpp>
 #include <solver_ipft/core/particle_belief.hpp>
+#include <solver_ipft/util/debug.hpp>
+#include <solver_ipft/util/output.hpp>
 #include <sstream>
 
 namespace solver_ipft {
 
 ParticleBelief::ParticleBelief(
     std::vector<State *> particles, std::vector<State *> wp_particles,
-    bool beliefTerminated, const POMDP *model, const Random *rand,
-    const ParticleReinvigorator *afterResampleReinvigorator)
-    : ParticleBelief(particles, beliefTerminated, model, rand,
-                     afterResampleReinvigorator) {
-  this->weighted_posterior_particles_ = wp_particles;
+    bool beliefTerminated, std::shared_ptr<POMDP> model,
+    std::shared_ptr<Random> rand,
+    std::unique_ptr<ParticleReinvigorator> &&afterResampleReinvigorator)
+    : ParticleBelief(std::move(particles), beliefTerminated, std::move(model),
+                     std::move(rand), std::move(afterResampleReinvigorator)) {
+  this->weighted_posterior_particles_ = std::move(wp_particles);
 }
 
 ParticleBelief::ParticleBelief(
-    std::vector<State *> particles, bool beliefTerminated, const POMDP *model,
-    const Random *rand, const ParticleReinvigorator *afterResampleReinvigorator)
-    : Belief(model), rand_(rand), particles_(particles),
-      beliefTerminated_(beliefTerminated),
-      afterResampleReinvigorator_(afterResampleReinvigorator) {
+    std::vector<State *> particles, bool beliefTerminated,
+    std::shared_ptr<POMDP> model, std::shared_ptr<Random> rand,
+    std::unique_ptr<ParticleReinvigorator> &&afterResampleReinvigorator)
+    : Belief(std::move(model)), rand_(std::move(rand)),
+      particles_(std::move(particles)), beliefTerminated_(beliefTerminated),
+      afterResampleReinvigorator_(std::move(afterResampleReinvigorator)),
+      num_particles_(particles.size()) {
   init();
 }
 
@@ -39,11 +42,10 @@ void ParticleBelief::init() {
 ParticleBelief::~ParticleBelief() {
   this->model_->freeStates(this->particles_);
   this->model_->freeStates(this->weighted_posterior_particles_);
-  delete afterResampleReinvigorator_;
 }
 
-Belief *ParticleBelief::clone() const {
-  return new ParticleBelief(
+std::unique_ptr<Belief> ParticleBelief::clone() const {
+  return std::make_unique<ParticleBelief>(
       this->model_->copyStates(particles_),
       this->model_->copyStates(weighted_posterior_particles_),
       this->beliefTerminated_, this->model_, this->rand_,
@@ -287,8 +289,9 @@ std::vector<State *> ParticleBelief::sample(int num) const {
 
 State *ParticleBelief::sample() const { return this->sample(1).back(); }
 
-ParticleBelief *ParticleBelief::sampleParticleBelief(int num) const {
-  return new ParticleBelief(this->sample(num), this->beliefTerminated_,
+std::unique_ptr<ParticleBelief>
+ParticleBelief::sampleParticleBelief(int num) const {
+  return std::make_unique<ParticleBelief>(this->sample(num), this->beliefTerminated_,
                             this->model_, this->rand_,
                             this->afterResampleReinvigorator_->clone());
 }
@@ -304,9 +307,8 @@ State *ParticleBelief::std() const {
 }
 
 void ParticleBelief::setReinvigorationStrategy(
-    const ParticleReinvigorator *reinvigorator) {
-  delete this->afterResampleReinvigorator_;
-  this->afterResampleReinvigorator_ = reinvigorator;
+    std::unique_ptr<ParticleReinvigorator> &&reinvigorator) {
+  this->afterResampleReinvigorator_ = std::move(reinvigorator);
 }
 
 } // namespace solver_ipft

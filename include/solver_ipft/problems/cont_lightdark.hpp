@@ -105,15 +105,16 @@ class ContLightDark : public POMDP {
 protected:
   mutable MemoryPool<CLDState> state_memory_pool_;
   mutable MemoryPool<CLDObs> obs_memory_pool_;
-  const Random *rand_;
+  std::shared_ptr<Random> rand_;
 
 public:
-  explicit ContLightDark(const Random *rand) : rand_(rand){};
+  explicit ContLightDark(std::shared_ptr<Random> rand)
+      : rand_(std::move(rand)){};
 
   /* ----------------------- Simulative model functions -----------------------
    */
   State *createStartState() const override;
-  Belief *initialBelief(const std::string &type) const override;
+  std::unique_ptr<Belief> initialBelief(const std::string &type) override;
 
   State *transition(const State &state, const Action &action) const override;
   Observation *observation(const State &statePosterior) const override;

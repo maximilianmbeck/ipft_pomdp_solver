@@ -95,24 +95,20 @@ State *ContLightDark::createStartState() const {
   return startState;
 }
 
-Belief *ContLightDark::initialBelief(const std::string &type) const {
+std::unique_ptr<Belief> ContLightDark::initialBelief(const std::string &type) {
   std::vector<State *> particleSet;
   for (int i = 0; i < Globals::config.num_solver_particles; i++) {
     State *particle = this->allocateState();
     double pos = rand_->nextNormal(
         muInitial, sigmaInitial); // same as in sample_trajectory.jl
-    //! TESTING:
-    // double pos = rand_->nextNormal(6, 2);
-    // double pos = rand_->nextNormal(2.022253, 3.647963);
-    // double pos = rand_->nextUniform(-10, 10);
     particle->set(pos, 0); // dimension 0 (CLDStates have only 1 dimension)
     particleSet.push_back(particle);
   }
   State::normalizeWeights(particleSet, State::weightSum(particleSet));
-  Belief *b =
-      new ParticleBelief(particleSet, false, this, this->rand_,
-                         new ObsAdaptiveReinvigorator(this, this->rand_));
-  return b;
+  return std::make_unique<ParticleBelief>(
+      particleSet, false, shared_from_this(), this->rand_,
+      std::make_unique<ObsAdaptiveReinvigorator>(shared_from_this(),
+                                                 this->rand_));
 }
 
 int ContLightDark::numActions() const { return numberOfActions; }

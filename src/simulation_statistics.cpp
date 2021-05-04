@@ -8,10 +8,12 @@
 namespace solver_ipft {
 constexpr int round_step_separator_len_ = 90;
 
-SimulationStatistics::SimulationStatistics(POMDP *model, World *world,
-                                           Solver *solver, std::ostream *out)
-    : model_(model), world_(world), solver_(solver), out_(out),
-      solver_hist_(nullptr) {
+SimulationStatistics::SimulationStatistics(std::shared_ptr<POMDP> model,
+                                           std::shared_ptr<World> world,
+                                           std::shared_ptr<Solver> solver,
+                                           std::ostream *out)
+    : model_(std::move(model)), world_(std::move(world)),
+      solver_(std::move(solver)), out_(out), solver_hist_(nullptr) {
   total_discounted_reward_ = 0.0;
   total_undiscounted_reward_ = 0.0;
   step_count_ = 0;
@@ -19,11 +21,7 @@ SimulationStatistics::SimulationStatistics(POMDP *model, World *world,
 }
 
 SimulationStatistics::~SimulationStatistics() {
-  delete solver_hist_;
   this->model_->freeStates(world_hist_);
-  for (auto &step_stat : this->search_stats_) {
-    delete step_stat;
-  }
 }
 
 void SimulationStatistics::initRound(int round) {
@@ -39,14 +37,13 @@ void SimulationStatistics::initRound(int round) {
   *out_ << "Initial solver belief: ";
   *out_ << this->model_->to_string(solverBel);
   *out_ << std::endl;
-  delete solverBel;
 
   // start round
   this->round_clock_start = std::chrono::high_resolution_clock::now();
 }
 
-void SimulationStatistics::endRound(int step_count, History *solver_hist,
-                                    const std::vector<State *> &world_hist) {
+void SimulationStatistics::endRound(int step_count, History &&solver_hist,
+                                    std::vector<State *> &&world_hist) {
   // record round time
   auto round_clock_end = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double, std::milli> elapsed =
@@ -101,14 +98,12 @@ void SimulationStatistics::initStep(int round, int step) {
   *out_ << std::endl;
   //! DEBUG:
   // *out_ << solverBel->detailedText();
-  delete solverBel;
 }
 
 void SimulationStatistics::summarizeSearch() {
   // record search statistics
-  SearchStatistics *search_stats = nullptr;
-  search_stats = this->solver_->getSearchStatistics();
-  this->search_stats_.push_back(search_stats);
+  auto search_stats = this->solver_->getSearchStatistics();
+  this->search_stats_.emplace_back(std::move(search_stats));
 
   // print search statistics
   if (Globals::config.print_search_step_results && search_stats != nullptr) {
@@ -154,7 +149,6 @@ void SimulationStatistics::summarizeBeliefUpdate() {
   *out_ << std::endl;
   //! DEBUG:
   // *out_ << solverBel->detailedText();
-  delete solverBel;
 }
 
 void SimulationStatistics::printRoundResultsTable(std::ostream &os) const {
@@ -233,7 +227,7 @@ SimulationStatistics::getStepResultsForTable(int step) const {
     // state
     dataRow.push_back(this->world_hist_[step]->text());
     // solver mean
-    const Belief *b = this->solver_hist_->beliefPointer(step);
+    const Belief *b = this->solver_hist_.beliefPointer(step);
     State *mean = b->mean();
     dataRow.push_back(mean->text());
     b->model_->freeState(mean);
@@ -243,17 +237,17 @@ SimulationStatistics::getStepResultsForTable(int step) const {
     b->model_->freeState(std);
     // action
     std::unique_ptr<ActionValue> actVal =
-        this->model_->valueOfAction(this->solver_hist_->action(step));
+        this->model_->valueOfAction(this->solver_hist_.action(step));
     dataRow.push_back(actVal->text());
     // state posterior
     dataRow.push_back(this->world_hist_[step + 1]->text());
     // observation
-    const Observation *o = this->solver_hist_->observationPointer(step);
+    const Observation *o = this->solver_hist_.observationPointer(step);
     dataRow.push_back(o->text());
     // obs prob
     dataRow.push_back(std::to_string(this->obs_probs_[step]));
     // solver mean posterior
-    const Belief *bp = this->solver_hist_->beliefPointer(step + 1);
+    const Belief *bp = this->solver_hist_.beliefPointer(step + 1);
     State *meanp = bp->mean();
     dataRow.push_back(meanp->text());
     bp->model_->freeState(meanp);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <chrono>
+#include <memory>
 #include <solver_ipft/core/solver.hpp>
 #include <solver_ipft/interface/pomdp.hpp>
 #include <solver_ipft/interface/world.hpp>
@@ -10,15 +11,15 @@
 namespace solver_ipft {
 class Plannerbase {
 protected:
-  Random *rand_;
-  POMDP *model_;
-  World *world_;
-  Solver *solver_;
+  std::shared_ptr<Random> rand_;
+  std::shared_ptr<POMDP> model_;
+  std::shared_ptr<World> world_;
+  std::shared_ptr<Solver> solver_;
 
 public:
   Plannerbase();
 
-  virtual ~Plannerbase();
+  virtual ~Plannerbase() = default;
 
   Plannerbase(const Plannerbase &) = delete;
   Plannerbase(Plannerbase &&) = delete;
@@ -29,18 +30,19 @@ public:
    * [Essential]
    * @brief Create, initialize, and return a POMDP model
    *
-   * @return POMDP* the created POMDP model
+   * @return the created POMDP model
    */
-  virtual POMDP *initializeModel() = 0;
+  virtual std::unique_ptr<POMDP> initializeModel() = 0;
 
   /**
    * [Essential]
    * @brief Create, initialize, and return the world
    *
    * @param model the POMDP model for the world
-   * @return World* the created world
+   * @return the created world
    */
-  virtual World *initializePOMDPWorld(POMDP *model) = 0;
+  virtual std::unique_ptr<World>
+  initializePOMDPWorld(std::shared_ptr<POMDP> model) = 0;
 
   /**
    * @brief Initialize the solver
@@ -49,7 +51,9 @@ public:
    * @param belief
    * @return Solver*
    */
-  virtual Solver *initializeSolver(POMDP *model, Belief *belief) = 0;
+  virtual std::unique_ptr<Solver>
+  initializeSolver(std::shared_ptr<POMDP> model,
+                   std::unique_ptr<Belief> &&belief) = 0;
 
   /**
    * @brief Display global parameters

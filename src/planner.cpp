@@ -5,8 +5,6 @@ namespace solver_ipft {
 
 Planner::Planner() : step_(0), round_(0), sim_stats_(nullptr) {}
 
-Planner::~Planner() { delete sim_stats_; }
-
 bool Planner::runStep() {
   ValuedAction valuedAct = findAction();
 
@@ -86,36 +84,36 @@ void Planner::runPlanningLoop() {
   planningLoop();
 
   // get solver history
-  History *solverHist = solver_->copyHistory();
+  History solverHist = solver_->copyHistory();
   // get (true) world history
   std::vector<State *> worldHist = world_->copyWorldStateSequence();
 
-  this->sim_stats_->endRound(this->step_, solverHist, std::move(worldHist));
+  this->sim_stats_->endRound(this->step_, std::move(solverHist),
+                             std::move(worldHist));
 }
 
 void Planner::initializePlanner() {
   //* initialize model
-  POMDP *model = initializeModel(); // the model is shared between the world and
+  this->model_ = initializeModel(); // the model is shared between the world and
                                     // the solver, i.e. they use the same model
-  this->model_ = model;
   //* initialize world
-  this->world_ = initializePOMDPWorld(model);
+  this->world_ = initializePOMDPWorld(this->model_);
   this->world_->initialize();
   //* initialize belief
-  Belief *initialBelief = this->model_->initialBelief("DEFAULT");
+  auto initialBelief = this->model_->initialBelief("DEFAULT");
   //* initialize solver
-  this->solver_ = initializeSolver(model, initialBelief);
+  this->solver_ = initializeSolver(this->model_, std::move(initialBelief));
 
   //* initialize simulation statistics
-  this->sim_stats_ = new SimulationStatistics(this->model_, this->world_,
-                                              this->solver_, &std::cout);
+  this->sim_stats_ = std::make_unique<SimulationStatistics>(
+      this->model_, this->world_, this->solver_, &std::cout);
 
   this->round_ = 0;
   this->step_ = 0;
 }
 
-SimulationStatistics *Planner::getSimulationStatsRef() const {
-  return this->sim_stats_;
+std::unique_ptr<SimulationStatistics> Planner::getSimulationStatistics() {
+  return std::move(this->sim_stats_);
 }
 
 void Planner::resetPlanner() {
@@ -126,15 +124,13 @@ void Planner::resetPlanner() {
   this->world_->initialize();
 
   // initial belief
-  Belief *initialBelief = this->model_->initialBelief("DEFAULT");
+  auto initialBelief = this->model_->initialBelief("DEFAULT");
   // reset solver
-  this->solver_->setBelief(initialBelief);
-
-  delete this->sim_stats_;
+  this->solver_->setBelief(std::move(initialBelief));
 
   // reset simulation statistics
-  this->sim_stats_ = new SimulationStatistics(this->model_, this->world_,
-                                              this->solver_, &std::cout);
+  this->sim_stats_ = std::make_unique<SimulationStatistics>(
+      this->model_, this->world_, this->solver_, &std::cout);
 }
 
 } // namespace solver_ipft

@@ -31,7 +31,7 @@ public:
 
   void initEvaluation();
 
-  void summarizeRound(SimulationStatistics *round_stats);
+  void summarizeRound(const SimulationStatistics &round_stats);
 
   void endEvaluation();
 
@@ -53,15 +53,14 @@ public:
 
 class Evaluator {
 protected:
-  Planner *planner_;
+  std::unique_ptr<Planner> planner_;
 
-  EvaluationStatistics *eval_stats_;
+  std::unique_ptr<EvaluationStatistics> eval_stats_;
 
   int round_;
 
 public:
   explicit Evaluator(Planner *planner);
-  virtual ~Evaluator();
 
   virtual int runEvaluation(int argc, char *argv[]);
 

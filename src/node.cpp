@@ -6,34 +6,21 @@ namespace solver_ipft {
 /*                                 Node class                                 */
 /* -------------------------------------------------------------------------- */
 
-Node::~Node() { delete this->value_; }
-
-// Node::Node(const Node &other)
-//     : model_(other.model_), count_(other.count_),
-//     treelevel_(other.treelevel_), value_(other.value_->clone()) {}
-
-// Node::Node(Node &&other) noexcept
-//     : model_(other.model_), count_(other.count_),
-//     treelevel_(other.treelevel_)
-// {
-//     this->value_ = other.value_;
-//     other.value_ = nullptr;
-// }
-
 void Node::setCount(int count) { this->count_ = count; }
 
 int Node::getCount() const { return this->count_; }
 
 int Node::getTreelevel() const { return this->treelevel_; }
 
-void Node::setValue(Value *value) {
-  delete this->value_;
-  this->value_ = value;
+void Node::setValue(std::unique_ptr<Value> &&value) {
+  this->value_ = std::move(value);
 }
 
-Value *Node::getValueObj() const { return this->value_->clone(); }
+std::unique_ptr<Value> Node::cloneValue() const {
+  return this->value_->clone();
+}
 
-const Value *Node::getValueRef() const { return this->value_; }
+const Value *Node::getValue() const { return this->value_.get(); }
 
 double Node::getTotalValue() const { return this->value_->total(); }
 
@@ -46,9 +33,10 @@ void Node::updateValueCount(const Value &v) {
 /*                                 VNode class                                */
 /* -------------------------------------------------------------------------- */
 
-VNode::VNode(const POMDP *model, QNode *parent, Observation *obs,
-             Belief *belief, int depth)
-    : Node(model, depth), parent_(parent), obsEdge_(obs), belief_(belief) {}
+VNode::VNode(std::shared_ptr<POMDP> model, std::shared_ptr<QNode> parent,
+             Observation *obs, std::unique_ptr<Belief> &&belief, int level)
+    : Node(std::move(model), level), parent_(std::move(parent)), obsEdge_(obs),
+      belief_(std::move(belief)) {}
 
 VNode::~VNode() {
   // free observations
@@ -56,15 +44,6 @@ VNode::~VNode() {
     this->model_->freeObs(obsEdge_);
   }
   this->model_->freeObss(this->obs_archive_);
-  // free beliefs
-  delete this->belief_;
-  for (auto &bel : this->belief_archive_) {
-    delete bel;
-  }
-  // free children nodes
-  for (auto &qnode : actChildren_) {
-    delete qnode;
-  }
 }
 
 Observation *VNode::getObservationObj() const {
@@ -78,43 +57,44 @@ void VNode::setObs(Observation *obs) {
   this->obsEdge_ = obs;
 }
 
-Belief *VNode::getBelief() const { return this->belief_->clone(); }
+std::unique_ptr<Belief> VNode::getBelief() const {
+  if (this->belief_) {
+    return this->belief_->clone();
+  }
+  return nullptr;
+}
 
-void VNode::setBelief(Belief *belief) {
-  if (this->belief_ != nullptr) {
-    this->belief_archive_.push_back(this->belief_);
+void VNode::setBelief(std::unique_ptr<Belief> &&belief) {
+  if (this->belief_) {
+    this->belief_archive_.emplace_back(std::move(this->belief_));
   };
-  this->belief_ = belief;
+  this->belief_ = std::move(belief);
 }
 
 bool VNode::isLeaf() const { return this->actChildren_.empty(); }
 
-const QNode *VNode::getParent() const { return parent_; }
+std::shared_ptr<QNode> VNode::getParent() const { return parent_; }
 
-const std::vector<QNode *> &VNode::children() const {
+std::vector<std::shared_ptr<QNode>> &VNode::children() const {
   return this->actChildren_;
 }
 
-std::vector<QNode *> &VNode::children() { return this->actChildren_; }
-
-const QNode *VNode::child(Action action) const {
+std::shared_ptr<QNode> VNode::child(Action action) const {
   return this->actChildren_[action];
 }
-
-QNode *VNode::child(Action action) { return this->actChildren_[action]; }
 
 std::vector<ValuedAction> VNode::getValuedActions() const {
   std::vector<ValuedAction> valuedActions;
   for (auto &actChild : this->actChildren_) {
-    ValuedAction va(actChild->getAction(), actChild->getValueObj(),
+    ValuedAction va(actChild->getAction(), actChild->cloneValue(),
                     actChild->getCount());
     valuedActions.push_back(va);
   }
   return valuedActions;
 }
 
-const QNode *VNode::maxChild() const {
-  const QNode *maxChild = nullptr;
+std::shared_ptr<QNode> VNode::maxChild() const {
+  std::shared_ptr<QNode> maxChild = nullptr;
   double maxVal = Globals::NEG_INFTY;
   for (auto &actChild : this->actChildren_) {
     double curActVal = actChild->getTotalValue();
@@ -130,19 +110,19 @@ History
 VNode::maximumValueActionObservationSequence(const Action &action) const {
   History actObsSeq(this->model_);
 
-  const QNode *qn = this->child(action);
-  assert(qn != nullptr);
+  auto qn = this->child(action);
+  assert(qn);
   while (!(qn->isLeaf())) {
-    const VNode *vn = qn->maxChild();
-    ValuedAction act(qn->getAction(), qn->getValueObj(), qn->getCount());
+    auto vn = qn->maxChild();
+    ValuedAction act(qn->getAction(), qn->cloneValue(), qn->getCount());
     Observation *obs = vn->getObservationObj();
-    Belief *b = vn->getBelief();
+    auto b = vn->getBelief();
     // add action-observation pair to history
-    actObsSeq.add(act, obs, b);
+    actObsSeq.add(act, obs, std::move(b));
 
     // go down the tree to the next (deeper) treelevel
     qn = vn->maxChild();
-    assert(qn != nullptr);
+    assert(qn);
   }
 
   return actObsSeq;
@@ -152,27 +132,23 @@ VNode::maximumValueActionObservationSequence(const Action &action) const {
 /*                                 QNode class                                */
 /* -------------------------------------------------------------------------- */
 
-QNode::QNode(const POMDP *model, VNode *parent, Action edge, int depth)
-    : Node(model, depth), parent_(parent), actEdge_(edge) {}
+QNode::QNode(std::shared_ptr<POMDP> model, std::shared_ptr<VNode> parent,
+             Action edge, int level)
+    : Node(std::move(model), level), parent_(std::move(parent)),
+      actEdge_(edge) {}
 
-QNode::~QNode() {
-  for (auto &obsChild : this->obsChildren_) {
-    delete obsChild;
-  }
-}
+QNode::~QNode() = default;
 
 Action QNode::getAction() const { return this->actEdge_; }
 
-const VNode *QNode::getParent() const { return parent_; }
+std::shared_ptr<VNode> QNode::getParent() const { return parent_; }
 
-const std::vector<VNode *> &QNode::children() const {
+std::vector<std::shared_ptr<VNode>> &QNode::children() const {
   return this->obsChildren_;
 }
 
-std::vector<VNode *> &QNode::children() { return this->obsChildren_; }
-
-const VNode *QNode::maxChild() const {
-  const VNode *maxChild = nullptr;
+std::shared_ptr<VNode> QNode::maxChild() const {
+  std::shared_ptr<VNode> maxChild = nullptr;
   double maxVal = Globals::NEG_INFTY;
   for (auto &obsChild : this->obsChildren_) {
     double curObsVal = obsChild->getTotalValue();

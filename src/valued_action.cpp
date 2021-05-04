@@ -14,8 +14,9 @@ ValuedAction::ValuedAction() : action_(-1), value_(nullptr), count_(-1) {}
 ValuedAction::ValuedAction(Action _action)
     : action_(_action), value_(nullptr), count_(-1) {}
 // regular constructor
-ValuedAction::ValuedAction(Action _action, Value *_value, int _count)
-    : action_(_action), value_(_value), count_(_count) {}
+ValuedAction::ValuedAction(Action _action, std::unique_ptr<Value> &&_value,
+                           int _count)
+    : action_(_action), value_(std::move(_value)), count_(_count) {}
 // copy constructor
 ValuedAction::ValuedAction(const ValuedAction &other)
     : action_(other.action_), count_(other.count_) {
@@ -30,7 +31,6 @@ ValuedAction &ValuedAction::operator=(const ValuedAction &rhs) {
   if (this != &rhs) {
     this->action_ = rhs.action_;
     this->count_ = rhs.count_;
-    delete value_;
     if (rhs.value_ != nullptr) {
       this->value_ = rhs.value_->clone();
     }
@@ -41,7 +41,7 @@ ValuedAction &ValuedAction::operator=(const ValuedAction &rhs) {
 ValuedAction::ValuedAction(ValuedAction &&other) noexcept {
   this->action_ = other.action_;
   this->count_ = other.count_;
-  this->value_ = other.value_;
+  this->value_ = std::move(other.value_);
   other.value_ = nullptr;
 }
 // move assigment operator
@@ -54,7 +54,7 @@ ValuedAction &ValuedAction::operator=(ValuedAction &&rhs) noexcept {
   return *this;
 }
 // destructor
-ValuedAction::~ValuedAction() { delete value_; }
+ValuedAction::~ValuedAction() = default;
 
 /* -------------------------- ValuedAction printers ------------------------- */
 

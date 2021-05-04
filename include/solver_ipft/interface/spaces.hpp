@@ -3,6 +3,7 @@
 // Definition of state, observation and action space in this file.
 
 #include <glog/logging.h>
+#include <memory>
 
 #include <solver_ipft/core/globals.hpp>
 #include <solver_ipft/interface/point.hpp>
@@ -32,10 +33,10 @@ public:
   static void normalizeWeights(const std::vector<State *> &states);
 
   static State *weightedMean(const std::vector<State *> &states,
-                             const POMDP *model);
+                             const std::shared_ptr<POMDP> &model);
 
   static State *weightedVariance(const std::vector<State *> &states,
-                                 const POMDP *model);
+                                 const std::shared_ptr<POMDP> &model);
 
   static void varToStd(State *varState);
 

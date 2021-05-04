@@ -1,7 +1,8 @@
 #include "solver_ipft/core/pomdp_world.hpp"
 
 namespace solver_ipft {
-POMDPWorld::POMDPWorld(const POMDP *model) : model_(model), stepReward_(0.0) {}
+POMDPWorld::POMDPWorld(std::shared_ptr<POMDP> model)
+    : model_(std::move(model)), stepReward_(0.0) {}
 
 POMDPWorld::~POMDPWorld() {
   if (state_ != nullptr) {

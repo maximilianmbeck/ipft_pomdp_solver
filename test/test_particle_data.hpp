@@ -18,7 +18,7 @@ protected:
 
   ParticleBeliefData() {
     // init model
-    this->model_ = new cld::ContLightDark(this->rand_);
+    this->model_ = std::make_shared<cld::ContLightDark>(this->rand_);
     // init belief1
     // belief1 variance =   5.365756272242247
     // belief1 std =        2.316410212428327

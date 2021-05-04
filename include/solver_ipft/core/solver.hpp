@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <memory>
 #include <solver_ipft/core/history.hpp>
 #include <solver_ipft/core/node.hpp>
 #include <solver_ipft/core/valued_action.hpp>
@@ -15,10 +16,11 @@ namespace solver_ipft {
 
 class SearchStatistics {
 public:
-  const POMDP *model_;
+  std::shared_ptr<POMDP> model_;
   ValuedAction optimalAction; // contains optimal action + optimal value
   std::vector<ValuedAction> valuedActions;
-  explicit SearchStatistics(const POMDP *model) : model_(model) {}
+  explicit SearchStatistics(std::shared_ptr<POMDP> model)
+      : model_(std::move(model)) {}
 
   virtual std::string text() const = 0;
 };
@@ -47,7 +49,7 @@ public:
   virtual std::string text() const = 0;
 
   virtual double total() const = 0;
-  virtual Value *clone() const = 0;
+  virtual std::unique_ptr<Value> clone() const = 0;
 
   friend std::ostream &operator<<(std::ostream &os, const Value &v);
 };
@@ -61,16 +63,17 @@ class VNode;
 
 class Solver {
 protected:
-  const POMDP *model_;
-  Belief *belief_;
-  VNode *root_;
-  History *history_; // contains only the action, not the action value
+  std::shared_ptr<POMDP> model_;
+  std::unique_ptr<Belief> belief_;
+  std::shared_ptr<VNode> root_;
+  std::unique_ptr<History>
+      history_; // contains only the action, not the action value
 
 public:
-  Solver(const POMDP *model, Belief *belief);
-  explicit Solver(const POMDP *model);
+  Solver(std::shared_ptr<POMDP> model, std::unique_ptr<Belief> &&belief);
+  explicit Solver(std::shared_ptr<POMDP> model);
 
-  virtual ~Solver();
+  virtual ~Solver() = default;
 
   Solver(const Solver &) = delete;
   Solver(Solver &&) = delete;
@@ -88,19 +91,17 @@ public:
   virtual ValuedAction search() = 0;
 
   /**
-   * @brief Returns a pointer to the root of the search tree, memory is still
-   * managed by the solver
+   * @brief Returns a pointer to the root of the search tree
    *
-   * @return const VNode* the root of the search tree
+   * @return the root of the search tree
    */
-  const VNode *getSearchTree() const;
+  std::shared_ptr<VNode> getSearchTree() const;
 
   /**
    * @brief
-   * Update current belief, history, and any other internal states that is
-   * needed for Search() to function correctly.
+   * Update current belief and history
    *
-   * @param action selected by the previous search
+   * @param action the action selected by the previous search
    * @param obs the observation received from the environment
    */
   virtual void beliefUpdate(const Action &action, const Observation &obs) = 0;
@@ -112,23 +113,22 @@ public:
    * allocated memory from previous searches need to be cleaned if not.
    * @param b the new belief
    */
-  virtual void setBelief(Belief *b) = 0;
+  virtual void setBelief(std::unique_ptr<Belief> &&b) = 0;
   virtual Belief *getBelief() const = 0;
 
   /**
-   * @brief Returns the search statistics
+   * @brief Returns the search statistics and resets statistics in the solver
    *
-   * @return SearchStatistics* the search statistics object (parent type, exact
-   * type is specified at runtime by the respective solver)
+   * @return SearchStatistics the search statistics object 
    */
-  virtual SearchStatistics *getSearchStatistics() const = 0;
+  virtual std::unique_ptr<SearchStatistics> getSearchStatistics() = 0;
 
   /**
    * @brief returns a copy of the History object
    *
-   * @return History* copy of the History object
+   * @return copy of the History object
    */
-  virtual History *copyHistory() const;
+  virtual History copyHistory() const;
 };
 
 } // namespace solver_ipft

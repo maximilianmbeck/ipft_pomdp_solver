@@ -1,5 +1,5 @@
-#include "solver_ipft/core/history.hpp"
-#include "solver_ipft/core/particle_belief.hpp"
+#include <solver_ipft/core/history.hpp>
+#include <solver_ipft/core/particle_belief.hpp>
 
 #include <iomanip>
 #include <sstream>
@@ -8,14 +8,11 @@ namespace solver_ipft {
 // do not use (only for vector initialization)
 History::History() : model_(nullptr) {}
 
-History::History(const POMDP *model) : model_(model) {}
+History::History(std::shared_ptr<POMDP> model) : model_(std::move(model)) {}
 
 History::~History() {
   if (this->model_ != nullptr) {
     this->model_->freeObss(this->observations_);
-  }
-  for (int i = 0; i < this->beliefs_.size(); i++) {
-    delete beliefs_[i];
   }
 }
 
@@ -24,10 +21,10 @@ History::History(const History &other)
     : model_(other.model_), actions_(other.actions_) {
   for (int i = 0; i < other.size(); i++) {
     this->observations_.push_back(other.observation(i));
-    this->beliefs_.push_back(other.belief(i));
+    this->beliefs_.emplace_back(other.belief(i));
   }
   // add last belief
-  this->beliefs_.push_back(other.lastBelief());
+  this->beliefs_.emplace_back(other.lastBelief());
 }
 
 // assignment operator
@@ -37,16 +34,15 @@ History &History::operator=(const History &rhs) {
     this->model_ = rhs.model_;
     this->model_->freeObss(this->observations_);
     this->observations_.clear();
-    for (int i = 0; i < this->beliefs_.size(); i++) {
-      delete beliefs_[i];
-    }
+    this->observations_.reserve(rhs.observations_.size());
     this->beliefs_.clear();
+    this->beliefs_.reserve(rhs.beliefs_.size());
     for (int i = 0; i < rhs.size(); i++) {
       this->observations_.push_back(rhs.observation(i));
-      this->beliefs_.push_back(rhs.belief(i));
+      this->beliefs_.emplace_back(rhs.belief(i));
     }
     // add last belief
-    this->beliefs_.push_back(rhs.lastBelief());
+    this->beliefs_.emplace_back(rhs.lastBelief());
   }
   return *this;
 }
@@ -67,20 +63,23 @@ History &History::operator=(History &&rhs) noexcept {
   }
   return *this;
 }
-
-void History::add(Action action, Observation *obs, Belief *b) {
+void History::add(Action action, Observation *obs,
+                  std::unique_ptr<Belief> &&b) {
   actions_.emplace_back(ValuedAction(action));
   observations_.push_back(obs);
-  beliefs_.push_back(b);
+  beliefs_.emplace_back(std::move(b));
 }
 
-void History::add(const ValuedAction &valAction, Observation *obs, Belief *b) {
+void History::add(const ValuedAction &valAction, Observation *obs,
+                  std::unique_ptr<Belief> &&b) {
   actions_.push_back(valAction);
   observations_.push_back(obs);
-  beliefs_.push_back(b);
+  beliefs_.emplace_back(std::move(b));
 }
 
-void History::addInitialBelief(Belief *b) { beliefs_.push_back(b); }
+void History::addInitialBelief(std::unique_ptr<Belief> &&b) {
+  beliefs_.emplace_back(std::move(b));
+}
 
 void History::RemoveLast() {
   actions_.pop_back();
@@ -102,12 +101,14 @@ const Observation *History::observationPointer(int t) const {
   return this->observations_[t];
 }
 
-Belief *History::belief(int t) const {
-  Belief *b = this->beliefs_[t]->clone();
+std::unique_ptr<Belief> History::belief(int t) const {
+  std::unique_ptr<Belief> b = this->beliefs_[t]->clone();
   return b;
 }
 
-const Belief *History::beliefPointer(int t) const { return this->beliefs_[t]; }
+const Belief *History::beliefPointer(int t) const {
+  return this->beliefs_[t].get();
+}
 
 size_t History::size() const { return actions_.size(); }
 
@@ -131,8 +132,8 @@ Observation *History::lastObservation() const {
   return obs;
 }
 
-Belief *History::lastBelief() const {
-  Belief *b = this->beliefs_.back()->clone();
+std::unique_ptr<Belief> History::lastBelief() const {
+  std::unique_ptr<Belief> b = this->beliefs_.back()->clone();
   return b;
 }
 
@@ -148,8 +149,8 @@ History History::suffix(int s) const {
   for (int i = s; i < size(); i++) {
     ValuedAction act = valuedAction(i); // Action space is discrete
     Observation *obs = this->observation(i);
-    Belief *b = belief(i);
-    history.add(act, obs, b);
+    std::unique_ptr<Belief> b = belief(i);
+    history.add(act, obs, std::move(b));
   }
   return history;
 }
@@ -189,7 +190,7 @@ std::string History::text() const {
     ss << right << setw(7) << "(" + to_string(i) + ") - "
        << this->actions_[i]; // << endl; // setw next line 7
     ss << right << setw(3) << " - "
-       << *(dynamic_cast<ParticleBelief *>(this->beliefs_[i])) << " - "
+       << *(dynamic_cast<ParticleBelief *>(this->beliefs_[i].get())) << " - "
        << this->model_->to_string(this->observations_[i]);
     if (i < (this->size() - 1)) {
       ss << endl;

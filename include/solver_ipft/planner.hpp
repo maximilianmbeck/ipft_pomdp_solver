@@ -9,12 +9,12 @@ protected:
   int step_;
   int round_;
 
-  SimulationStatistics *sim_stats_;
+  std::unique_ptr<SimulationStatistics> sim_stats_;
 
 public:
   Planner();
 
-  ~Planner() override;
+  ~Planner() override = default;
 
   Planner(const Planner &) = delete;
   Planner(Planner &&) = delete;
@@ -33,8 +33,13 @@ public:
 
   virtual void resetPlanner();
 
-  // Return a pointer to the true sim stats object (ownership stays in planner)
-  virtual SimulationStatistics *getSimulationStatsRef() const;
+  /**
+   * @brief returns the simulation statistics and resets the statistics in the
+   * planner
+   *
+   * @return SimulationStatistics the simulation statistics object
+   */
+  virtual std::unique_ptr<SimulationStatistics> getSimulationStatistics();
 
   /**
    * @brief Run and evaluate POMDP planning for a given number of rounds

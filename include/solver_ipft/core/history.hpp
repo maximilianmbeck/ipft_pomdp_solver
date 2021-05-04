@@ -14,14 +14,14 @@ namespace solver_ipft {
  */
 class History {
 private:
-  const POMDP *model_;
+  std::shared_ptr<POMDP> model_;
   std::vector<ValuedAction> actions_; // Actions are discrete
   std::vector<Observation *> observations_;
-  std::vector<Belief *> beliefs_;
+  std::vector<std::unique_ptr<Belief>> beliefs_;
 
 public:
   History();
-  explicit History(const POMDP *model);
+  explicit History(std::shared_ptr<POMDP> model);
   virtual ~History();
   // copy constructor
   History(const History &other);
@@ -32,15 +32,16 @@ public:
   // move assignment operator
   History &operator=(History &&rhs) noexcept;
 
-  void add(Action action, Observation *obs, Belief *b);
-  void add(const ValuedAction &valAction, Observation *obs, Belief *b);
-  void addInitialBelief(Belief *b);
+  void add(Action action, Observation *obs, std::unique_ptr<Belief> &&b);
+  void add(const ValuedAction &valAction, Observation *obs,
+           std::unique_ptr<Belief> &&b);
+  void addInitialBelief(std::unique_ptr<Belief> &&b);
   void RemoveLast();
   Action action(int t) const;
   ValuedAction valuedAction(int t) const;
   Observation *observation(int t) const;
   const Observation *observationPointer(int t) const;
-  Belief *belief(int t) const;
+  std::unique_ptr<Belief> belief(int t) const;
   const Belief *beliefPointer(int t) const;
   size_t size() const;
   /**
@@ -52,7 +53,7 @@ public:
   Action lastAction() const;
   ValuedAction lastValuedAction() const;
   Observation *lastObservation() const;
-  Belief *lastBelief() const;
+  std::unique_ptr<Belief> lastBelief() const;
   /**
    * @brief Returns the history with action-observation tuples from timestep s
    * to the end.

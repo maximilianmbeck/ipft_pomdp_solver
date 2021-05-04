@@ -33,9 +33,9 @@ public:
   std::vector<double> timesteps;
   std::vector<std::vector<ValuedAction>> valuedActionsPerTimestep;
 
-  explicit IpftSearchStatistics(const POMDP *model)
-      : SearchStatistics(model), time_search(0.0), time_node_selection(0.0),
-        time_backup(0.0), time_belief_update(0.0),
+  explicit IpftSearchStatistics(std::shared_ptr<POMDP> model)
+      : SearchStatistics(std::move(model)), time_search(0.0),
+        time_node_selection(0.0), time_backup(0.0), time_belief_update(0.0),
         time_information_gain_computation(0.0), time_node_rollout(0.0),
         num_tree_vnodes(0), num_simulations(0), deepest_simulation_depth(0),
         num_visits_vnodes_on_level(Globals::config.search_depth),
@@ -69,7 +69,7 @@ class IpftValue : public Value {
 protected:
   static constexpr int componentCount = 2;
   // index 0: stateValue, index 1: informationValue
-  double value[componentCount];
+  double value[componentCount]; // TODO(max): replace by std::array
 
 public:
   IpftValue();
@@ -91,7 +91,7 @@ public:
   std::string text() const override;
 
   double total() const override;
-  Value *clone() const override;
+  std::unique_ptr<Value> clone() const override;
 
   IpftValue &operator+=(const IpftValue &add);
   IpftValue operator*(const double &factor);
@@ -110,21 +110,19 @@ public:
  */
 class Ipft : public Solver {
 protected:
-  const Random *rand_;
-  RolloutPolicy *rolloutPolicy_;
-  DiscountedInformationGain *infGainRewardCalculator_;
+  std::shared_ptr<Random> rand_;
+  std::unique_ptr<RolloutPolicy> rolloutPolicy_;
+  std::unique_ptr<DiscountedInformationGain> infGainRewardCalculator_;
 
-  mutable IpftSearchStatistics
-      *stats_; // stats is never deleted! Make sure that getSearchStatistics is
-               // always called if record_statistics == true and pointer is
-               // deallocated later
+  mutable std::unique_ptr<IpftSearchStatistics> stats_;
 
 public:
-  Ipft(const POMDP *model, Belief *belief, const Random *rand,
-       RolloutPolicy *rp);
-  Ipft(const POMDP *model, const Random *rand, RolloutPolicy *rp,
-       DiscountedInformationGain *infGainRewardCalc);
-  ~Ipft() override;
+  Ipft(std::shared_ptr<Random> rand, std::shared_ptr<POMDP> model,
+       std::unique_ptr<Belief> &&belief, std::unique_ptr<RolloutPolicy> &&rp);
+  Ipft(std::shared_ptr<Random> rand, std::shared_ptr<POMDP> model,
+       std::unique_ptr<RolloutPolicy> &&rp,
+       std::unique_ptr<DiscountedInformationGain> infGainRewardCalc);
+  ~Ipft() override = default;
 
   Ipft(const Ipft &) = delete;
   Ipft(Ipft &&) = delete;
@@ -138,29 +136,31 @@ public:
 
   void beliefUpdate(const Action &action, const Observation &obs) override;
 
-  void setBelief(Belief *b) override;
+  void setBelief(std::unique_ptr<Belief> &&b) override;
 
   Belief *getBelief() const override;
 
-  SearchStatistics *getSearchStatistics() const override;
+  std::unique_ptr<SearchStatistics> getSearchStatistics() override;
 
   /* ----------------------------- helper methods -----------------------------
    */
 
   virtual ValuedAction search(double timeout);
 
-  virtual IpftValue simulate(VNode *vnode, int depth);
+  virtual IpftValue simulate(VNode &vnode, int depth);
 
-  virtual IpftValue rollout(VNode *leaf, int depth);
+  virtual IpftValue rollout(VNode &leaf, int depth);
 
 protected:
   // argmax actions of vnode
-  ValuedAction optimalAction(const VNode *vnode) const;
+  ValuedAction optimalAction(const VNode &vnode) const;
 
-  QNode *ucbActionSelection(VNode *vnode) const;
+  std::shared_ptr<QNode> ucbActionSelection(const VNode &vnode) const;
 
-  VNode *createVNode(QNode *parent, Observation *obs, Belief *belief,
-                     int level) const;
+  std::shared_ptr<VNode> createVNode(const std::shared_ptr<QNode> &parent,
+                                     Observation *obs,
+                                     std::unique_ptr<Belief> &&belief,
+                                     int level) const;
 };
 
 /* -------------------------------------------------------------------------- */

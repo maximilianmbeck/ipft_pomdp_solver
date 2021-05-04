@@ -13,7 +13,7 @@ protected:
 
   NodeValueTest() {
     // You can do set-up work for each test here.
-    this->model_ = new cld::ContLightDark(this->rand_);
+    this->model_ = std::make_shared<cld::ContLightDark>(this->rand_);
   }
 
   ~NodeValueTest() override {

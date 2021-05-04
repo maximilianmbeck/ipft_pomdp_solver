@@ -28,7 +28,7 @@ void State::normalizeWeights(const std::vector<State *> &states) {
 // see wikipedia: "weighted_arithmetic_mean"
 // https://en.wikipedia.org/wiki/Weighted_arithmetic_mean#Weighted_sample_variance
 State *State::weightedMean(const std::vector<State *> &states,
-                           const POMDP *model) {
+                           const std::shared_ptr<POMDP> &model) {
   double weightSum = State::weightSum(states);
   CHECK(std::abs(weightSum - 1.0) <= Globals::DOUBLEEQLIM);
   CHECK(!states.empty()) << "State set empty";
@@ -53,7 +53,7 @@ State *State::weightedMean(const std::vector<State *> &states,
 // https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python/blob/master/12-Particle-Filters.ipynb
 // for weighted variance estimate
 State *State::weightedVariance(const std::vector<State *> &states,
-                               const POMDP *model) {
+                               const std::shared_ptr<POMDP> &model) {
   State *meanState = State::weightedMean(states, model);
   CHECK(states.size() > 1)
       << "Need more than one particle to compute a variance";

@@ -18,9 +18,8 @@ public:
   operator=(const DiscountedInformationGain &) = delete;
   DiscountedInformationGain &operator=(DiscountedInformationGain &&) = delete;
 
-  virtual double computeDiscInfGain(double discFactor,
-                                    const ParticleBelief *bnext,
-                                    const ParticleBelief *b) const = 0;
+  virtual double computeDiscInfGain(double discFactor, const Belief *bnext,
+                                    const Belief *b) const = 0;
 };
 
 /* ------------------- Classes implementing the interface ------------------- */
@@ -41,11 +40,11 @@ public:
   EntropyInfGain &operator=(const EntropyInfGain &) = delete;
   EntropyInfGain &operator=(EntropyInfGain &&) = delete;
 
-  double computeDiscInfGain(double discFactor, const ParticleBelief *bnext,
-                            const ParticleBelief *b) const override;
+  double computeDiscInfGain(double discFactor, const Belief *bnext,
+                            const Belief *b) const override;
 
   // protected:
-  double computeEntropyEstimate(const ParticleBelief *b) const;
+  double computeEntropyEstimate(const Belief *b) const;
 };
 
 class NoInfGain : public DiscountedInformationGain {
@@ -58,8 +57,8 @@ public:
   NoInfGain &operator=(const NoInfGain &) = delete;
   NoInfGain &operator=(NoInfGain &&) = delete;
 
-  double computeDiscInfGain(double discFactor, const ParticleBelief *bnext,
-                            const ParticleBelief *b) const override;
+  double computeDiscInfGain(double discFactor, const Belief *bnext,
+                            const Belief *b) const override;
 };
 
 } // namespace solver_ipft

@@ -20,12 +20,12 @@ void EvaluationStatistics::initEvaluation() {
   this->eval_clock_start = std::chrono::high_resolution_clock::now();
 }
 
-void EvaluationStatistics::summarizeRound(SimulationStatistics *round_stats) {
+void EvaluationStatistics::summarizeRound(
+    const SimulationStatistics &round_stats) {
   using namespace std;
-  this->step_counts_.push_back(round_stats->step_count_);
-  this->total_disc_rewards_.push_back(round_stats->total_discounted_reward_);
-  this->total_undisc_rewards_.push_back(
-      round_stats->total_undiscounted_reward_);
+  this->step_counts_.push_back(round_stats.step_count_);
+  this->total_disc_rewards_.push_back(round_stats.total_discounted_reward_);
+  this->total_undisc_rewards_.push_back(round_stats.total_undiscounted_reward_);
 
   // current statistics
   double avg_disc_rew, avg_undisc_rew;
@@ -37,9 +37,9 @@ void EvaluationStatistics::summarizeRound(SimulationStatistics *round_stats) {
   *out_ << fixed << setprecision(2) << "Round(" << right << setw(4)
         << round_count_ << "): "
         << "reward(" << right << setw(nwidth)
-        << round_stats->total_discounted_reward_ << " / " << right
-        << setw(nwidth) << round_stats->total_undiscounted_reward_ << ") "
-        << "time(" << right << setw(nwidth) << round_stats->total_round_time
+        << round_stats.total_discounted_reward_ << " / " << right
+        << setw(nwidth) << round_stats.total_undiscounted_reward_ << ") "
+        << "time(" << right << setw(nwidth) << round_stats.total_round_time
         << "ms) - "
         << "avg total reward: " << right << setw(nwidth) << avg_disc_rew
         << " (+-" << stderr_disc_rew << ") / " << right << setw(nwidth)
@@ -180,12 +180,7 @@ void EvaluationStatistics::printEvaluationResults(std::ostream &os) const {
 /* -------------------------------------------------------------------------- */
 
 Evaluator::Evaluator(Planner *planner) : planner_(planner), round_(0) {
-  this->eval_stats_ = new EvaluationStatistics(&std::cout);
-}
-
-Evaluator::~Evaluator() {
-  delete eval_stats_;
-  delete planner_;
+  this->eval_stats_ = std::make_unique<EvaluationStatistics>(&std::cout);
 }
 
 int Evaluator::runEvaluation(int argc, char *argv[]) {
@@ -213,8 +208,8 @@ int Evaluator::runEvaluation(int argc, char *argv[]) {
 void Evaluator::runEvaluationLoop() {
   for (round_ = 0; round_ < Globals::config.eval_len; round_++) {
     planner_->runPlanningLoop();
-    SimulationStatistics *round_results = planner_->getSimulationStatsRef();
-    this->eval_stats_->summarizeRound(round_results);
+    auto round_results = planner_->getSimulationStatistics();
+    this->eval_stats_->summarizeRound(*round_results);
 
     planner_->resetPlanner();
   }

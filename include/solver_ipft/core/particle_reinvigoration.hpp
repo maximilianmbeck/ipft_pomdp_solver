@@ -12,10 +12,11 @@ namespace solver_ipft {
 
 class ParticleReinvigorator {
 protected:
-  const POMDP *model_;
+  std::shared_ptr<POMDP> model_;
 
 public:
-  explicit ParticleReinvigorator(const POMDP *model) : model_(model) {}
+  explicit ParticleReinvigorator(std::shared_ptr<POMDP> model)
+      : model_(std::move(model)) {}
   virtual ~ParticleReinvigorator() = default;
 
   ParticleReinvigorator(const ParticleReinvigorator &) = default;
@@ -30,7 +31,7 @@ public:
   virtual std::vector<State *>
   reinvigorate(const std::vector<State *> &particleSet, const Action &act,
                const Observation &obs) const = 0;
-  virtual ParticleReinvigorator *clone() const = 0;
+  virtual std::unique_ptr<ParticleReinvigorator> clone() const = 0;
 };
 
 /* -------------------------------------------------------------------------- */
@@ -46,7 +47,7 @@ public:
   std::vector<State *> reinvigorate(const std::vector<State *> &particleSet,
                                     const Action &act,
                                     const Observation &obs) const final;
-  ParticleReinvigorator *clone() const override;
+  std::unique_ptr<ParticleReinvigorator> clone() const override;
 };
 
 /* -------------------------------------------------------------------------- */
@@ -55,15 +56,15 @@ public:
 
 class SimpleParticleReinvigorator : public ParticleReinvigorator {
 public:
-  explicit SimpleParticleReinvigorator(const POMDP *model)
-      : ParticleReinvigorator(model) {}
+  explicit SimpleParticleReinvigorator(std::shared_ptr<POMDP> model)
+      : ParticleReinvigorator(std::move(model)) {}
   bool particleReinvigorationNeeded(const std::vector<State *> &particleSet,
                                     const Action &act,
                                     const Observation &obs) const override;
   std::vector<State *> reinvigorate(const std::vector<State *> &particleSet,
                                     const Action &act,
                                     const Observation &obs) const override;
-  ParticleReinvigorator *clone() const override;
+  std::unique_ptr<ParticleReinvigorator> clone() const override;
 
 private:
   bool allParticlesEqual(const std::vector<State *> &particleSet) const;
@@ -80,12 +81,14 @@ public:
   static constexpr double max_frac_replaced = 0.05;
 
 protected:
-  const Random *rand_;
-  mutable int n_replaced;
+  std::shared_ptr<Random> rand_;
+  mutable int n_replaced_;
 
 public:
-  ObsAdaptiveReinvigorator(const POMDP *model, const Random *rand)
-      : ParticleReinvigorator(model), rand_(rand), n_replaced(0) {}
+  ObsAdaptiveReinvigorator(std::shared_ptr<POMDP> model,
+                           std::shared_ptr<Random> rand)
+      : ParticleReinvigorator(std::move(model)), rand_(std::move(rand)),
+        n_replaced_(0) {}
   // particleSet must be weighted and unnormalized
   bool particleReinvigorationNeeded(const std::vector<State *> &particleSet,
                                     const Action &act,
@@ -93,7 +96,7 @@ public:
   std::vector<State *> reinvigorate(const std::vector<State *> &particleSet,
                                     const Action &act,
                                     const Observation &obs) const override;
-  ParticleReinvigorator *clone() const override;
+  std::unique_ptr<ParticleReinvigorator> clone() const override;
 };
 
 } // namespace solver_ipft

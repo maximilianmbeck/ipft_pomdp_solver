@@ -203,7 +203,6 @@ double IpftValue::getWeightedComponent(int index) const {
     break;
   default:
     throw std::out_of_range("IpftValue has only valid indices 0 and 1.");
-    // return std::numeric_limits<double>::quiet_NaN();
     break;
   }
 }
@@ -216,7 +215,9 @@ double IpftValue::total() const {
   return total;
 }
 
-Value *IpftValue::clone() const { return new IpftValue(*this); }
+std::unique_ptr<Value> IpftValue::clone() const {
+  return std::make_unique<IpftValue>(*this);
+}
 
 IpftValue &IpftValue::operator+=(const IpftValue &add) {
   this->value[0] += add.value[0];
@@ -253,22 +254,22 @@ std::ostream &operator<<(std::ostream &os, const IpftValue &v) {
 /*                              IPFT Solver class                             */
 /* -------------------------------------------------------------------------- */
 
-Ipft::Ipft(const POMDP *model, Belief *belief, const Random *rand,
-           RolloutPolicy *rp)
-    : Solver(model, belief), rand_(rand), rolloutPolicy_(rp) {
-  infGainRewardCalculator_ =
-      new EntropyInfGain(); // default information gain calculator
-}
+Ipft::Ipft(std::shared_ptr<Random> rand, std::shared_ptr<POMDP> model,
+           std::unique_ptr<Belief> &&belief,
+           std::unique_ptr<RolloutPolicy> &&rp)
+    : Solver(std::move(model), std::move(belief)), rand_(std::move(rand)),
+      rolloutPolicy_(std::move(rp)),
+      infGainRewardCalculator_(
+          std::make_unique<EntropyInfGain>()) //< default information gain
+                                              // calculator
+{}
 
-Ipft::Ipft(const POMDP *model, const Random *rand, RolloutPolicy *rp,
-           DiscountedInformationGain *infGainRewardCalc)
-    : Solver(model), rand_(rand), rolloutPolicy_(rp),
-      infGainRewardCalculator_(infGainRewardCalc) {}
-
-Ipft::~Ipft() {
-  delete rolloutPolicy_;
-  delete infGainRewardCalculator_;
-}
+Ipft::Ipft(std::shared_ptr<Random> rand, std::shared_ptr<POMDP> model,
+           std::unique_ptr<RolloutPolicy> &&rp,
+           std::unique_ptr<DiscountedInformationGain> infGainRewardCalc)
+    : Solver(std::move(model)), rand_(std::move(rand)),
+      rolloutPolicy_(std::move(rp)),
+      infGainRewardCalculator_(std::move(infGainRewardCalc)) {}
 
 /* ---------------------------- solver interface ---------------------------- */
 
@@ -276,42 +277,32 @@ ValuedAction Ipft::search() { return search(Globals::config.time_per_move); }
 
 void Ipft::beliefUpdate(const Action &action, const Observation &obs) {
   // delete the current search tree
-  if (this->root_ != nullptr) {
-    delete this->root_; //? reuse difficult: due to continuous observation space
-                        // no observation is sampled twice
-    this->root_ = nullptr;
-  }
+  // reuse difficult: due to continuous observation space
+  // no observation is sampled twice
+  this->root_ = nullptr;
   //* use the particle filter to update the belief
   this->belief_->update(action, obs);
   //* update the history
   // add copy of new belief to history
-  Belief *bp = this->belief_->clone();
+  std::unique_ptr<Belief> bp = this->belief_->clone();
   Observation *o = this->model_->copyObs(&obs);
-  this->history_->add(action, o, bp);
+  this->history_->add(action, o, std::move(bp));
 }
 
-void Ipft::setBelief(Belief *b) {
+void Ipft::setBelief(std::unique_ptr<Belief> &&b) {
   // clear history
-  delete this->history_;
-  this->history_ = new History(this->model_);
-
-  // clear belief
-  delete this->belief_;
+  this->history_ = std::make_unique<History>(this->model_);
 
   // set new belief
-  this->belief_ = b;
+  this->belief_ = std::move(b);
   // add initial belief to history
-  Belief *initialBelief = this->belief_->clone();
-  this->history_->addInitialBelief(initialBelief);
+  this->history_->addInitialBelief(this->belief_->clone());
 
   // clear root
-  if (this->root_ != nullptr) {
-    delete this->root_;
-    this->root_ = nullptr;
-  }
+  this->root_ = nullptr;
 }
 
-Belief *Ipft::getBelief() const { return this->belief_->clone(); }
+Belief *Ipft::getBelief() const { return this->belief_.get(); }
 
 /* ----------------------------- helper methods ----------------------------- */
 
@@ -325,16 +316,13 @@ ValuedAction Ipft::search(double timeout) {
   }
 
   // initialize root for search
-  if (this->root_ == nullptr) {
+  if (!this->root_) {
     if (Globals::config.record_statistics) {
-      stats_ = new IpftSearchStatistics(this->model_); // reset statistics
-      // stats_->root_belief = static_cast<ParticleBelief*>(b->clone());
+      stats_ = std::make_unique<IpftSearchStatistics>(
+          this->model_); // reset statistics
     }
     this->root_ = createVNode(nullptr, nullptr, nullptr, 0);
   }
-
-  // std::cout << "[SEARCH] [BELIEF] " << this->belief_->detailedText() <<
-  // std::endl; // LOG(INFO) truncates output
 
   auto start = high_resolution_clock::now();
   duration<double, std::milli> elapsed;
@@ -342,13 +330,13 @@ ValuedAction Ipft::search(double timeout) {
   do {
     DLOG(INFO) << "[SEARCH] start simulation(" << num_sims << ")";
     // sample search particle set for root
-    ParticleBelief *b = this->belief_->sampleParticleBelief(
+    auto b = this->belief_->sampleParticleBelief(
         Globals::config.num_search_particles);
-    b->setReinvigorationStrategy(new NoReinvigoration());
+    b->setReinvigorationStrategy(std::make_unique<NoReinvigoration>());
 
     DLOG(INFO) << "[SEARCH] sampled search particle set: " << b->detailedText();
-    this->root_->setBelief(b);
-    IpftValue val = simulate(this->root_, Globals::config.search_depth);
+    this->root_->setBelief(std::move(b));
+    IpftValue val = simulate(*this->root_, Globals::config.search_depth);
     DLOG(INFO) << "[SEARCH] end simulation(" << num_sims << ") " << val;
     DLOG(INFO) << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
                   "|||||||||||||||||||||||||";
@@ -364,14 +352,14 @@ ValuedAction Ipft::search(double timeout) {
           this->root_->getValuedActions());
     }
 
-  } while ((elapsed.count() < Globals::config.time_per_move) &&
+  } while ((elapsed.count() < timeout) &&
            (num_sims <
             Globals::config
                 .max_simulation_count)); // for fixed number of iterations
                                          // change < to != in time comparison
 
   // find optimal action
-  ValuedAction astar = optimalAction(this->root_);
+  ValuedAction astar = optimalAction(*this->root_);
 
   // search statistics update
   if (Globals::config.record_statistics) {
@@ -394,12 +382,10 @@ ValuedAction Ipft::search(double timeout) {
 }
 
 // Algorithm 1 in IPFT paper
-IpftValue Ipft::simulate(VNode *vnode, int depth) {
-  assert(vnode != nullptr);
-
+IpftValue Ipft::simulate(VNode &vnode, int depth) {
   if (depth == 0) {
     IpftValue zero;
-    vnode->updateValueCount(zero);
+    vnode.updateValueCount(zero);
     return zero;
   }
   // log next tree level
@@ -408,7 +394,7 @@ IpftValue Ipft::simulate(VNode *vnode, int depth) {
       std::chrono::high_resolution_clock::now(); // time_node_selection
 
   //* Action space is discrete --> no progressive widening needed
-  QNode *actionNode = ucbActionSelection(vnode);
+  auto actionNode = ucbActionSelection(vnode);
 
   // log action selection
   DLOG(INFO) << "[SIM] select " << model_->to_string(actionNode->getAction())
@@ -421,14 +407,15 @@ IpftValue Ipft::simulate(VNode *vnode, int depth) {
   DLOG(INFO) << "[SIM][PW] num children C(ha)=" << actionNode->children().size()
              << " -> PW limit obs space: " << pw_limit;
   bool new_obs_sampled = false;
-  VNode *obsNode = nullptr;   // the next observation node after the action node
+  std::shared_ptr<VNode> obsNode =
+      nullptr;                // the next observation node after the action node
   Observation *obs = nullptr; // observation for the particle filter update
 
   //* observation generation
   // sample state s from b and generate observation o from (s,a)
   //? one observation is (almost) never sampled twice (continuous observation
-  // space)
-  State *s = vnode->belief_->sample();
+  //? space)
+  State *s = vnode.belief_->sample();
   State *statePosterior = this->model_->transition(*s, actionNode->getAction());
   Observation *o = this->model_->observation(*statePosterior);
   // states are unused
@@ -462,7 +449,7 @@ IpftValue Ipft::simulate(VNode *vnode, int depth) {
 
   //* Particle filter and reward calculation
   // get copy of current belief (bNext is b')
-  Belief *bNext = vnode->getBelief();
+  auto bNext = vnode.getBelief();
   this->stats_->time_node_selection +=
       stopTime(startNodeSel); // time_node_selection
 
@@ -479,13 +466,13 @@ IpftValue Ipft::simulate(VNode *vnode, int depth) {
   // calculate information gathering reward term
   // vnode belief is b
   auto startInfGain = std::chrono::high_resolution_clock::
-      now();                      // time_information_gain_computation
-  Belief *b = vnode->getBelief(); // a copy of the vnode belief
+      now();                  // time_information_gain_computation
+  auto b = vnode.getBelief(); // a copy of the vnode belief
   double informationReward = this->infGainRewardCalculator_->computeDiscInfGain(
       Globals::config.inf_discount_gamma,
-      dynamic_cast<const ParticleBelief *>(bNext),
-      dynamic_cast<const ParticleBelief *>(b));
-  delete b;
+      dynamic_cast<const ParticleBelief *>(bNext.get()),
+      dynamic_cast<const ParticleBelief *>(b.get()));
+
   CHECK(!std::isnan(informationReward)) << "Information reward is nan.";
   this->stats_->time_information_gain_computation +=
       stopTime(startInfGain); // time_information_gain_computation
@@ -505,22 +492,22 @@ IpftValue Ipft::simulate(VNode *vnode, int depth) {
   IpftValue recursiveReward;
   if (new_obs_sampled) {
     // Add new VNode
-    VNode *newChild =
-        createVNode(actionNode, obs, bNext, vnode->getTreelevel() + 1);
-    actionNode->children().push_back(newChild);
+    auto newChild = createVNode(actionNode, obs, std::move(bNext),
+                                vnode.getTreelevel() + 1);
+    actionNode->children().emplace_back(newChild);
 
     // rollout
-    recursiveReward = rollout(newChild, depth - 1);
+    recursiveReward = rollout(*newChild, depth - 1);
   } else // already existing child VNode is selected
   {
-    assert(obsNode != nullptr);
+    assert(obsNode);
     // set observation in vnode to obs, previous obs is archived
     obsNode->setObs(obs);
     // set belief in vnode to bNext, previous belief is archived
-    obsNode->setBelief(bNext);
+    obsNode->setBelief(std::move(bNext));
 
     // simulate
-    recursiveReward = simulate(obsNode, depth - 1);
+    recursiveReward = simulate(*obsNode, depth - 1);
   }
 
   auto startBackup = std::chrono::high_resolution_clock::now(); // time_backup
@@ -534,32 +521,28 @@ IpftValue Ipft::simulate(VNode *vnode, int depth) {
   DLOG(INFO) << "[SIM] acc. disc. recursive reward " << accDiscountedReward;
 
   // for logging only
-  Value *oldVNodeVal = vnode->getValueObj();
-  Value *oldQNodeVal = actionNode->getValueObj();
+  auto oldVNodeVal = vnode.cloneValue();
+  auto oldQNodeVal = actionNode->cloneValue();
 
   //* Backup
-  vnode->updateValueCount(accDiscountedReward);
+  vnode.updateValueCount(accDiscountedReward);
   // vnode->setCount(vnode->getCount() + 1);
   actionNode->updateValueCount(accDiscountedReward);
 
   // log backup
   DLOG(INFO) << "[SIM][BU] " << std::setfill(' ') << std::setw(15) << std::right
-             << model_->to_string(vnode->obsEdge_) << " on level "
+             << model_->to_string(vnode.obsEdge_) << " on level "
              << Globals::config.search_depth - depth << ": "
-             << *(vnode->getValueRef()) << " = " << *oldVNodeVal << "<-"
-             << accDiscountedReward << "|[C: " << vnode->getCount() << "]";
+             << *(vnode.getValue()) << " = " << *oldVNodeVal << "<-"
+             << accDiscountedReward << "|[C: " << vnode.getCount() << "]";
   DLOG(INFO) << "[SIM][BU] " << std::setfill(' ') << std::setw(15) << std::right
              << model_->to_string(actionNode->getAction()) << " on level "
              << Globals::config.search_depth - depth << ": "
-             << *(actionNode->getValueRef()) << " = " << *oldQNodeVal << "<-"
+             << *(actionNode->getValue()) << " = " << *oldQNodeVal << "<-"
              << accDiscountedReward << "|[C: " << actionNode->getCount() << "]";
 
-  // clean up temp logging objects
-  delete oldVNodeVal;
-  delete oldQNodeVal;
-
   if (Globals::config.record_statistics) {
-    int treeLevel = vnode->getTreelevel();
+    int treeLevel = vnode.getTreelevel();
     this->stats_->num_visits_vnodes_on_level[treeLevel]++;
     if (treeLevel > this->stats_->deepest_simulation_depth) {
       this->stats_->deepest_simulation_depth = treeLevel;
@@ -578,33 +561,35 @@ IpftValue Ipft::simulate(VNode *vnode, int depth) {
   return accDiscountedReward;
 }
 
-IpftValue Ipft::rollout(VNode *leaf, int depth) {
+IpftValue Ipft::rollout(VNode &leaf, int depth) {
   // log rollout
-  DLOG(WARNING) << "[ROLLOUT] estimate value of " << leaf->belief_->text()
+  DLOG(WARNING) << "[ROLLOUT] estimate value of " << leaf.belief_->text()
                 << "..";
   auto start = std::chrono::high_resolution_clock::now();
-  IpftValue value = this->rolloutPolicy_->rollout(leaf->getBelief(), depth);
+  IpftValue value = this->rolloutPolicy_->rollout(leaf.getBelief(), depth);
   this->stats_->time_node_rollout += stopTime(start);
   // update value of leaf / "newChild"
-  leaf->updateValueCount(value);
+  leaf.updateValueCount(value);
   // log rollout result
   DLOG(WARNING) << "[ROLLOUT] result: " << value << "^^";
   return value;
 }
 
-SearchStatistics *Ipft::getSearchStatistics() const { return this->stats_; }
+std::unique_ptr<SearchStatistics> Ipft::getSearchStatistics() {
+  return std::move(this->stats_);
+}
 
-ValuedAction Ipft::optimalAction(const VNode *vnode) const {
-  const std::vector<QNode *> &qnodes = vnode->children();
-  Value *initVal = new IpftValue(Globals::NEG_INFTY, 0.0);
-  ValuedAction astar(-1, initVal, -1);
+ValuedAction Ipft::optimalAction(const VNode &vnode) const {
+  std::vector<std::shared_ptr<QNode>> &qnodes = vnode.children();
+  ValuedAction astar(-1, std::make_unique<IpftValue>(Globals::NEG_INFTY, 0.0),
+                     -1);
   double val = Globals::NEG_INFTY;
-  for (QNode *qnode : qnodes) {
+  for (auto &qnode : qnodes) {
     double curNodeVal = qnode->getTotalValue();
     if (curNodeVal > val) {
       // delete ValuedAction
       // create new with copy of action
-      astar = ValuedAction(qnode->getAction(), qnode->getValueObj(),
+      astar = ValuedAction(qnode->getAction(), qnode->cloneValue(),
                            qnode->getCount());
       val = curNodeVal;
     }
@@ -613,57 +598,20 @@ ValuedAction Ipft::optimalAction(const VNode *vnode) const {
       << "Cannot select optimal action!";
   return astar;
 }
-// imitation of julia implementation
-// QNode* Ipft::ucbActionSelection(VNode* vnode) const {
-//     const std::vector<QNode*>& qnodes = vnode->children();
-//     double best_ucb = Globals::NEG_INFTY;
-//     QNode* best_qnode = nullptr;
-//     double ltn = log(vnode->getCount());
-//     for (int i = 0; i < qnodes.size(); i++) {
-//         QNode* qchild = qnodes[i];
-//         int n = qchild->getCount();
-//         double wq = qchild->getTotalValue();
-//         double ucbT = 0;
-//         double ucb = 0;
-//         if ((ltn <= 0 && n == 0) || Globals::config.explore_constant_c == 0)
-//         {
-//             ucb = wq;
-//         } else {
-//             ucbT = Globals::config.explore_constant_c * sqrt(ltn / n);
-//             ucb = wq + ucbT;
-//         }
 
-//         DLOG(INFO) << "[UCB] " << model_->to_string(qchild->getAction()) <<
-//         ": [UCB1:"
-//                    << std::right << std::setfill(' ') << std::setw(9) <<
-//                    std::setprecision(4) << std::fixed << ucb << "] = "
-//                    << std::left << std::setfill(' ') << std::setw(31) <<
-//                    *(qchild->getValueRef())
-//                    << "+[ucbT:" << std::right << std::setw(9) << ucbT << "]"
-//                    << "|[C: " << qchild->getCount() << "]";
-
-//         if (ucb >= best_ucb) {
-//             best_ucb = ucb;
-//             best_qnode = qchild;
-//         }
-//     }
-//     CHECK(best_qnode != nullptr) << "Cannot select best UCB qnode!";
-//     return best_qnode;
-// }
-// own version:
-QNode *Ipft::ucbActionSelection(VNode *vnode) const {
-  const std::vector<QNode *> &qnodes = vnode->children();
+std::shared_ptr<QNode> Ipft::ucbActionSelection(const VNode &vnode) const {
+  std::vector<std::shared_ptr<QNode>> &qnodes = vnode.children();
   double best_ucb = Globals::NEG_INFTY;
-  QNode *best_qnode = nullptr;
+  std::shared_ptr<QNode> best_qnode = nullptr;
 
-  for (QNode *qnode : qnodes) {
+  for (auto &qnode : qnodes) {
     // try previously untried actions first
     if (qnode->getCount() == 0) {
       return qnode;
     }
     // +1 in log(), since log(0) is undefined
     double ucbT = Globals::config.explore_constant_c *
-                  sqrt(log(vnode->getCount() + 1) / qnode->getCount());
+                  sqrt(log(vnode.getCount() + 1) / qnode->getCount());
     double qval = qnode->getTotalValue();
     double ucb = qval + ucbT;
 
@@ -671,7 +619,7 @@ QNode *Ipft::ucbActionSelection(VNode *vnode) const {
                << ": [UCB1:" << std::right << std::setfill(' ') << std::setw(9)
                << std::setprecision(4) << std::fixed << ucb
                << "] = " << std::left << std::setfill(' ') << std::setw(31)
-               << *(qnode->getValueRef()) << "+[ucbT:" << std::right
+               << *(qnode->getValue()) << "+[ucbT:" << std::right
                << std::setw(9) << ucbT << "]"
                << "|[C: " << qnode->getCount() << "]";
 
@@ -680,16 +628,19 @@ QNode *Ipft::ucbActionSelection(VNode *vnode) const {
       best_qnode = qnode;
     }
   }
-  CHECK(best_qnode != nullptr) << "Cannot select best UCB qnode!";
+  CHECK(best_qnode) << "Cannot select best UCB qnode!";
   return best_qnode;
 }
 
-VNode *Ipft::createVNode(QNode *parent, Observation *obs, Belief *belief,
-                         int level) const {
+std::shared_ptr<VNode> Ipft::createVNode(const std::shared_ptr<QNode> &parent,
+                                         Observation *obs,
+                                         std::unique_ptr<Belief> &&belief,
+                                         int level) const {
   // initialize VNode
-  VNode *vnode = new VNode(this->model_, parent, obs, belief, level);
-  Value *initVal = new IpftValue();
-  vnode->setValue(initVal);
+  auto vnode = std::make_shared<VNode>(this->model_, parent, obs,
+                                       std::move(belief), level);
+  std::unique_ptr<Value> initVal = std::make_unique<IpftValue>();
+  vnode->setValue(std::move(initVal));
 
   // statistics
   if (Globals::config.record_statistics) {
@@ -698,8 +649,10 @@ VNode *Ipft::createVNode(QNode *parent, Observation *obs, Belief *belief,
   }
 
   // get legal and preferred actions from model based on the current belief
-  std::vector<Action> preferredActions = this->model_->preferredActions(belief);
-  std::vector<Action> legalActions = this->model_->legalActions(belief);
+  auto bel = vnode->getBelief();
+  std::vector<Action> preferredActions =
+      this->model_->preferredActions(bel.get());
+  std::vector<Action> legalActions = this->model_->legalActions(bel.get());
 
   int num_pref_act = preferredActions.size();
   int num_legal_act = legalActions.size();
@@ -710,41 +663,42 @@ VNode *Ipft::createVNode(QNode *parent, Observation *obs, Belief *belief,
   if (num_legal_act == 0) // no prior knowledge, all actions are equal
   {
     for (Action a = 0; a < this->model_->numActions(); a++) {
-      QNode *qnode = new QNode(this->model_, vnode, a,
-                               level); // same level as parent vnode
+      std::shared_ptr<QNode> qnode =
+          std::make_shared<QNode>(this->model_, vnode, a,
+                                  level); // same level as parent vnode
       qnode->setCount(0);
-      Value *initVal = new IpftValue(0.0, 0.0);
-      qnode->setValue(initVal);
+      std::unique_ptr<Value> initVal = std::make_unique<IpftValue>(0.0, 0.0);
+      qnode->setValue(std::move(initVal));
 
-      vnode->children().push_back(qnode);
+      vnode->children().emplace_back(qnode);
     }
   } else {
-    // initialize all action as penalized
+    // initialize all actions as penalized
     for (Action a = 0; a < this->model_->numActions(); a++) {
-      QNode *qnode = new QNode(this->model_, vnode, a, level);
+      auto qnode = std::make_shared<QNode>(this->model_, vnode, a, level);
       qnode->setCount(Globals::ucb::large_count);
-      Value *initVal = new IpftValue(Globals::ucb::neg_inf_val, 0.0);
-      qnode->setValue(initVal);
+      std::unique_ptr<Value> initVal =
+          std::make_unique<IpftValue>(Globals::ucb::neg_inf_val, 0.0);
+      qnode->setValue(std::move(initVal));
 
-      vnode->children().push_back(qnode);
+      vnode->children().emplace_back(qnode);
     }
 
     // set legal actions to "regular" initialization
     for (int i = 0; i < num_legal_act; i++) {
-      QNode *qnode = vnode->child(legalActions[i]);
+      auto qnode = vnode->child(legalActions[i]);
       qnode->setCount(0);
-      Value *initVal = new IpftValue(0.0, 0.0);
-      qnode->setValue(initVal);
+      std::unique_ptr<Value> initVal = std::make_unique<IpftValue>(0.0, 0.0);
+      qnode->setValue(std::move(initVal));
     }
 
     // set preferred actions to preferred values by ucb action selection
     for (int i = 0; i < num_pref_act; i++) {
-      QNode *qnode = vnode->child(preferredActions[i]);
-      qnode->setCount(
-          Globals::ucb::smart_count); // Improvement: different smart
-                                      // count/value for different actions
-      Value *initVal = new IpftValue(Globals::ucb::smart_value, 0.0);
-      qnode->setValue(initVal);
+      auto qnode = vnode->child(preferredActions[i]);
+      qnode->setCount(Globals::ucb::smart_count);
+      std::unique_ptr<Value> initVal =
+          std::make_unique<IpftValue>(Globals::ucb::smart_value, 0.0);
+      qnode->setValue(std::move(initVal));
     }
   }
   return vnode;

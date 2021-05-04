@@ -10,14 +10,15 @@ namespace solver_ipft {
 
 // IPFT paper equation (3)
 // returns actually the negative entropy
-double EntropyInfGain::computeEntropyEstimate(const ParticleBelief *b) const {
+double EntropyInfGain::computeEntropyEstimate(const Belief *b) const {
+  auto pb = dynamic_cast<const ParticleBelief *>(b);
   double entropyValue = 0.0;
   double temp1;
   double temp2;
   double weight;
-  for (int i = 0; i < b->numParticles(); i++) {
-    const State *s = b->particle(i);
-    temp1 = this->densEstimator->computeDensityValue(s, b);
+  for (int i = 0; i < pb->numParticles(); i++) {
+    const State *s = pb->particle(i);
+    temp1 = this->densEstimator->computeDensityValue(s, pb);
     if (temp1 > 0.0) {
       temp2 = std::log(temp1);
     } else {
@@ -31,17 +32,16 @@ double EntropyInfGain::computeEntropyEstimate(const ParticleBelief *b) const {
 }
 
 double EntropyInfGain::computeDiscInfGain(double discFactor,
-                                          const ParticleBelief *bnext,
-                                          const ParticleBelief *b) const {
+                                          const Belief *bnext,
+                                          const Belief *b) const {
   return (discFactor * this->computeEntropyEstimate(bnext) -
           this->computeEntropyEstimate(b)); // no minus needed
 }
 
 /* ----------------------------- NoInfGain class ---------------------------- */
 
-double NoInfGain::computeDiscInfGain(double discFactor,
-                                     const ParticleBelief *bnext,
-                                     const ParticleBelief *b) const {
+double NoInfGain::computeDiscInfGain(double discFactor, const Belief *bnext,
+                                     const Belief *b) const {
   return 0.0;
 }
 } // namespace solver_ipft

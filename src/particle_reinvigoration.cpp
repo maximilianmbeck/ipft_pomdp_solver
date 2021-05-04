@@ -23,8 +23,8 @@ NoReinvigoration::reinvigorate(const std::vector<State *> &particleSet,
   return particleSet;
 }
 
-ParticleReinvigorator *NoReinvigoration::clone() const {
-  return new NoReinvigoration();
+std::unique_ptr<ParticleReinvigorator> NoReinvigoration::clone() const {
+  return std::make_unique<NoReinvigoration>();
 }
 
 /* -------------------------------------------------------------------------- */
@@ -63,8 +63,9 @@ bool SimpleParticleReinvigorator::allParticlesEqual(
   return true;
 }
 
-ParticleReinvigorator *SimpleParticleReinvigorator::clone() const {
-  return new SimpleParticleReinvigorator(this->model_);
+std::unique_ptr<ParticleReinvigorator>
+SimpleParticleReinvigorator::clone() const {
+  return std::make_unique<SimpleParticleReinvigorator>(this->model_);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -83,16 +84,16 @@ bool ObsAdaptiveReinvigorator::particleReinvigorationNeeded(
   double maxWeight = (*stateMaxWeight)->weight_;
   double frac_replaced = ObsAdaptiveReinvigorator::max_frac_replaced *
                          std::max(0.0, 1 - maxWeight / mpw);
-  this->n_replaced =
+  this->n_replaced_ =
       static_cast<int>(std::floor(frac_replaced * particleSet.size()));
-  // DLOG(INFO) << "[PF] n_replaced: " << n_replaced;
-  return this->n_replaced > 0;
+  // DLOG(INFO) << "[PF] n_replaced: " << n_replaced_;
+  return this->n_replaced_ > 0;
 }
 std::vector<State *>
 ObsAdaptiveReinvigorator::reinvigorate(const std::vector<State *> &particleSet,
                                        const Action &act,
                                        const Observation &obs) const {
-  DLOG(WARNING) << "[PF] Number of particles replaced: " << this->n_replaced;
+  DLOG(WARNING) << "[PF] Number of particles replaced: " << this->n_replaced_;
   // pick randomly (uniformly) n_replaced particles from the particle set
   // create an vector holding all the indices for the particle set
   // ([0:particleSet.size()-1])
@@ -101,14 +102,14 @@ ObsAdaptiveReinvigorator::reinvigorate(const std::vector<State *> &particleSet,
   std::shuffle(indices.begin(), indices.end(), *(this->rand_->engine()));
   // replace the selected particles by new ones
   std::vector<State *> obsAdaptedPs = particleSet;
-  for (int i = 0; i < this->n_replaced; i++) {
+  for (int i = 0; i < this->n_replaced_; i++) {
     this->model_->newParticle(obsAdaptedPs[indices[i]], particleSet, act, obs);
   }
   return std::move(obsAdaptedPs);
 }
 
-ParticleReinvigorator *ObsAdaptiveReinvigorator::clone() const {
-  return new ObsAdaptiveReinvigorator(this->model_, this->rand_);
+std::unique_ptr<ParticleReinvigorator> ObsAdaptiveReinvigorator::clone() const {
+  return std::make_unique<ObsAdaptiveReinvigorator>(this->model_, this->rand_);
 }
 
 } // namespace solver_ipft

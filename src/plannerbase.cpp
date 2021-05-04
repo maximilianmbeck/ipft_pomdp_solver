@@ -4,14 +4,7 @@ namespace solver_ipft {
 
 Plannerbase::Plannerbase()
     : model_(nullptr), world_(nullptr), solver_(nullptr) {
-  this->rand_ = new Random();
-}
-
-Plannerbase::~Plannerbase() {
-  delete solver_;
-  delete world_;
-  delete model_;
-  delete rand_;
+  this->rand_ = std::make_shared<Random>();
 }
 
 void Plannerbase::displayParameters() const {

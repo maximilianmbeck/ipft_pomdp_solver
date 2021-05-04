@@ -1,9 +1,9 @@
 #pragma once
 
+#include <memory>
 #include <string>
 
 #include <solver_ipft/core/particle_belief.hpp>
-
 namespace solver_ipft {
 // Forward declarations
 class ParticleBelief;
@@ -20,10 +20,10 @@ class ParticleBelief;
  */
 class ParticleSetToString {
 private:
-  const POMDP *model_;
+  std::shared_ptr<POMDP> model_;
 
 public:
-  explicit ParticleSetToString(const POMDP *model);
+  explicit ParticleSetToString(std::shared_ptr<POMDP> model);
 
   std::string shortDescription(const std::vector<State *> &particleSet,
                                bool terminated) const;

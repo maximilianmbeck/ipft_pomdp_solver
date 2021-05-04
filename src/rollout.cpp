@@ -7,18 +7,18 @@ namespace solver_ipft {
 
 /* ------------------------- Default rollout policy ------------------------- */
 
-IpftValue BeliefRolloutPolicy::rollout(Belief *belief, int depth) const {
+IpftValue BeliefRolloutPolicy::rollout(std::unique_ptr<Belief> &&belief,
+                                       int depth) const {
   int rolloutIteration =
       0; // start index = 0, since rollout is called with value = locReward +
          // gamma * rollout() [gamma already present in first iteration]
   IpftValue value; // default constructor initializes to zero
   if (depth == 0) {
-    delete belief;
     return value;
   }
   for (int d = depth; d >= 0; d--) {
     //* Random action selection
-    Action act = this->actionChooser_->chooseAction(belief);
+    Action act = this->actionChooser_->chooseAction(belief.get());
 
     //* Random observation generation
     State *s = belief->sample();
@@ -27,7 +27,7 @@ IpftValue BeliefRolloutPolicy::rollout(Belief *belief, int depth) const {
 
     //* belief update and state reward calculation
     // copy of belief for transition step
-    Belief *bNext = belief->clone();
+    auto bNext = belief->clone();
 
     double stateReward = bNext->update(act, *obs);
 
@@ -42,9 +42,7 @@ IpftValue BeliefRolloutPolicy::rollout(Belief *belief, int depth) const {
     double informationReward = 0.0;
     if (this->infGainRewardCalculator_ != nullptr) {
       informationReward = this->infGainRewardCalculator_->computeDiscInfGain(
-          Globals::config.inf_discount_gamma,
-          dynamic_cast<const ParticleBelief *>(bNext),
-          dynamic_cast<const ParticleBelief *>(belief));
+          Globals::config.inf_discount_gamma, bNext.get(), belief.get());
     }
 
     CHECK(!std::isnan(informationReward)) << "Information reward is nan.";
@@ -57,18 +55,10 @@ IpftValue BeliefRolloutPolicy::rollout(Belief *belief, int depth) const {
     rolloutIteration++;
 
     //* terminal belief reached?
-    if (bNext->isTerminalBelief()) {
-      delete belief;
-      delete bNext;
-      break;
+    if (!bNext->isTerminalBelief()) {
+      belief = std::move(bNext);
     } else {
-      delete belief;
-      belief = bNext;
-    }
-    if (d == 0) // last iteration
-    {
-      // clean up memory
-      delete bNext;
+      break;
     }
   }
   return value;
@@ -90,8 +80,8 @@ Action RandomActionChooser::chooseAction(const Belief *belief) const {
 /* --------------------- Deterministic action selection --------------------- */
 
 DeterministicActionChooser::DeterministicActionChooser(
-    const std::vector<Action> &actions)
-    : actions_(actions), round_(0) {}
+    std::vector<Action> actions)
+    : actions_(std::move(actions)), round_(0) {}
 
 Action DeterministicActionChooser::chooseAction(const Belief *belief) const {
   Action act;

@@ -33,29 +33,29 @@ public:
 // Interface for the rollout policy
 class RolloutPolicy {
 protected:
-  const POMDP *model_;
-  const ActionChooser *actionChooser_;
-  const DiscountedInformationGain *infGainRewardCalculator_;
+  const std::shared_ptr<POMDP> model_;
+  std::unique_ptr<ActionChooser> actionChooser_;
+  std::unique_ptr<DiscountedInformationGain> infGainRewardCalculator_;
 
 public:
-  RolloutPolicy(const POMDP *model, const ActionChooser *actionChooser)
-      : model_(model), actionChooser_(actionChooser),
+  RolloutPolicy(std::shared_ptr<POMDP> model,
+                std::unique_ptr<ActionChooser> &&actionChooser)
+      : model_(std::move(model)), actionChooser_(std::move(actionChooser)),
         infGainRewardCalculator_(nullptr) {}
-  RolloutPolicy(const POMDP *model, const ActionChooser *actionChooser,
-                const DiscountedInformationGain *infGainRewardCalc)
-      : model_(model), actionChooser_(actionChooser),
-        infGainRewardCalculator_(infGainRewardCalc) {}
-  virtual ~RolloutPolicy() {
-    delete actionChooser_;
-    delete infGainRewardCalculator_;
-  }
+  RolloutPolicy(std::shared_ptr<POMDP> model,
+                std::unique_ptr<ActionChooser> &&actionChooser,
+                std::unique_ptr<DiscountedInformationGain> &&infGainRewardCalc)
+      : model_(std::move(model)), actionChooser_(std::move(actionChooser)),
+        infGainRewardCalculator_(std::move(infGainRewardCalc)) {}
+  virtual ~RolloutPolicy() = default;
 
   RolloutPolicy(const RolloutPolicy &) = delete;
   RolloutPolicy(RolloutPolicy &&) = delete;
   RolloutPolicy &operator=(const RolloutPolicy &) = delete;
   RolloutPolicy &operator=(RolloutPolicy &&) = delete;
 
-  virtual IpftValue rollout(Belief *belief, int depth) const = 0;
+  virtual IpftValue rollout(std::unique_ptr<Belief> &&belief,
+                            int depth) const = 0;
 };
 
 /* -------------------------------------------------------------------------- */
@@ -65,10 +65,11 @@ public:
 /* ------------------------- Random action selection ------------------------ */
 class RandomActionChooser : public ActionChooser {
 protected:
-  const Random *rand_;
+  const std::shared_ptr<Random> rand_;
 
 public:
-  explicit RandomActionChooser(const Random *rand) : rand_(rand) {}
+  explicit RandomActionChooser(std::shared_ptr<Random> rand)
+      : rand_(std::move(rand)) {}
   ~RandomActionChooser() override = default;
 
   RandomActionChooser(const RandomActionChooser &) = delete;
@@ -87,7 +88,7 @@ protected:
   mutable int round_;
 
 public:
-  explicit DeterministicActionChooser(const std::vector<Action> &actions);
+  explicit DeterministicActionChooser(std::vector<Action> actions);
 
   ~DeterministicActionChooser() override = default;
 
@@ -130,9 +131,12 @@ public:
 // Belief based rollout
 class BeliefRolloutPolicy : public RolloutPolicy {
 public:
-  BeliefRolloutPolicy(const POMDP *model, const ActionChooser *actionChooser,
-                      const DiscountedInformationGain *infGainRewardCalculator)
-      : RolloutPolicy(model, actionChooser, infGainRewardCalculator) {}
+  BeliefRolloutPolicy(
+      std::shared_ptr<POMDP> model,
+      std::unique_ptr<ActionChooser> &&actionChooser,
+      std::unique_ptr<DiscountedInformationGain> &&infGainRewardCalculator)
+      : RolloutPolicy(std::move(model), std::move(actionChooser),
+                      std::move(infGainRewardCalculator)) {}
 
   ~BeliefRolloutPolicy() override = default;
 
@@ -141,7 +145,7 @@ public:
   BeliefRolloutPolicy &operator=(const BeliefRolloutPolicy &) = delete;
   BeliefRolloutPolicy &operator=(BeliefRolloutPolicy &&) = delete;
 
-  IpftValue rollout(Belief *belief, int depth) const override;
+  IpftValue rollout(std::unique_ptr<Belief> &&belief, int depth) const override;
 };
 
 /* ------------------------- Default rollout policy ------------------------- */
@@ -149,12 +153,16 @@ public:
 // Belief based rollout with information reward computation
 class BeliefInformationPolicy : public BeliefRolloutPolicy {
 public:
-  BeliefInformationPolicy(const POMDP *model, const Random *rand)
-      : BeliefRolloutPolicy(model, new RandomActionChooser(rand),
-                            new EntropyInfGain()) {}
-  BeliefInformationPolicy(const POMDP *model,
-                          const ActionChooser *actionChooser)
-      : BeliefRolloutPolicy(model, actionChooser, new EntropyInfGain()) {}
+  BeliefInformationPolicy(std::shared_ptr<POMDP> model,
+                          std::shared_ptr<Random> rand)
+      : BeliefRolloutPolicy(
+            std::move(model),
+            std::make_unique<RandomActionChooser>(std::move(rand)),
+            std::make_unique<EntropyInfGain>()) {}
+  BeliefInformationPolicy(std::shared_ptr<POMDP> model,
+                          std::unique_ptr<ActionChooser> &&actionChooser)
+      : BeliefRolloutPolicy(std::move(model), std::move(actionChooser),
+                            std::make_unique<EntropyInfGain>()) {}
 
   ~BeliefInformationPolicy() override = default;
   BeliefInformationPolicy(const BeliefInformationPolicy &) = delete;

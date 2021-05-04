@@ -8,7 +8,7 @@
 namespace solver_ipft {
 class Belief;
 
-class POMDP {
+class POMDP : public std::enable_shared_from_this<POMDP> {
 public:
   POMDP() = default;
   virtual ~POMDP() = default;
@@ -38,7 +38,7 @@ public:
    * @param type      type of the initial belief (e.g. Gaussian)
    * @return Belief*  the initial belief
    */
-  virtual Belief *initialBelief(const std::string &type) const;
+  virtual std::unique_ptr<Belief> initialBelief(const std::string &type);
 
   virtual State *transition(const State &state, const Action &action) const = 0;
 

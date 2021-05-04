@@ -1,3 +1,4 @@
+#include <solver_ipft/interface/belief.hpp>
 #include <solver_ipft/interface/pomdp.hpp>
 #include <stdexcept>
 
@@ -72,7 +73,7 @@ State *POMDP::createStartState() const {
   return nullptr;
 }
 
-Belief *POMDP::initialBelief(const std::string &type) const {
+std::unique_ptr<Belief> POMDP::initialBelief(const std::string &type) {
   throw std::runtime_error("POMDP::initialBelief not supported!");
   return nullptr;
 }

@@ -1,7 +1,7 @@
 #pragma once
 
+#include <memory>
 #include <solver_ipft/core/globals.hpp>
-
 #include <solver_ipft/core/history.hpp>
 #include <solver_ipft/interface/spaces.hpp>
 namespace solver_ipft {
@@ -16,10 +16,10 @@ class ParticleBelief;
  */
 class Belief {
 public:
-  const POMDP *model_;
+  std::shared_ptr<POMDP> model_;
 
 public:
-  explicit Belief(const POMDP *model) : model_(model){};
+  explicit Belief(std::shared_ptr<POMDP> model) : model_(std::move(model)){};
   virtual ~Belief() = default;
 
   Belief(const Belief &) = delete;
@@ -49,7 +49,8 @@ public:
    * @param num the number of particles
    * @return ParticleBelief* the samples particle belief / set
    */
-  virtual ParticleBelief *sampleParticleBelief(int num) const = 0;
+  virtual std::unique_ptr<ParticleBelief>
+  sampleParticleBelief(int num) const = 0;
 
   /**
    * @brief Update the belief
@@ -62,7 +63,7 @@ public:
 
   virtual bool isTerminalBelief() const = 0;
 
-  virtual Belief *clone() const = 0;
+  virtual std::unique_ptr<Belief> clone() const = 0;
 
   virtual State *mean() const = 0;
 

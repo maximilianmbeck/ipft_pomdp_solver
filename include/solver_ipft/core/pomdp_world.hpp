@@ -9,13 +9,13 @@ namespace solver_ipft {
 class POMDPWorld : public World {
 protected:
   State *state_{nullptr};
-  const POMDP *model_;
+  std::shared_ptr<POMDP> model_;
   std::vector<State *> stateSequence_;
 
   double stepReward_; // reward of the last step
 
 public:
-  explicit POMDPWorld(const POMDP *model);
+  explicit POMDPWorld(std::shared_ptr<POMDP> model);
 
   ~POMDPWorld() override;
 

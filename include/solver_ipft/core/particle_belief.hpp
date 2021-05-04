@@ -15,8 +15,8 @@ class ParticleBelief : public Belief {
   friend class ParticleSetToString;
 
 protected:
-  const Random *rand_;
-  const ParticleReinvigorator *afterResampleReinvigorator_;
+  std::shared_ptr<Random> rand_;
+  std::unique_ptr<ParticleReinvigorator> afterResampleReinvigorator_;
   int num_particles_;
   bool beliefTerminated_;
 
@@ -26,15 +26,15 @@ public:
       weighted_posterior_particles_; // weighted particle set before resampling
                                      // (predicted, reweighted samples)
 public:
-  ParticleBelief(std::vector<State *> particles, bool beliefTerminated,
-                 const POMDP *model, const Random *rand,
-                 const ParticleReinvigorator *afterResampleReinvigorator =
-                     new NoReinvigoration());
-  ParticleBelief(std::vector<State *> particles,
-                 std::vector<State *> wp_particles, bool beliefTerminated,
-                 const POMDP *model, const Random *rand,
-                 const ParticleReinvigorator *afterResampleReinvigorator =
-                     new NoReinvigoration());
+  ParticleBelief(
+      std::vector<State *> particles, bool beliefTerminated,
+      std::shared_ptr<POMDP> model, std::shared_ptr<Random> rand,
+      std::unique_ptr<ParticleReinvigorator> &&afterResampleReinvigorator);
+  ParticleBelief(
+      std::vector<State *> particles, std::vector<State *> wp_particles,
+      bool beliefTerminated, std::shared_ptr<POMDP> model,
+      std::shared_ptr<Random> rand,
+      std::unique_ptr<ParticleReinvigorator> &&afterResampleReinvigorator);
 
   ~ParticleBelief() override;
 
@@ -61,7 +61,7 @@ public:
 
   State *sample() const override;
 
-  ParticleBelief *sampleParticleBelief(int num) const override;
+  std::unique_ptr<ParticleBelief> sampleParticleBelief(int num) const override;
 
   double update(const Action &action, const Observation &obs) override;
 
@@ -73,7 +73,7 @@ public:
   std::string detailedText() const override;
 
   // makes a full / deep copy of the belief
-  Belief *clone() const override;
+  std::unique_ptr<Belief> clone() const override;
 
   bool isTerminalBelief() const override;
 
@@ -83,8 +83,8 @@ public:
 
   State *std() const override;
 
-  virtual void
-  setReinvigorationStrategy(const ParticleReinvigorator *reinvigorator);
+  virtual void setReinvigorationStrategy(
+      std::unique_ptr<ParticleReinvigorator> &&reinvigorator);
 
   friend std::ostream &operator<<(std::ostream &os,
                                   const ParticleBelief &partBelief);

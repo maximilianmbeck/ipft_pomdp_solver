@@ -85,19 +85,15 @@ public:
 
 class KernelDensityEstimator : public DensityEstimator {
 private:
-  BandwidthSelector *bwSelector_;
-  KernelFunction *kernel_;
+  std::unique_ptr<BandwidthSelector> bwSelector_;
+  std::unique_ptr<KernelFunction> kernel_;
 
 public:
-  KernelDensityEstimator() {
-    bwSelector_ = new RotBandwidthSelector(); // default bandwidth selector
-    kernel_ = new NormalKernel();             // default kernel
-  }
+  KernelDensityEstimator()
+      : bwSelector_(std::make_unique<RotBandwidthSelector>()),
+        kernel_(std::make_unique<NormalKernel>()) {}
 
-  ~KernelDensityEstimator() override {
-    delete bwSelector_;
-    delete kernel_;
-  }
+  ~KernelDensityEstimator() override = default;
 
   KernelDensityEstimator(const KernelDensityEstimator &) = delete;
   KernelDensityEstimator(KernelDensityEstimator &&) = delete;
