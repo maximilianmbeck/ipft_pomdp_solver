@@ -8,36 +8,13 @@ namespace test {
 // The fixture for testing class CldModel.
 class NodeValueTest : public IpftObjects {
 protected:
-  // You can remove any or all of the following functions if their bodies would
-  // be empty.
-
   NodeValueTest() {
-    // You can do set-up work for each test here.
     this->model_ = std::make_shared<cld::ContLightDark>(this->rand_);
   }
-
-  ~NodeValueTest() override {
-    // You can do clean-up work that doesn't throw exceptions here.
-  }
-
-  // If the constructor and destructor are not enough for setting up
-  // and cleaning up each test, you can define the following methods:
-
-  void SetUp() override {
-    // Code here will be called immediately after the constructor (right
-    // before each test).
-  }
-
-  void TearDown() override {
-    // Code here will be called immediately after each test (right
-    // before the destructor).
-  }
-
-  // Class members declared here can be used by all tests in the test suite
 };
 
 // Test for IpftValue operations
-TEST_F(NodeValueTest, IPFTValueOperations) {
+TEST_F(NodeValueTest, IPFTValueOperations) { // NOLINT
   IpftValue zeroVal;
   EXPECT_DOUBLE_EQ(0.0, zeroVal.total());
 
@@ -76,7 +53,7 @@ TEST_F(NodeValueTest, IPFTValueOperations) {
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   // INIT GLOG
-  google::InitGoogleLogging(argv[0]);
+  google::InitGoogleLogging(argv[0]); // NOLINT
   google::InstallFailureSignalHandler();
   // ::testing::InitGoogleTest(&argc, argv);
 

@@ -29,7 +29,7 @@ bool allParticlesEqual(const std::vector<State *> &particles) {
 }
 
 std::vector<State *> doubleVec2StateVec(const std::vector<double> &numbers,
-                                        POMDP *model) {
+                                        const std::shared_ptr<POMDP> &model) {
   std::vector<State *> states;
   // generate 1 dimensional states from number vector
   for (double n : numbers) {

@@ -11,10 +11,10 @@ namespace test {
 // The fixture for testing with particle beliefs / particle sets
 class ParticleBeliefData : public IpftObjects {
 protected:
-  ParticleBelief *belief1;
-  ParticleBelief *belief2;
-  ParticleBelief *allEq5;
-  ParticleBelief *belErr1Step;
+  std::unique_ptr<ParticleBelief> belief1;
+  std::unique_ptr<ParticleBelief> belief2;
+  std::unique_ptr<ParticleBelief> allEq5;
+  std::unique_ptr<ParticleBelief> belErr1Step;
 
   ParticleBeliefData() {
     // init model
@@ -30,8 +30,8 @@ protected:
 
     std::vector<State *> states =
         debug::doubleVec2StateVec(numbers, this->model_);
-    belief1 = new ParticleBelief(states, false, this->model_, this->rand_,
-                                 new NoReinvigoration());
+    belief1 = std::make_unique<ParticleBelief>(states, false, this->model_,
+                                               this->rand_);
 
     // init belief2
     // belief2 variance =   0.0
@@ -43,15 +43,14 @@ protected:
                4.253895, 4.253895, 4.253895, 4.253895, 4.253895};
 
     states = debug::doubleVec2StateVec(numbers, this->model_);
-    belief2 = new ParticleBelief(states, false, this->model_, this->rand_,
-                                 new NoReinvigoration());
-
+    belief2 = std::make_unique<ParticleBelief>(states, false, this->model_,
+                                               this->rand_);
     // init belief allEq5
     numbers = {5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0,
                5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0};
     states = debug::doubleVec2StateVec(numbers, this->model_);
-    allEq5 = new ParticleBelief(states, false, this->model_, this->rand_,
-                                new NoReinvigoration());
+    allEq5 = std::make_unique<ParticleBelief>(states, false, this->model_,
+                                              this->rand_);
 
     // belErr1Step
     numbers = {9.3953, 9.8427,  10.1268, 9.6946, 9.2815,  10.4726, 10.7598,
@@ -59,19 +58,12 @@ protected:
                8.9347, 10.1384, 9.6376,  9.6736, 10.7702, 9.7005};
 
     states = debug::doubleVec2StateVec(numbers, this->model_);
-    belErr1Step = new ParticleBelief(states, false, this->model_, this->rand_,
-                                     new NoReinvigoration());
+    belErr1Step = std::make_unique<ParticleBelief>(states, false, this->model_,
+                                                   this->rand_);
   }
 
-  virtual ~ParticleBeliefData() override {
-    delete belief1;
-    delete belief2;
-    delete allEq5;
-    delete belErr1Step;
-  }
-
-  ParticleBelief *createUniformParticleSet(int numParticles, double lower,
-                                           double upper) {
+  std::unique_ptr<ParticleBelief>
+  createUniformParticleSet(int numParticles, double lower, double upper) {
     std::vector<State *> particleSet;
     for (int i = 0; i < numParticles; i++) {
       State *particle = this->model_->allocateState();
@@ -80,13 +72,13 @@ protected:
       particleSet.push_back(particle);
     }
     State::normalizeWeights(particleSet, State::weightSum(particleSet));
-    return new ParticleBelief(
+    return std::make_unique<ParticleBelief>(
         particleSet, false, this->model_, this->rand_,
-        new ObsAdaptiveReinvigorator(this->model_, this->rand_));
+        std::make_unique<ObsAdaptiveReinvigorator>(this->model_, this->rand_));
   }
 
-  ParticleBelief *createNormalParticleSet(int numParticles, double mu,
-                                          double sigma) {
+  std::unique_ptr<ParticleBelief>
+  createNormalParticleSet(int numParticles, double mu, double sigma) {
     std::vector<State *> particleSet;
     for (int i = 0; i < numParticles; i++) {
       State *particle = this->model_->allocateState();
@@ -95,9 +87,9 @@ protected:
       particleSet.push_back(particle);
     }
     State::normalizeWeights(particleSet, State::weightSum(particleSet));
-    return new ParticleBelief(
+    return std::make_unique<ParticleBelief>(
         particleSet, false, this->model_, this->rand_,
-        new ObsAdaptiveReinvigorator(this->model_, this->rand_));
+        std::make_unique<ObsAdaptiveReinvigorator>(this->model_, this->rand_));
   }
 };
 } // namespace test

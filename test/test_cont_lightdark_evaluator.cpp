@@ -6,7 +6,7 @@
 namespace solver_ipft {
 namespace test {
 
-TEST(ProblemContLightDark, TestEvaluator) {
+TEST(ProblemContLightDark, TestEvaluator) { // NOLINT
   Evaluator evaluator(new cld::MyPlanner());
   evaluator.runEvaluation(0, nullptr);
   EXPECT_TRUE(true);
@@ -18,7 +18,7 @@ TEST(ProblemContLightDark, TestEvaluator) {
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   // INIT GLOG
-  google::InitGoogleLogging(argv[0]);
+  google::InitGoogleLogging(argv[0]); // NOLINT
   google::InstallFailureSignalHandler();
   // ::testing::InitGoogleTest(&argc, argv);
 

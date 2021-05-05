@@ -10,6 +10,13 @@
 
 namespace solver_ipft {
 
+ParticleBelief::ParticleBelief(std::vector<State *> particles,
+                               bool beliefTerminated,
+                               std::shared_ptr<POMDP> model,
+                               std::shared_ptr<Random> rand)
+    : ParticleBelief(std::move(particles), beliefTerminated, std::move(model),
+                     std::move(rand), std::make_unique<NoReinvigoration>()) {}
+
 ParticleBelief::ParticleBelief(
     std::vector<State *> particles, std::vector<State *> wp_particles,
     bool beliefTerminated, std::shared_ptr<POMDP> model,
@@ -291,9 +298,9 @@ State *ParticleBelief::sample() const { return this->sample(1).back(); }
 
 std::unique_ptr<ParticleBelief>
 ParticleBelief::sampleParticleBelief(int num) const {
-  return std::make_unique<ParticleBelief>(this->sample(num), this->beliefTerminated_,
-                            this->model_, this->rand_,
-                            this->afterResampleReinvigorator_->clone());
+  return std::make_unique<ParticleBelief>(
+      this->sample(num), this->beliefTerminated_, this->model_, this->rand_,
+      this->afterResampleReinvigorator_->clone());
 }
 
 State *ParticleBelief::mean() const {

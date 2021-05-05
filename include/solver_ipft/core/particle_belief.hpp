@@ -26,6 +26,8 @@ public:
       weighted_posterior_particles_; // weighted particle set before resampling
                                      // (predicted, reweighted samples)
 public:
+  ParticleBelief(std::vector<State *> particles, bool beliefTerminated,
+                 std::shared_ptr<POMDP> model, std::shared_ptr<Random> rand);
   ParticleBelief(
       std::vector<State *> particles, bool beliefTerminated,
       std::shared_ptr<POMDP> model, std::shared_ptr<Random> rand,
