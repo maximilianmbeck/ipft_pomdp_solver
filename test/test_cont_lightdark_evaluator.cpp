@@ -7,7 +7,7 @@ namespace solver_ipft {
 namespace test {
 
 TEST(ProblemContLightDark, TestEvaluator) { // NOLINT
-  Evaluator evaluator(new cld::MyPlanner());
+  Evaluator evaluator(std::make_unique<cld::MyPlanner>());
   evaluator.runEvaluation(0, nullptr);
   EXPECT_TRUE(true);
 }

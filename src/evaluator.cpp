@@ -179,7 +179,8 @@ void EvaluationStatistics::printEvaluationResults(std::ostream &os) const {
 /*                               Evaluator class                              */
 /* -------------------------------------------------------------------------- */
 
-Evaluator::Evaluator(Planner *planner) : planner_(planner), round_(0) {
+Evaluator::Evaluator(std::unique_ptr<Planner> &&planner)
+    : planner_(std::move(planner)), round_(0) {
   this->eval_stats_ = std::make_unique<EvaluationStatistics>(&std::cout);
 }
 

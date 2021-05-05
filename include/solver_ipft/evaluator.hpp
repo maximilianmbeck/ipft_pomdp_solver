@@ -60,7 +60,7 @@ protected:
   int round_;
 
 public:
-  explicit Evaluator(Planner *planner);
+  explicit Evaluator(std::unique_ptr<Planner> &&planner);
 
   virtual int runEvaluation(int argc, char *argv[]);
 
