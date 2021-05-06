@@ -4,9 +4,17 @@
 #include <ostream>
 #include <vector>
 
-//* Copy from DESPOT (originally from POMCP (David Silver))
-
-// usage of MemoryPool explained in comments
+/**
+ * This piece of code is taken from DESPOT and POMCP solvers
+ *
+ * cf. https://github.com/AdaCompNUS/despot
+ *
+ * cf. Ye, Nan, et al. "Despot: Online pomdp planning with regularization."
+ * Journal of Artificial Intelligence Research 58 (2017): 231-266.
+ *
+ * cf. Silver, David, and Joel Veness. "Monte-Carlo planning in large POMDPs."
+ * Neural Information Processing Systems, 2010.
+ */
 
 namespace solver_ipft {
 
@@ -31,18 +39,15 @@ public:
   MemoryPool &operator=(const MemoryPool &) = delete;
   MemoryPool &operator=(MemoryPool &&) = delete;
 
-  // Do not use
   T *Construct() {
     T *obj = Allocate();
     return new (obj) T;
   }
-  // Do not use
   void Destroy(T *obj) {
-    obj.T::~T();
+    obj->~T();
     Free(obj);
   }
 
-  //* Use this function to allocate new MemoryObjects
   T *Allocate() {
     if (freelist_.empty()) {
       NewChunk();
@@ -55,7 +60,6 @@ public:
     return obj;
   }
 
-  //* Use this function to free a MemoryObject
   void Free(T *obj) {
     assert(obj->IsAllocated());
     obj->ClearAllocated();
