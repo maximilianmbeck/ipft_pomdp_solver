@@ -4,6 +4,7 @@
 /*                   Continuous Light Dark POMDP definition                   */
 /* -------------------------------------------------------------------------- */
 
+#include <array>
 #include <solver_ipft/interface/pomdp.hpp>
 #include <solver_ipft/interface/rollout.hpp>
 #include <solver_ipft/interface/spaces.hpp>
@@ -25,7 +26,8 @@ constexpr double sigmaInitial = 10.0; // see MA Fischer p.87 + continuous_ld.jl
 constexpr double sigmaTransition = 0.1;
 constexpr double lightSourceLoc = 10.0;
 constexpr double goalRegion = 0.0;
-constexpr int actToValueMap[5] = {-3, -1, 0, 1, 3}; // discrete actions
+constexpr std::array<int, 5> actToValueMap = {-3, -1, 0, 1,
+                                              3}; // discrete actions
 
 constexpr int cldPrec =
     4; // precision of state and observation outputs / prints

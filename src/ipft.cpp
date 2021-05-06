@@ -24,7 +24,7 @@ std::ostream &operator<<(std::ostream &os,
 }
 
 std::string IpftSearchStatistics::shortDescription() const {
-  using namespace std;
+  using namespace std; // NOLINT
   stringstream ss;
   ss << "[Search(" << time_search << "ms, " << num_simulations
      << " sims): " << optimalAction << "]";
@@ -32,7 +32,7 @@ std::string IpftSearchStatistics::shortDescription() const {
 }
 
 std::string IpftSearchStatistics::text() const {
-  using namespace std;
+  using namespace std; // NOLINT
   string description = this->shortDescription();
 
   constexpr int indentFromRightSubHeader = 20;
@@ -61,7 +61,7 @@ std::string IpftSearchStatistics::text() const {
 }
 
 std::string IpftSearchStatistics::printValuedActions() const {
-  using namespace std;
+  using namespace std; // NOLINT
   constexpr char fillChar = ' ';
   constexpr char optimalChar = '*';
   constexpr int width1 = 2;
@@ -82,7 +82,7 @@ std::string IpftSearchStatistics::printValuedActions() const {
 }
 
 std::string IpftSearchStatistics::printActionObservationSequences() const {
-  using namespace std;
+  using namespace std; // NOLINT
   constexpr char fillChar = ' ';
   constexpr char optimalChar = '*';
   constexpr int width1 = 2;
@@ -101,7 +101,7 @@ std::string IpftSearchStatistics::printActionObservationSequences() const {
 }
 
 std::string IpftSearchStatistics::printTimes() const {
-  using namespace std;
+  using namespace std; // NOLINT
 
   constexpr int width1 = 20;
   constexpr int width2 = 10;
@@ -127,7 +127,7 @@ std::string IpftSearchStatistics::printTimes() const {
 }
 
 std::string IpftSearchStatistics::printNodeStats() const {
-  using namespace std;
+  using namespace std; // NOLINT
 
   constexpr int width1 = 10;
   constexpr int width2 = 8;
@@ -153,53 +153,47 @@ std::string IpftSearchStatistics::printNodeStats() const {
 /*                              Ipft value class                              */
 /* -------------------------------------------------------------------------- */
 
-IpftValue::IpftValue() {
-  value[0] = 0;
-  value[1] = 0;
-}
+IpftValue::IpftValue() : value_({0.0, 0.0}) {}
 
 IpftValue::IpftValue(const double &stateValue, const double &informationValue) {
-  value[0] = stateValue;
-  value[1] = informationValue;
+  value_[0] = stateValue;
+  value_[1] = informationValue;
 }
 
 void IpftValue::add(const Value &val) {
   auto v = dynamic_cast<const IpftValue &>(val);
-  value[0] += v.value[0];
-  value[1] += v.value[1];
+  value_[0] += v.value_[0];
+  value_[1] += v.value_[1];
 }
 
 void IpftValue::update(const Value &val, int count) {
   auto v = dynamic_cast<const IpftValue &>(val);
   for (int i = 0; i < IpftValue::componentCount; i++) {
-    // this->value[i] = (this->value[i] * count + v.value[i]) / (count + 1);
-    this->value[i] += (v.value[i] - this->value[i]) / (count + 1);
+    this->value_.at(i) += (v.value_.at(i) - this->value_.at(i)) / (count + 1);
   }
 }
 
 void IpftValue::set(const Value &val) {
   auto v = dynamic_cast<const IpftValue &>(val);
-  value[0] = v.value[0];
-  value[1] = v.value[1];
+  value_[0] = v.value_[0];
+  value_[1] = v.value_[1];
 }
 
 void IpftValue::setComponent(int index, const double &val) {
-  if (index < componentCount && index >= 0) {
-    this->value[index] = val;
-  }
+  this->value_.at(index) = val;
 }
 
 double IpftValue::getRawComponent(int index) const {
-  return this->value[index];
+  return this->value_.at(index);
 }
 
 double IpftValue::getWeightedComponent(int index) const {
   switch (index) {
   case 0:
-    return this->value[index];
+    return this->value_.at(index);
     break;
   case 1:
-    return Globals::config.inf_gather_constant_lambda * value[index];
+    return Globals::config.inf_gather_constant_lambda * value_.at(index);
     break;
   default:
     throw std::out_of_range("IpftValue has only valid indices 0 and 1.");
@@ -211,7 +205,7 @@ int IpftValue::getComponentCount() const { return componentCount; }
 
 double IpftValue::total() const {
   double total =
-      value[0] + Globals::config.inf_gather_constant_lambda * value[1];
+      value_[0] + Globals::config.inf_gather_constant_lambda * value_[1];
   return total;
 }
 
@@ -220,28 +214,27 @@ std::unique_ptr<Value> IpftValue::clone() const {
 }
 
 IpftValue &IpftValue::operator+=(const IpftValue &add) {
-  this->value[0] += add.value[0];
-  this->value[1] += add.value[1];
+  this->value_[0] += add.value_[0];
+  this->value_[1] += add.value_[1];
   return *this;
 }
 
 IpftValue IpftValue::operator*(const double &factor) {
-  IpftValue result(this->value[0] * factor, this->value[1] * factor);
+  IpftValue result(this->value_[0] * factor, this->value_[1] * factor);
   return result;
 }
 
 IpftValue IpftValue::operator+(const IpftValue &add) {
-  IpftValue result(this->value[0] + add.value[0],
-                   this->value[1] + add.value[1]);
+  IpftValue result(this->value_[0] + add.value_[0],
+                   this->value_[1] + add.value_[1]);
   return result;
 }
 
 std::string IpftValue::text() const {
-  using namespace std;
-  stringstream ss;
+  std::stringstream ss;
   ss << "[V: " << std::setprecision(2) << std::fixed << this->total() << " ("
-     << std::setprecision(3) << this->value[0] << "|"
-     << Globals::config.inf_gather_constant_lambda * this->value[1] << ")]";
+     << std::setprecision(3) << this->value_[0] << "|"
+     << Globals::config.inf_gather_constant_lambda * this->value_[1] << ")]";
   return ss.str();
 }
 
@@ -307,7 +300,6 @@ Belief *Ipft::getBelief() const { return this->belief_.get(); }
 /* ----------------------------- helper methods ----------------------------- */
 
 ValuedAction Ipft::search(double timeout) {
-  using namespace std::chrono;
   // checking preconditions
   if (this->belief_->isTerminalBelief()) {
     LOG(FATAL) << "Treesearch with terminal belief!";
@@ -324,8 +316,8 @@ ValuedAction Ipft::search(double timeout) {
     this->root_ = createVNode(nullptr, nullptr, nullptr, 0);
   }
 
-  auto start = high_resolution_clock::now();
-  duration<double, std::milli> elapsed;
+  auto start = std::chrono::high_resolution_clock::now();
+  std::chrono::duration<double, std::milli> elapsed(0.0);
   int num_sims = 0;
   do {
     DLOG(INFO) << "[SEARCH] start simulation(" << num_sims << ")";
@@ -336,13 +328,13 @@ ValuedAction Ipft::search(double timeout) {
 
     DLOG(INFO) << "[SEARCH] sampled search particle set: " << b->detailedText();
     this->root_->setBelief(std::move(b));
-    IpftValue val = simulate(*this->root_, Globals::config.search_depth);
+    IpftValue val = simulate(this->root_, Globals::config.search_depth);
     DLOG(INFO) << "[SEARCH] end simulation(" << num_sims << ") " << val;
     DLOG(INFO) << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
                   "|||||||||||||||||||||||||";
     num_sims++;
 
-    auto end = high_resolution_clock::now();
+    auto end = std::chrono::high_resolution_clock::now();
     elapsed = end - start;
 
     // convergence evaluation
@@ -382,10 +374,10 @@ ValuedAction Ipft::search(double timeout) {
 }
 
 // Algorithm 1 in IPFT paper
-IpftValue Ipft::simulate(VNode &vnode, int depth) {
+IpftValue Ipft::simulate(const std::shared_ptr<VNode> &vnode, int depth) {
   if (depth == 0) {
     IpftValue zero;
-    vnode.updateValueCount(zero);
+    vnode->updateValueCount(zero);
     return zero;
   }
   // log next tree level
@@ -394,7 +386,7 @@ IpftValue Ipft::simulate(VNode &vnode, int depth) {
       std::chrono::high_resolution_clock::now(); // time_node_selection
 
   //* Action space is discrete --> no progressive widening needed
-  auto actionNode = ucbActionSelection(vnode);
+  auto actionNode = ucbActionSelection(*vnode);
 
   // log action selection
   DLOG(INFO) << "[SIM] select " << model_->to_string(actionNode->getAction())
@@ -415,7 +407,7 @@ IpftValue Ipft::simulate(VNode &vnode, int depth) {
   // sample state s from b and generate observation o from (s,a)
   //? one observation is (almost) never sampled twice (continuous observation
   //? space)
-  State *s = vnode.belief_->sample();
+  State *s = vnode->belief_->sample();
   State *statePosterior = this->model_->transition(*s, actionNode->getAction());
   Observation *o = this->model_->observation(*statePosterior);
   // states are unused
@@ -449,7 +441,7 @@ IpftValue Ipft::simulate(VNode &vnode, int depth) {
 
   //* Particle filter and reward calculation
   // get copy of current belief (bNext is b')
-  auto bNext = vnode.getBelief();
+  auto bNext = vnode->getBelief();
   this->stats_->time_node_selection +=
       stopTime(startNodeSel); // time_node_selection
 
@@ -467,7 +459,7 @@ IpftValue Ipft::simulate(VNode &vnode, int depth) {
   // vnode belief is b
   auto startInfGain = std::chrono::high_resolution_clock::
       now();                  // time_information_gain_computation
-  auto b = vnode.getBelief(); // a copy of the vnode belief
+  auto b = vnode->getBelief(); // a copy of the vnode belief
   double informationReward = this->infGainRewardCalculator_->computeDiscInfGain(
       Globals::config.inf_discount_gamma,
       dynamic_cast<const ParticleBelief *>(bNext.get()),
@@ -493,11 +485,11 @@ IpftValue Ipft::simulate(VNode &vnode, int depth) {
   if (new_obs_sampled) {
     // Add new VNode
     auto newChild = createVNode(actionNode, obs, std::move(bNext),
-                                vnode.getTreelevel() + 1);
+                                vnode->getTreelevel() + 1);
     actionNode->children().emplace_back(newChild);
 
     // rollout
-    recursiveReward = rollout(*newChild, depth - 1);
+    recursiveReward = rollout(newChild, depth - 1);
   } else // already existing child VNode is selected
   {
     assert(obsNode);
@@ -507,7 +499,7 @@ IpftValue Ipft::simulate(VNode &vnode, int depth) {
     obsNode->setBelief(std::move(bNext));
 
     // simulate
-    recursiveReward = simulate(*obsNode, depth - 1);
+    recursiveReward = simulate(obsNode, depth - 1);
   }
 
   auto startBackup = std::chrono::high_resolution_clock::now(); // time_backup
@@ -521,20 +513,20 @@ IpftValue Ipft::simulate(VNode &vnode, int depth) {
   DLOG(INFO) << "[SIM] acc. disc. recursive reward " << accDiscountedReward;
 
   // for logging only
-  auto oldVNodeVal = vnode.cloneValue();
+  auto oldVNodeVal = vnode->cloneValue();
   auto oldQNodeVal = actionNode->cloneValue();
 
   //* Backup
-  vnode.updateValueCount(accDiscountedReward);
+  vnode->updateValueCount(accDiscountedReward);
   // vnode->setCount(vnode->getCount() + 1);
   actionNode->updateValueCount(accDiscountedReward);
 
   // log backup
   DLOG(INFO) << "[SIM][BU] " << std::setfill(' ') << std::setw(15) << std::right
-             << model_->to_string(vnode.obsEdge_) << " on level "
+             << model_->to_string(vnode->obsEdge_) << " on level "
              << Globals::config.search_depth - depth << ": "
-             << *(vnode.getValue()) << " = " << *oldVNodeVal << "<-"
-             << accDiscountedReward << "|[C: " << vnode.getCount() << "]";
+             << *(vnode->getValue()) << " = " << *oldVNodeVal << "<-"
+             << accDiscountedReward << "|[C: " << vnode->getCount() << "]";
   DLOG(INFO) << "[SIM][BU] " << std::setfill(' ') << std::setw(15) << std::right
              << model_->to_string(actionNode->getAction()) << " on level "
              << Globals::config.search_depth - depth << ": "
@@ -542,7 +534,7 @@ IpftValue Ipft::simulate(VNode &vnode, int depth) {
              << accDiscountedReward << "|[C: " << actionNode->getCount() << "]";
 
   if (Globals::config.record_statistics) {
-    int treeLevel = vnode.getTreelevel();
+    int treeLevel = vnode->getTreelevel();
     this->stats_->num_visits_vnodes_on_level[treeLevel]++;
     if (treeLevel > this->stats_->deepest_simulation_depth) {
       this->stats_->deepest_simulation_depth = treeLevel;
@@ -561,15 +553,15 @@ IpftValue Ipft::simulate(VNode &vnode, int depth) {
   return accDiscountedReward;
 }
 
-IpftValue Ipft::rollout(VNode &leaf, int depth) {
+IpftValue Ipft::rollout(const std::shared_ptr<VNode> &leaf, int depth) {
   // log rollout
-  DLOG(WARNING) << "[ROLLOUT] estimate value of " << leaf.belief_->text()
+  DLOG(WARNING) << "[ROLLOUT] estimate value of " << leaf->belief_->text()
                 << "..";
   auto start = std::chrono::high_resolution_clock::now();
-  IpftValue value = this->rolloutPolicy_->rollout(leaf.getBelief(), depth);
+  IpftValue value = this->rolloutPolicy_->rollout(leaf->getBelief(), depth);
   this->stats_->time_node_rollout += stopTime(start);
   // update value of leaf / "newChild"
-  leaf.updateValueCount(value);
+  leaf->updateValueCount(value);
   // log rollout result
   DLOG(WARNING) << "[ROLLOUT] result: " << value << "^^";
   return value;

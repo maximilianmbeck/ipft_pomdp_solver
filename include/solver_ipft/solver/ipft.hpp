@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <chrono>
 #include <solver_ipft/config.hpp>
 #include <solver_ipft/core/information_gain.hpp>
@@ -15,15 +16,15 @@ class RolloutPolicy;
 
 class IpftSearchStatistics : public SearchStatistics {
 public:
-  double time_search;                       // ms
-  double time_node_selection;               // ms
-  double time_backup;                       // ms
-  double time_belief_update;                // ms
-  double time_information_gain_computation; // ms
-  double time_node_rollout;                 // ms
-  int num_tree_vnodes;
-  int num_simulations;
-  int deepest_simulation_depth; //
+  double time_search{0.0};                       // ms
+  double time_node_selection{0.0};               // ms
+  double time_backup{0.0};                       // ms
+  double time_belief_update{0.0};                // ms
+  double time_information_gain_computation{0.0}; // ms
+  double time_node_rollout{0.0};                 // ms
+  int num_tree_vnodes{0};
+  int num_simulations{0};
+  int deepest_simulation_depth{0}; //
 
   std::vector<int> num_visits_vnodes_on_level;
   std::vector<int> num_vnodes_on_level;
@@ -34,10 +35,7 @@ public:
   std::vector<std::vector<ValuedAction>> valuedActionsPerTimestep;
 
   explicit IpftSearchStatistics(std::shared_ptr<POMDP> model)
-      : SearchStatistics(std::move(model)), time_search(0.0),
-        time_node_selection(0.0), time_backup(0.0), time_belief_update(0.0),
-        time_information_gain_computation(0.0), time_node_rollout(0.0),
-        num_tree_vnodes(0), num_simulations(0), deepest_simulation_depth(0),
+      : SearchStatistics(std::move(model)),
         num_visits_vnodes_on_level(Globals::config.search_depth),
         num_vnodes_on_level(Globals::config.search_depth + 1){};
 
@@ -69,7 +67,7 @@ class IpftValue : public Value {
 protected:
   static constexpr int componentCount = 2;
   // index 0: stateValue, index 1: informationValue
-  double value[componentCount]; // TODO(max): replace by std::array
+  std::array<double, componentCount> value_;
 
 public:
   IpftValue();
@@ -147,9 +145,9 @@ public:
 
   virtual ValuedAction search(double timeout);
 
-  virtual IpftValue simulate(VNode &vnode, int depth);
+  virtual IpftValue simulate(const std::shared_ptr<VNode> &vnode, int depth);
 
-  virtual IpftValue rollout(VNode &leaf, int depth);
+  virtual IpftValue rollout(const std::shared_ptr<VNode> &leaf, int depth);
 
 protected:
   // argmax actions of vnode

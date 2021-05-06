@@ -72,7 +72,7 @@ std::ostream &operator<<(std::ostream &os, const CLDObs &p) {
 /* -------------------------------------------------------------------------- */
 
 CLDActionValue::CLDActionValue(const Action &act)
-    : CLDObs(static_cast<double>(actToValueMap[act])) {}
+    : CLDObs(static_cast<double>(actToValueMap.at(act))) {}
 
 std::ostream &operator<<(std::ostream &os, const CLDActionValue &p) {
   os << p.text();
@@ -126,7 +126,7 @@ State *ContLightDark::transition(const State &state,
 
   // transition to the next state mu is the mean of the transition (normal)
   // distribution
-  double mu = cldState->get(0) + actToValueMap[static_cast<int>(cldAction)];
+  double mu = cldState->get(0) + actToValueMap.at(static_cast<int>(cldAction));
   double nextStatePos = rand_->nextNormal(
       mu, sigmaTransition); // nextState = s' (s prime) = state posterior
 
