@@ -1,4 +1,4 @@
-#include "solver_ipft/core/pomdp_world.hpp"
+#include <solver_ipft/core/pomdp_world.hpp>
 
 namespace solver_ipft {
 POMDPWorld::POMDPWorld(std::shared_ptr<POMDP> model)

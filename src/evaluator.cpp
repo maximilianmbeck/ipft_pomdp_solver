@@ -22,7 +22,7 @@ void EvaluationStatistics::initEvaluation() {
 
 void EvaluationStatistics::summarizeRound(
     const SimulationStatistics &round_stats) {
-  using namespace std;
+  using namespace std; // NOLINT
   this->step_counts_.push_back(round_stats.step_count_);
   this->total_disc_rewards_.push_back(round_stats.total_discounted_reward_);
   this->total_undisc_rewards_.push_back(round_stats.total_undiscounted_reward_);
@@ -141,7 +141,7 @@ void EvaluationStatistics::writeEvalutionResultsToFile(
 }
 
 void EvaluationStatistics::printEvaluationResults(std::ostream &os) const {
-  using namespace std;
+  using namespace std; // NOLINT
   // ----------------------------------------------
   // Round | #Steps | disc. Reward | undisc. Reward
   // ----------------------------------------------

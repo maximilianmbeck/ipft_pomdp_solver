@@ -101,14 +101,13 @@ void SimulationStatistics::initStep(int round, int step) {
 }
 
 void SimulationStatistics::summarizeSearch() {
-  // record search statistics
   auto search_stats = this->solver_->getSearchStatistics();
-  this->search_stats_.emplace_back(std::move(search_stats));
-
   // print search statistics
   if (Globals::config.print_search_step_results && search_stats != nullptr) {
     *out_ << search_stats->text() << std::endl;
   }
+  // save search statistics
+  this->search_stats_.emplace_back(std::move(search_stats));
 }
 
 void SimulationStatistics::summarizeExecuteAction(const Action &act,
@@ -152,7 +151,7 @@ void SimulationStatistics::summarizeBeliefUpdate() {
 }
 
 void SimulationStatistics::printRoundResultsTable(std::ostream &os) const {
-  using namespace std;
+  using namespace std; // NOLINT
   if (this->step_count_ > 0) {
     // ------------------------------------------------------------------------------------------------------------------------
     // Step | State | Solv.Mean | Solv.Std | Action | StatePost | Observation |

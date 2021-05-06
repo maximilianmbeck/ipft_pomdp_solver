@@ -8,7 +8,7 @@ Plannerbase::Plannerbase()
 }
 
 void Plannerbase::displayParameters() const {
-  using namespace std;
+  using namespace std; // NOLINT
 
   std::cout
       << "Model = " << typeid(*this->model_).name() << endl

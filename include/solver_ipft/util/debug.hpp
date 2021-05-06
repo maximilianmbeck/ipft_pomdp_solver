@@ -23,14 +23,6 @@ bool variableHasIncreasedMoreThan(varType curVal, varType delta) {
     return temp > delta;
 }
 
-// Testing this function in main:
-// int num = 40;
-// debug::variableHasIncreasedMoreThan(num, 20);
-// num += 20;
-// std::cout << debug::variableHasIncreasedMoreThan(num, 20) << std::endl;
-// num += 40;
-// std::cout << debug::variableHasIncreasedMoreThan(num, 40) << std::endl;
-
 bool allParticlesEqual(const Belief* belief);
 
 bool allParticlesEqual(const std::vector<State*>& particles);

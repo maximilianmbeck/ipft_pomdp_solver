@@ -163,8 +163,7 @@ std::ostream &operator<<(std::ostream &os, const History &history) {
 }
 std::string History::shortDescription() const {
   constexpr int maxNumberActionsToPrint = 6;
-  using namespace std;
-  stringstream ss;
+  std::stringstream ss;
   ss << "[History(" << this->size() << "): ";
   int i;
   for (i = 0; (i < this->size()) && (i < maxNumberActionsToPrint); i++) {
@@ -183,7 +182,7 @@ std::string History::shortDescription() const {
 }
 
 std::string History::text() const {
-  using namespace std;
+  using namespace std; // NOLINT
   stringstream ss;
   ss << "[History(" << this->size() << "):" << endl;
   for (int i = 0; i < this->size(); i++) {

@@ -34,7 +34,7 @@ ParticleSetToString::shortDescription(const std::vector<State *> &particleSet,
 
 std::string ParticleSetToString::particleTable(
     const std::vector<State *> &particleSet) const {
-  using namespace std;
+  using namespace std; // NOLINT
   // Example for particle table:
   // ----------------------------------
   //  index | weight | value

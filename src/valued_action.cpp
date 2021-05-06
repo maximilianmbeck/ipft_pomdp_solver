@@ -59,8 +59,7 @@ ValuedAction::~ValuedAction() = default;
 /* -------------------------- ValuedAction printers ------------------------- */
 
 std::string ValuedAction::text() const {
-  using namespace std;
-  stringstream ss;
+  std::stringstream ss;
   if (this->value_ != nullptr) {
     ss << "[ValuedAction: Act(" << this->action_ << ") " << *(this->value_)
        << " Count(" << this->count_ << ")]";
