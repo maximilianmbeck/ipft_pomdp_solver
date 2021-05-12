@@ -134,10 +134,6 @@ public:
 
   void beliefUpdate(const Action &action, const Observation &obs) override;
 
-  void setBelief(std::unique_ptr<Belief> &&b) override;
-
-  Belief *getBelief() const override;
-
   std::unique_ptr<SearchStatistics> getSearchStatistics() override;
 
   /* ----------------------------- helper methods -----------------------------

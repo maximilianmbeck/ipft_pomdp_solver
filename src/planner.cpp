@@ -126,7 +126,7 @@ void Planner::resetPlanner() {
   // initial belief
   auto initialBelief = this->model_->initialBelief("DEFAULT");
   // reset solver
-  this->solver_->setBelief(std::move(initialBelief));
+  this->solver_->resetBelief(std::move(initialBelief));
 
   // reset simulation statistics
   this->sim_stats_ = std::make_unique<SimulationStatistics>(

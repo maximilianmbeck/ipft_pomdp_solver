@@ -282,21 +282,6 @@ void Ipft::beliefUpdate(const Action &action, const Observation &obs) {
   this->history_->add(action, o, std::move(bp));
 }
 
-void Ipft::setBelief(std::unique_ptr<Belief> &&b) {
-  // clear history
-  this->history_ = std::make_unique<History>(this->model_);
-
-  // set new belief
-  this->belief_ = std::move(b);
-  // add initial belief to history
-  this->history_->addInitialBelief(this->belief_->clone());
-
-  // clear root
-  this->root_ = nullptr;
-}
-
-Belief *Ipft::getBelief() const { return this->belief_.get(); }
-
 /* ----------------------------- helper methods ----------------------------- */
 
 ValuedAction Ipft::search(double timeout) {

@@ -33,7 +33,7 @@ void SimulationStatistics::initRound(int round) {
   *out_ << this->model_->to_string(this->world_->getCurrentState());
   *out_ << std::endl;
   // print initial solver belief
-  Belief *solverBel = this->solver_->getBelief();
+  auto solverBel = this->solver_->getBelief();
   *out_ << "Initial solver belief: ";
   *out_ << this->model_->to_string(solverBel);
   *out_ << std::endl;
@@ -92,7 +92,7 @@ void SimulationStatistics::initStep(int round, int step) {
   *out_ << std::endl;
 
   // print previous belief of solver
-  Belief *solverBel = this->solver_->getBelief();
+  auto solverBel = this->solver_->getBelief();
   *out_ << "- Prev. solver belief = ";
   *out_ << this->model_->to_string(solverBel);
   *out_ << std::endl;
@@ -142,7 +142,7 @@ void SimulationStatistics::summarizeExecuteAction(const Action &act,
 
 void SimulationStatistics::summarizeBeliefUpdate() {
   // print belief of solver (belief is recorded in solver history)
-  Belief *solverBel = this->solver_->getBelief();
+  auto solverBel = this->solver_->getBelief();
   *out_ << "- new solver belief = ";
   *out_ << this->model_->to_string(solverBel);
   *out_ << std::endl;

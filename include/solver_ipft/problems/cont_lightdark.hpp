@@ -113,6 +113,11 @@ public:
   explicit ContLightDark(std::shared_ptr<Random> rand)
       : rand_(std::move(rand)){};
 
+  ContLightDark(const ContLightDark &) = delete;
+  ContLightDark(ContLightDark &&) = delete;
+  ContLightDark &operator=(const ContLightDark &) = delete;
+  ContLightDark &operator=(ContLightDark &&) = delete;
+
   /* ----------------------- Simulative model functions -----------------------
    */
   State *createStartState() const override;

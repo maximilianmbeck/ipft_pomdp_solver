@@ -107,19 +107,26 @@ public:
   virtual void beliefUpdate(const Action &action, const Observation &obs) = 0;
 
   /**
-   * @brief Set the Belief object
-   * Set initial belief for planning. Make sure internal states associated with
-   * initial belief are reset. In particular, history need to be cleaned, and
-   * allocated memory from previous searches need to be cleaned if not.
+   * @brief Reset the Belief
+   * Belief are reset to the new belief. History is reset: Action,
+   * Observation and Belief history are cleared.
    * @param b the new belief
    */
-  virtual void setBelief(std::unique_ptr<Belief> &&b) = 0;
-  virtual Belief *getBelief() const = 0;
+  virtual void resetBelief(std::unique_ptr<Belief> &&b);
+
+  /**
+   * @brief Set the Belief to a new belief ("weak" version of "resetBelief")
+   * History is not reset. Only the current belief is changed.
+   * @param b the new belief
+   */
+  virtual void setBelief(std::unique_ptr<Belief> &&b);
+  virtual const Belief *getBelief() const;
+  virtual std::unique_ptr<Belief> copyBelief() const;
 
   /**
    * @brief Returns the search statistics and resets statistics in the solver
    *
-   * @return SearchStatistics the search statistics object 
+   * @return SearchStatistics the search statistics object
    */
   virtual std::unique_ptr<SearchStatistics> getSearchStatistics() = 0;
 
