@@ -23,7 +23,7 @@ ValuedAction Planner::findAction() {
   this->sim_stats_->summarizeSearch();
   DLOG(WARNING) << "[runStep] ...end search";
 
-  return std::move(valuedAct);
+  return valuedAct;
 }
 
 bool Planner::takeAction(const ValuedAction &valuedAct) {

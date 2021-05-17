@@ -105,7 +105,8 @@ ObsAdaptiveReinvigorator::reinvigorate(const std::vector<State *> &particleSet,
   for (int i = 0; i < this->n_replaced_; i++) {
     this->model_->newParticle(obsAdaptedPs[indices[i]], particleSet, act, obs);
   }
-  return std::move(obsAdaptedPs);
+  auto o = std::move(obsAdaptedPs);
+  return o;
 }
 
 std::unique_ptr<ParticleReinvigorator> ObsAdaptiveReinvigorator::clone() const {

@@ -355,7 +355,7 @@ ValuedAction Ipft::search(double timeout) {
     this->stats_->optimalAction = astar;
   }
 
-  return std::move(astar);
+  return astar;
 }
 
 // Algorithm 1 in IPFT paper
