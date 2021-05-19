@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <utility>
 #include <solver_ipft/core/globals.hpp>
 #include <solver_ipft/core/history.hpp>
 #include <solver_ipft/interface/spaces.hpp>
@@ -11,15 +12,12 @@ class ParticleBelief;
 
 /**
  * @brief A class representing an interface for the belief
- * (the underscore after the attributes follows the Python convention for
- * private members)
  */
 class Belief {
 public:
-    std::shared_ptr<POMDP> model_;
+    std::shared_ptr<POMDP> model;
 
-public:
-    explicit Belief(std::shared_ptr<POMDP> model) : model_(std::move(model)){};
+    explicit Belief(std::shared_ptr<POMDP> m) : model(std::move(m)){};
     virtual ~Belief() = default;
 
     Belief(const Belief&) = delete;
@@ -60,12 +58,29 @@ public:
      */
     virtual double update(const Action& action, const Observation& obs) = 0;
 
+    /**
+     * @brief Check for terminal belief
+     *
+     * @return true
+     * @return false
+     */
     virtual bool isTerminalBelief() const = 0;
 
+    /**
+     * @brief Deepcopy current belief.
+     *
+     * @return std::unique_ptr<Belief>
+     */
     virtual std::unique_ptr<Belief> clone() const = 0;
 
+    /**
+     * @brief Calculate the mean state of the belief
+     */
     virtual State* mean() const = 0;
 
+    /**
+     * @brief Calculate the stddev of the state of the belief
+     */
     virtual State* std() const = 0;
 
     /* --------------------------------------------------------------------------
