@@ -68,7 +68,7 @@ Action RandomActionChooser::chooseAction(const Belief* belief) const {
     //"action index" 0
     // to choose an action randomly, sample integer from uniform distribution
     // between [0, numActions-1]
-    int randomActionIndex = this->rand_->nextUniformInt(belief->model_->numActions());
+    int randomActionIndex = this->rand_->nextUniformInt(belief->model->numActions());
     auto act = static_cast<Action>(randomActionIndex);
     return act;
 }

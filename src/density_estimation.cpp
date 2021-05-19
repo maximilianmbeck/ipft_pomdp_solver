@@ -10,7 +10,7 @@ namespace solver_ipft {
 /* -------------------------------------------------------------------------- */
 
 double KernelDensityEstimator::computeDensityValue(const State* s, const ParticleBelief* b) const {
-    int dimensions = b->model_->numDimStateSpace();
+    int dimensions = b->model->numDimStateSpace();
     double densityEstimate = 0.0;
     if (dimensions <= 1) {
         // univariate case
@@ -36,21 +36,21 @@ double KernelDensityEstimator::computeDensityValue(const State* s, const Particl
 double RotBandwidthSelector::computeBandwidth(const ParticleBelief* b) const {
     State* wSampleStd = b->std();
     double stdeviation = wSampleStd->get(0);
-    b->model_->freeState(wSampleStd);
+    b->model->freeState(wSampleStd);
     double minBandw = std::sqrt(std::numeric_limits<double>::epsilon()); //  = 1.49012e-08
     return std::max(1.0592238410488122 * std::pow(static_cast<double>(b->numParticles()), -0.2) * stdeviation,
                     minBandw);
 }
 
 std::vector<double> RotBandwidthSelector::computeBandwidthMatrixDiagElmts(const ParticleBelief* b) const {
-    int dimensions = b->model_->numDimStateSpace();
+    int dimensions = b->model->numDimStateSpace();
     State* wSampleStd = b->std();
     std::vector<double> bandwidthMatrixDiagElmts(dimensions, 0.0);
     for (int dim = 0; dim < dimensions; dim++) {
         bandwidthMatrixDiagElmts[dim] = wSampleStd->get(dim);
         bandwidthMatrixDiagElmts[dim] *= std::pow(4.0 / (b->numParticles() * (dimensions + 2)), 1.0 / (dimensions + 4));
     }
-    b->model_->freeState(wSampleStd);
+    b->model->freeState(wSampleStd);
     return bandwidthMatrixDiagElmts;
 }
 

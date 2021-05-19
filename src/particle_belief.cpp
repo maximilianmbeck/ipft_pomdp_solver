@@ -55,21 +55,21 @@ void ParticleBelief::init() {
 }
 
 ParticleBelief::~ParticleBelief() {
-    this->model_->freeStates(this->particles_);
-    this->model_->freeStates(this->weighted_posterior_particles_);
+    this->model->freeStates(this->particles_);
+    this->model->freeStates(this->weighted_posterior_particles_);
 }
 
 std::unique_ptr<Belief> ParticleBelief::clone() const {
-    return std::make_unique<ParticleBelief>(this->model_->copyStates(particles_),
-                                            this->model_->copyStates(weighted_posterior_particles_),
+    return std::make_unique<ParticleBelief>(this->model->copyStates(particles_),
+                                            this->model->copyStates(weighted_posterior_particles_),
                                             this->beliefTerminated_,
-                                            this->model_,
+                                            this->model,
                                             this->rand_,
                                             this->afterResampleReinvigorator_->clone());
 }
 
 std::vector<State*> ParticleBelief::particles() const {
-    return this->model_->copyStates(this->particles_);
+    return this->model->copyStates(this->particles_);
 }
 
 const State* ParticleBelief::particle(int i) const {
@@ -86,7 +86,7 @@ int ParticleBelief::numParticles() const {
 }
 
 std::string ParticleBelief::text(const std::vector<State*>& particleSet) const {
-    ParticleSetToString pbPrinter(this->model_);
+    ParticleSetToString pbPrinter(this->model);
     std::string description = pbPrinter.shortDescription(particleSet, this->beliefTerminated_);
     std::stringstream ss;
     ss << description;
@@ -98,7 +98,7 @@ std::string ParticleBelief::text() const {
 }
 
 std::string ParticleBelief::detailedText(const std::vector<State*>& particleSet) const {
-    ParticleSetToString pbPrinter(this->model_);
+    ParticleSetToString pbPrinter(this->model);
     std::string description = pbPrinter.shortDescription(particleSet, this->beliefTerminated_);
 
     std::stringstream ss;
@@ -141,7 +141,7 @@ double ParticleBelief::update(const Action& action, const Observation& obs) {
 
     // log belief update
     DLOG(INFO) << "[PF] " << std::setfill(' ') << std::setw(7) << std::left << "update " << this->text() << " with "
-               << model_->to_string(action) << model_->to_string(&obs);
+               << model->to_string(action) << model->to_string(&obs);
 
     std::vector<State*> predictedParticles;
     double total_state_reward = 0;
@@ -153,13 +153,13 @@ double ParticleBelief::update(const Action& action, const Observation& obs) {
     for (auto& state : this->particles_) {
 
         // state posterior / next state
-        State* stateP = this->model_->transition(*state, action);
-        double prob = this->model_->obsProb(*stateP, obs);
-        bool terminal = this->model_->terminalState(*stateP, action);
+        State* stateP = this->model->transition(*state, action);
+        double prob = this->model->obsProb(*stateP, obs);
+        bool terminal = this->model->terminalState(*stateP, action);
 
         // reward calculation (calculates the first term of equation (1) in IPFT
         // paper)
-        double reward = this->model_->reward(*state, action, *stateP);
+        double reward = this->model->reward(*state, action, *stateP);
         total_old_weight += state->weight_;
         total_state_reward += reward * state->weight_;
         // update state weight
@@ -178,7 +178,7 @@ double ParticleBelief::update(const Action& action, const Observation& obs) {
         } else {
             // LOG(WARNING) << "Particle " << *stateP << " rejected with weight " <<
             // prob << ". Observation was " << obs << ".";
-            this->model_->freeState(stateP);
+            this->model->freeState(stateP);
         }
 
         // avoid round off to zero #2 (see rlabbe online book particle filters)
@@ -217,7 +217,7 @@ double ParticleBelief::update(const Action& action, const Observation& obs) {
         this->afterResampleReinvigorator_->particleReinvigorationNeeded(predictedParticles, action, obs);
 
     // assign weighted posterior particle set
-    this->model_->freeStates(this->weighted_posterior_particles_);
+    this->model->freeStates(this->weighted_posterior_particles_);
     State::normalizeWeights(predictedParticles, total_updated_weight);
     this->weighted_posterior_particles_ = predictedParticles;
 
@@ -225,7 +225,7 @@ double ParticleBelief::update(const Action& action, const Observation& obs) {
 
     //! RESAMPLING in EVERY step
     std::vector<State*> resampledPart = this->sample(num_particles_, this->weighted_posterior_particles_);
-    this->model_->freeStates(this->particles_);
+    this->model->freeStates(this->particles_);
     this->particles_ = resampledPart;
 
     // log belief update result
@@ -275,7 +275,7 @@ std::vector<State*> ParticleBelief::sample(int num, const std::vector<State*>& p
             }
             cur += particleSet[i]->weight_;
         }
-        State* particle = this->model_->copyState(particleSet[i]);
+        State* particle = this->model->copyState(particleSet[i]);
         particle->weight_ = invNum;
         sampledParticles.push_back(particle);
     }
@@ -293,17 +293,17 @@ State* ParticleBelief::sample() const {
 std::unique_ptr<ParticleBelief> ParticleBelief::sampleParticleBelief(int num) const {
     return std::make_unique<ParticleBelief>(this->sample(num),
                                             this->beliefTerminated_,
-                                            this->model_,
+                                            this->model,
                                             this->rand_,
                                             this->afterResampleReinvigorator_->clone());
 }
 
 State* ParticleBelief::mean() const {
-    return State::weightedMean(this->particles_, this->model_);
+    return State::weightedMean(this->particles_, this->model);
 }
 
 State* ParticleBelief::std() const {
-    State* std = State::weightedVariance(this->particles_, this->model_);
+    State* std = State::weightedVariance(this->particles_, this->model);
     State::varToStd(std);
     return std;
 }

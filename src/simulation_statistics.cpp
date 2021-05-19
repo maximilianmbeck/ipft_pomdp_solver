@@ -229,11 +229,11 @@ std::vector<std::string> SimulationStatistics::getStepResultsForTable(int step) 
         const Belief* b = this->solver_hist_.beliefPointer(step);
         State* mean = b->mean();
         dataRow.push_back(mean->text());
-        b->model_->freeState(mean);
+        b->model->freeState(mean);
         // solver std
         State* std = b->std();
         dataRow.push_back(std->text());
-        b->model_->freeState(std);
+        b->model->freeState(std);
         // action
         std::unique_ptr<ActionValue> actVal = this->model_->valueOfAction(this->solver_hist_.action(step));
         dataRow.push_back(actVal->text());
@@ -248,11 +248,11 @@ std::vector<std::string> SimulationStatistics::getStepResultsForTable(int step) 
         const Belief* bp = this->solver_hist_.beliefPointer(step + 1);
         State* meanp = bp->mean();
         dataRow.push_back(meanp->text());
-        bp->model_->freeState(meanp);
+        bp->model->freeState(meanp);
         // solver std posterior
         State* stdp = bp->std();
         dataRow.push_back(stdp->text());
-        bp->model_->freeState(stdp);
+        bp->model->freeState(stdp);
         // reward
         dataRow.push_back(std::to_string(this->state_rewards_[step]));
     }
