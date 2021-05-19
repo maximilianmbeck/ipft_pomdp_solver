@@ -54,13 +54,12 @@ std::vector<Point*> doubleVec2PointVec(const std::vector<double>& numbers) {
     return points;
 }
 
-std::vector<State *> doubleVec2StateVec(const std::vector<double> &numbers,
-                                        const std::shared_ptr<POMDP> &model);
+std::vector<State*> doubleVec2StateVec(const std::vector<double>& numbers, const std::shared_ptr<POMDP>& model);
 
 void freeStateVec(std::vector<State*> states);
 
 void freePointVec(std::vector<Point*> points);
 
-}  // namespace debug
+} // namespace debug
 
-}  // namespace solver_ipft
+} // namespace solver_ipft

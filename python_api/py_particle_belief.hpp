@@ -10,19 +10,19 @@ namespace solver_ipft {
 namespace pyadapters {
 
 class PyParticleBelief {
-   public:
+public:
     py::array_t<double> particles_;
     py::array_t<double> weights_;
-    py::array_t<double> post_particles_;  // particles before resampling
-    py::array_t<double> post_weights_;    // weights before resampling
+    py::array_t<double> post_particles_; // particles before resampling
+    py::array_t<double> post_weights_;   // weights before resampling
     int num_particles_;
 
-   public:
+public:
     PyParticleBelief() = default;
     virtual ~PyParticleBelief() = default;
 
     static PyParticleBelief createPyParticleBelief(const ParticleBelief& pb);
 };
 
-}  // namespace pyadapters
-}  // namespace solver_ipft
+} // namespace pyadapters
+} // namespace solver_ipft

@@ -5,53 +5,52 @@ namespace solver_ipft {
 
 namespace debug {
 
-bool allParticlesEqual(const Belief *belief) {
-  auto pBelief = dynamic_cast<const ParticleBelief *>(belief);
-  for (int i = 1; i < pBelief->numParticles(); i++) {
-    const State *prevState = pBelief->particle(i - 1);
-    const State *curState = pBelief->particle(i);
-    if (!(prevState->equals(*curState))) {
-      return false;
+bool allParticlesEqual(const Belief* belief) {
+    auto pBelief = dynamic_cast<const ParticleBelief*>(belief);
+    for (int i = 1; i < pBelief->numParticles(); i++) {
+        const State* prevState = pBelief->particle(i - 1);
+        const State* curState = pBelief->particle(i);
+        if (!(prevState->equals(*curState))) {
+            return false;
+        }
     }
-  }
-  return true;
+    return true;
 }
 
-bool allParticlesEqual(const std::vector<State *> &particles) {
-  for (int i = 1; i < particles.size(); i++) {
-    const State *prevState = particles[i - 1];
-    const State *curState = particles[i];
-    if (!(prevState->equals(*curState))) {
-      return false;
+bool allParticlesEqual(const std::vector<State*>& particles) {
+    for (int i = 1; i < particles.size(); i++) {
+        const State* prevState = particles[i - 1];
+        const State* curState = particles[i];
+        if (!(prevState->equals(*curState))) {
+            return false;
+        }
     }
-  }
-  return true;
+    return true;
 }
 
-std::vector<State *> doubleVec2StateVec(const std::vector<double> &numbers,
-                                        const std::shared_ptr<POMDP> &model) {
-  std::vector<State *> states;
-  // generate 1 dimensional states from number vector
-  for (double n : numbers) {
-    State *s = model->allocateState();
-    s->set(n, 0);
-    s->weight_ = 1.0 / numbers.size();
-    states.push_back(s);
-  }
+std::vector<State*> doubleVec2StateVec(const std::vector<double>& numbers, const std::shared_ptr<POMDP>& model) {
+    std::vector<State*> states;
+    // generate 1 dimensional states from number vector
+    for (double n : numbers) {
+        State* s = model->allocateState();
+        s->set(n, 0);
+        s->weight_ = 1.0 / numbers.size();
+        states.push_back(s);
+    }
 
-  return states;
+    return states;
 }
 
-void freeStateVec(std::vector<State *> states) {
-  for (State *s : states) {
-    delete s;
-  }
+void freeStateVec(std::vector<State*> states) {
+    for (State* s : states) {
+        delete s;
+    }
 }
 
-void freePointVec(std::vector<Point *> points) {
-  for (Point *p : points) {
-    delete p;
-  }
+void freePointVec(std::vector<Point*> points) {
+    for (Point* p : points) {
+        delete p;
+    }
 }
 
 } // namespace debug

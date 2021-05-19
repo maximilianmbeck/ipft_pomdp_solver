@@ -10,184 +10,179 @@ class Belief;
 
 class POMDP : public std::enable_shared_from_this<POMDP> {
 public:
-  POMDP() = default;
-  virtual ~POMDP() = default;
+    POMDP() = default;
+    virtual ~POMDP() = default;
 
-  POMDP(const POMDP &) = delete;
-  POMDP(POMDP &&) = delete;
-  POMDP &operator=(const POMDP &) = delete;
-  POMDP &operator=(POMDP &&) = delete;
+    POMDP(const POMDP&) = delete;
+    POMDP(POMDP&&) = delete;
+    POMDP& operator=(const POMDP&) = delete;
+    POMDP& operator=(POMDP&&) = delete;
 
-  /* --------------------------------------------------------------------------
-   */
-  /*                   Simulative model and related functions */
-  /* --------------------------------------------------------------------------
-   */
+    /* --------------------------------------------------------------------------
+     */
+    /*                   Simulative model and related functions */
+    /* --------------------------------------------------------------------------
+     */
 
-  /**
-   * @brief Returns a starting state of the simulation
-   * Used to generate states in the initial belief or the true starting state of
-   * a POMDP-based world.
-   * @return State* the starting state
-   */
-  virtual State *createStartState() const;
+    /**
+     * @brief Returns a starting state of the simulation
+     * Used to generate states in the initial belief or the true starting state of
+     * a POMDP-based world.
+     * @return State* the starting state
+     */
+    virtual State* createStartState() const;
 
-  /**
-   * @brief Returns the initial belief.
-   *
-   * @param type      type of the initial belief (e.g. Gaussian)
-   * @return Belief*  the initial belief
-   */
-  virtual std::unique_ptr<Belief> initialBelief(const std::string &type);
+    /**
+     * @brief Returns the initial belief.
+     *
+     * @param type      type of the initial belief (e.g. Gaussian)
+     * @return Belief*  the initial belief
+     */
+    virtual std::unique_ptr<Belief> initialBelief(const std::string& type);
 
-  virtual State *transition(const State &state, const Action &action) const = 0;
+    virtual State* transition(const State& state, const Action& action) const = 0;
 
-  virtual Observation *observation(const State &statePosterior) const = 0;
+    virtual Observation* observation(const State& statePosterior) const = 0;
 
-  virtual double obsProb(const State &statePosterior,
-                         const Observation &obs) const;
+    virtual double obsProb(const State& statePosterior, const Observation& obs) const;
 
-  virtual double obsProb(const State &state, const Action &action,
-                         const State &statePosterior,
-                         const Observation &obs) const;
+    virtual double obsProb(const State& state,
+                           const Action& action,
+                           const State& statePosterior,
+                           const Observation& obs) const;
 
-  virtual double maxPossibleWeight(const Action &act,
-                                   const Observation &obs) const;
+    virtual double maxPossibleWeight(const Action& act, const Observation& obs) const;
 
-  /**
-   * @brief Returns the reward for taking an action at a state
-   *
-   * @param state     Current state of the world
-   * @param action    Action to be taken
-   * @return double   Reward for taking action in state
-   */
-  virtual double reward(const State &state, const Action &action) const;
+    /**
+     * @brief Returns the reward for taking an action at a state
+     *
+     * @param state     Current state of the world
+     * @param action    Action to be taken
+     * @return double   Reward for taking action in state
+     */
+    virtual double reward(const State& state, const Action& action) const;
 
-  virtual double reward(const State &state, const Action &action,
-                        const State &statePosterior) const;
+    virtual double reward(const State& state, const Action& action, const State& statePosterior) const;
 
-  virtual bool terminalState(const State &statePosterior,
-                             const Action &action) const = 0;
+    virtual bool terminalState(const State& statePosterior, const Action& action) const = 0;
 
-  /**
-   * @brief Returns number of actions.
-   * @return int Number of Actions
-   */
-  virtual int numActions() const = 0;
+    /**
+     * @brief Returns number of actions.
+     * @return int Number of Actions
+     */
+    virtual int numActions() const = 0;
 
-  /**
-   * @brief Function mapping an action(index) to the action value
-   * Must be defined by the concrete model. ActionValue object is a Point
-   * @param act the action index
-   * @return ActionValue& the action value (concrete type must be defined with
-   * the concrete model)
-   */
-  virtual std::unique_ptr<ActionValue> valueOfAction(const Action &act) const;
+    /**
+     * @brief Function mapping an action(index) to the action value
+     * Must be defined by the concrete model. ActionValue object is a Point
+     * @param act the action index
+     * @return ActionValue& the action value (concrete type must be defined with
+     * the concrete model)
+     */
+    virtual std::unique_ptr<ActionValue> valueOfAction(const Action& act) const;
 
-  /**
-   * @brief Returns the (current) number of dimensions of the state space.
-   * "current" means: the dimension of the states to be created next, if model
-   * does not change.
-   * @return int number of dimensions of the state space
-   */
-  virtual int numDimStateSpace() const;
+    /**
+     * @brief Returns the (current) number of dimensions of the state space.
+     * "current" means: the dimension of the states to be created next, if model
+     * does not change.
+     * @return int number of dimensions of the state space
+     */
+    virtual int numDimStateSpace() const;
 
-  /**
-   * @brief Returns states in the near of the State state. Used for particle
-   * reinvigoration.
-   *
-   * @param state the state around all the other states are distributed (the
-   * state is copied internally)
-   * @param count the number of similar states to return (count > 0, if count =
-   * 1 then the set of similar states only contains the parameter state)
-   * @return std::vector<State*> the set of similar states including the
-   * parameter state
-   */
-  virtual std::vector<State *> similarStates(const State &state,
-                                             int count) const;
+    /**
+     * @brief Returns states in the near of the State state. Used for particle
+     * reinvigoration.
+     *
+     * @param state the state around all the other states are distributed (the
+     * state is copied internally)
+     * @param count the number of similar states to return (count > 0, if count =
+     * 1 then the set of similar states only contains the parameter state)
+     * @return std::vector<State*> the set of similar states including the
+     * parameter state
+     */
+    virtual std::vector<State*> similarStates(const State& state, int count) const;
 
-  /**
-   * @brief Replaces @param particle with a resampled particle around the
-   * current observation @param obs
-   *
-   * @param particle the particle to replace
-   * @param particleSet the unweighted / resampled particle set --> all weights
-   * must be 1/N_particles
-   * @param act current action
-   * @param obs current observation
-   */
-  virtual void newParticle(State *particle,
-                           const std::vector<State *> &particleSet,
-                           const Action &act, const Observation &obs) const;
+    /**
+     * @brief Replaces @param particle with a resampled particle around the
+     * current observation @param obs
+     *
+     * @param particle the particle to replace
+     * @param particleSet the unweighted / resampled particle set --> all weights
+     * must be 1/N_particles
+     * @param act current action
+     * @param obs current observation
+     */
+    virtual void newParticle(State* particle,
+                             const std::vector<State*>& particleSet,
+                             const Action& act,
+                             const Observation& obs) const;
 
-  /**
-   * [Optional] default returns empty vector
-   * @brief Returns an ordered vector with preferred actions.
-   * No duplicates! Each action can be only once in the set of preferred
-   * actions. *All actions in this set will be initialized with a small positive
-   * count and value! (refers to the action nodes in the search tree)
-   * @param belief the current belief (on which preferred actions can be based
-   * on)
-   * @return std::vector<Action> ordered, preferred actions
-   */
-  virtual std::vector<Action> preferredActions(const Belief *belief) const;
+    /**
+     * [Optional] default returns empty vector
+     * @brief Returns an ordered vector with preferred actions.
+     * No duplicates! Each action can be only once in the set of preferred
+     * actions. *All actions in this set will be initialized with a small positive
+     * count and value! (refers to the action nodes in the search tree)
+     * @param belief the current belief (on which preferred actions can be based
+     * on)
+     * @return std::vector<Action> ordered, preferred actions
+     */
+    virtual std::vector<Action> preferredActions(const Belief* belief) const;
 
-  /**
-   * [Optional] default returns empty vector.
-   * @brief Returns an ordered vector of all legal actions.
-   * No duplicates! Each action can be only once in the set of preferred
-   * actions.
-   *
-   * @param belief
-   * @return std::vector<Action>
-   */
-  virtual std::vector<Action> legalActions(const Belief *belief) const;
+    /**
+     * [Optional] default returns empty vector.
+     * @brief Returns an ordered vector of all legal actions.
+     * No duplicates! Each action can be only once in the set of preferred
+     * actions.
+     *
+     * @param belief
+     * @return std::vector<Action>
+     */
+    virtual std::vector<Action> legalActions(const Belief* belief) const;
 
-  /* --------------------------------------------------------------------------
-   */
-  /*                              Display functions */
-  /* --------------------------------------------------------------------------
-   */
+    /* --------------------------------------------------------------------------
+     */
+    /*                              Display functions */
+    /* --------------------------------------------------------------------------
+     */
 
-  virtual std::string to_string(const State *state) const = 0;
+    virtual std::string to_string(const State* state) const = 0;
 
-  virtual std::string to_string(const Observation *obs) const = 0;
+    virtual std::string to_string(const Observation* obs) const = 0;
 
-  virtual std::string to_string(const Action &action) const = 0;
+    virtual std::string to_string(const Action& action) const = 0;
 
-  virtual std::string to_string(const Belief *belief) const = 0;
+    virtual std::string to_string(const Belief* belief) const = 0;
 
-  /* --------------------------------------------------------------------------
-   */
-  /*                              Memory management */
-  /* --------------------------------------------------------------------------
-   */
+    /* --------------------------------------------------------------------------
+     */
+    /*                              Memory management */
+    /* --------------------------------------------------------------------------
+     */
 
-  virtual Observation *allocateObs() const = 0;
+    virtual Observation* allocateObs() const = 0;
 
-  virtual State *allocateState() const = 0;
+    virtual State* allocateState() const = 0;
 
-  virtual Observation *copyObs(const Observation *obs) const = 0;
+    virtual Observation* copyObs(const Observation* obs) const = 0;
 
-  virtual std::vector<Observation *>
-  copyObss(const std::vector<Observation *> &obss) const;
+    virtual std::vector<Observation*> copyObss(const std::vector<Observation*>& obss) const;
 
-  virtual State *copyState(const State *state) const = 0;
+    virtual State* copyState(const State* state) const = 0;
 
-  virtual std::vector<State *>
-  copyStates(const std::vector<State *> &states) const;
+    virtual std::vector<State*> copyStates(const std::vector<State*>& states) const;
 
-  virtual void freeObs(Observation *obs) const = 0;
+    virtual void freeObs(Observation* obs) const = 0;
 
-  virtual void freeObss(const std::vector<Observation *> &obss) const;
+    virtual void freeObss(const std::vector<Observation*>& obss) const;
 
-  virtual void freeState(State *state) const = 0;
+    virtual void freeState(State* state) const = 0;
 
-  virtual void freeStates(const std::vector<State *> &states) const;
+    virtual void freeStates(const std::vector<State*>& states) const;
 
-  virtual int numActiveObs() const = 0;
+    virtual int numActiveObs() const = 0;
 
-  virtual int numActiveStates() const = 0;
+    virtual int numActiveStates() const = 0;
 };
 
 } // namespace solver_ipft
