@@ -15,9 +15,9 @@ class ParticleBelief;
  */
 class Belief {
 public:
-    std::shared_ptr<POMDP> model;
+    std::shared_ptr<POMDP> model_;
 
-    explicit Belief(std::shared_ptr<POMDP> m) : model(std::move(m)){};
+    explicit Belief(std::shared_ptr<POMDP> m) : model_(std::move(m)){};
     virtual ~Belief() = default;
 
     Belief(const Belief&) = delete;
