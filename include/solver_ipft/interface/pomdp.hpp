@@ -155,23 +155,21 @@ public:
     /**
      * [Optional] default returns empty vector
      * @brief Returns an ordered vector with preferred actions.
-     * No duplicates! Each action can be only once in the set of preferred
-     * actions. *All actions in this set will be initialized with a small positive
-     * count and value! (refers to the action nodes in the search tree)
-     * @param belief the current belief (on which preferred actions can be based
-     * on)
-     * @return std::vector<Action> ordered, preferred actions
+     * Each action is unique in the set of preferred actions.
+     * All actions in this set , i.e. the action nodes in the search tree, will be initialized with a small positive
+     * count and value!
+     * @param belief                the current belief on which preferred actions can depend on
+     * @return std::vector<Action>  ordered, preferred actions
      */
     virtual std::vector<Action> preferredActions(const Belief* belief) const;
 
     /**
      * [Optional] default returns empty vector.
      * @brief Returns an ordered vector of all legal actions.
-     * No duplicates! Each action can be only once in the set of preferred
-     * actions.
+     * Each action is unique in the set of all legal actions.
      *
-     * @param belief
-     * @return std::vector<Action>
+     * @param belief                the current belief on which legal actions can depend on
+     * @return std::vector<Action>  ordered, preferred actions
      */
     virtual std::vector<Action> legalActions(const Belief* belief) const;
 
@@ -193,6 +191,10 @@ public:
      */
     /*                              Memory management */
     /* --------------------------------------------------------------------------
+     */
+
+    /*
+     * Part of the interface and must be implemented with problem dependent memory pool.
      */
 
     virtual Observation* allocateObs() const = 0;
