@@ -50,25 +50,6 @@ public:
     std::unique_ptr<ParticleReinvigorator> clone() const override;
 };
 
-/* -------------------------------------------------------------------------- */
-/*                      SimpleParticleReinvigorator class                     */
-/* -------------------------------------------------------------------------- */
-
-class SimpleParticleReinvigorator : public ParticleReinvigorator {
-public:
-    explicit SimpleParticleReinvigorator(std::shared_ptr<POMDP> model) : ParticleReinvigorator(std::move(model)) {
-    }
-    bool particleReinvigorationNeeded(const std::vector<State*>& particleSet,
-                                      const Action& act,
-                                      const Observation& obs) const override;
-    std::vector<State*> reinvigorate(const std::vector<State*>& particleSet,
-                                     const Action& act,
-                                     const Observation& obs) const override;
-    std::unique_ptr<ParticleReinvigorator> clone() const override;
-
-private:
-    bool allParticlesEqual(const std::vector<State*>& particleSet) const;
-};
 
 /* -------------------------------------------------------------------------- */
 /*                          ObsAdaptiveReinvigorator                          */

@@ -87,12 +87,6 @@ void POMDP::newParticle(State* particle,
     throw std::runtime_error("POMDP::newParticle not supported!");
 }
 
-std::vector<State*> POMDP::similarStates(const State& state, int count) const {
-    throw std::runtime_error("POMDP::similarStates not supported!");
-    std::vector<State*> vec;
-    return vec;
-}
-
 std::unique_ptr<ActionValue> POMDP::valueOfAction(const Action& act) const {
     throw std::runtime_error("POMDP::valueOfAction not supported!");
     return nullptr;

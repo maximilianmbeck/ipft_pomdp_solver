@@ -224,34 +224,6 @@ int ContLightDark::numDimStateSpace() const {
     return 1;
 }
 
-std::vector<State*> ContLightDark::similarStates(const State& state, int count) const {
-    assert(count > 0);
-    std::vector<State*> simStates;
-    State* s = this->copyState(&state);
-    auto cldState = dynamic_cast<CLDState*>(s);
-
-    double mu = cldState->get(0);
-    double std = Globals::config.min_particle_std;
-    double total_weight = 0.0;
-
-    cldState->weight_ = NormalDistr::prob(cldState->get(0), mu, std);
-    simStates.push_back(cldState);
-    total_weight += cldState->weight_;
-
-    for (int i = 0; i < (count - 1); i++) {
-        double x = rand_->nextNormal(mu, std);
-        double p = NormalDistr::prob(x, mu, std);
-        CLDState* simState = state_memory_pool_.Allocate();
-        simState->set(x, 0);
-        simState->weight_ = p;
-        simStates.push_back(simState);
-        total_weight += p;
-    }
-    State::normalizeWeights(simStates, total_weight);
-
-    return simStates;
-}
-
 void ContLightDark::newParticle(State* particle,
                                 const std::vector<State*>& particleSet,
                                 const Action& act,

@@ -26,42 +26,6 @@ std::unique_ptr<ParticleReinvigorator> NoReinvigoration::clone() const {
     return std::make_unique<NoReinvigoration>();
 }
 
-/* -------------------------------------------------------------------------- */
-/*                      SimpleParticleReinvigorator class                     */
-/* -------------------------------------------------------------------------- */
-
-bool SimpleParticleReinvigorator::particleReinvigorationNeeded(const std::vector<State*>& particleSet,
-                                                               const Action& act,
-                                                               const Observation& obs) const {
-    return this->allParticlesEqual(particleSet);
-}
-
-std::vector<State*> SimpleParticleReinvigorator::reinvigorate(const std::vector<State*>& particleSet,
-                                                              const Action& act,
-                                                              const Observation& obs) const {
-    // all particles are equal
-    CHECK(this->allParticlesEqual(particleSet)) << "Reinvigorate particle set, but reinvigoration criterion not met.";
-
-    State* s = particleSet[0];
-
-    std::vector<State*> reinvigoratedStates = this->model_->similarStates(*s, particleSet.size());
-    return reinvigoratedStates;
-}
-
-bool SimpleParticleReinvigorator::allParticlesEqual(const std::vector<State*>& particleSet) const {
-    for (int i = 1; i < particleSet.size(); i++) {
-        const State* prevState = particleSet[i - 1];
-        const State* curState = particleSet[i];
-        if (!(prevState->equals(*curState))) {
-            return false;
-        }
-    }
-    return true;
-}
-
-std::unique_ptr<ParticleReinvigorator> SimpleParticleReinvigorator::clone() const {
-    return std::make_unique<SimpleParticleReinvigorator>(this->model_);
-}
 
 /* -------------------------------------------------------------------------- */
 /*                          ObsAdaptiveReinvigorator                          */

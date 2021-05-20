@@ -131,7 +131,6 @@ public:
     std::unique_ptr<ActionValue> valueOfAction(const Action& act) const override;
 
     int numDimStateSpace() const override;
-    std::vector<State*> similarStates(const State& state, int count) const override;
     void newParticle(State* particle,
                      const std::vector<State*>& particleSet,
                      const Action& act,

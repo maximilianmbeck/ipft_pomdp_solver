@@ -140,15 +140,6 @@ public:
     virtual int numDimStateSpace() const;
 
     /**
-     * @brief Returns states in the vicinity of the state.
-     * Used for particle reinvigoration.
-     * @param state the state around all the other states are distributed (the state is copied internally)
-     * @param count the number of similar states to return (count > 0).
-     * @return std::vector<State*> the set of similar states including the parameter state
-     */
-    virtual std::vector<State*> similarStates(const State& state, int count) const;
-
-    /**
      * @brief Replaces @param particle with a resampled particle in the vicinity of the current observation @param obs
      * Used for particle reinvigoration in ObsAdaptiveReinvigorator.
      * @param particle the particle to replace
