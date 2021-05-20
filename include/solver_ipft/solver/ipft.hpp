@@ -81,7 +81,7 @@ public:
     void update(const Value& val, int count) override;
     void set(const Value& val) override;
     void setComponent(int index, const double& val) override;
-    double getRawComponent(int index) const override;
+    double getComponent(int index) const override;
     double getWeightedComponent(int index) const override;
     int getComponentCount() const override;
     std::string text() const override;

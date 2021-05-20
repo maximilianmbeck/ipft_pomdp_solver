@@ -25,14 +25,14 @@ TEST_F(NodeValueTest, IPFTValueOperations) { // NOLINT
     // test opertor+=
     IpftValue tempVal; // == zeroVal
     tempVal += oneOneVal;
-    EXPECT_DOUBLE_EQ(1.0, tempVal.getRawComponent(0));
-    EXPECT_DOUBLE_EQ(1.0, tempVal.getRawComponent(1));
+    EXPECT_DOUBLE_EQ(1.0, tempVal.getComponent(0));
+    EXPECT_DOUBLE_EQ(1.0, tempVal.getComponent(1));
 
     // test operator* and copyconstructor
     IpftValue tempVal2;
     tempVal2 = oneOneVal * 5.0;
-    EXPECT_DOUBLE_EQ(5.0, tempVal2.getRawComponent(0));
-    EXPECT_DOUBLE_EQ(5.0, tempVal2.getRawComponent(1));
+    EXPECT_DOUBLE_EQ(5.0, tempVal2.getComponent(0));
+    EXPECT_DOUBLE_EQ(5.0, tempVal2.getComponent(1));
 
     // test update()
     // we have value1 = (stateVal, infVal) = (20,0.5)
@@ -42,8 +42,8 @@ TEST_F(NodeValueTest, IPFTValueOperations) { // NOLINT
     IpftValue value1(20, 0.5);
     IpftValue value2(10, 1.5);
     value1.update(value2, 3);
-    EXPECT_DOUBLE_EQ(17.5, value1.getRawComponent(0));
-    EXPECT_DOUBLE_EQ(0.75, value1.getRawComponent(1));
+    EXPECT_DOUBLE_EQ(17.5, value1.getComponent(0));
+    EXPECT_DOUBLE_EQ(0.75, value1.getComponent(1));
 }
 
 } // namespace test
