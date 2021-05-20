@@ -39,7 +39,7 @@ public:
         num_visits_vnodes_on_level(Globals::config.search_depth),
         num_vnodes_on_level(Globals::config.search_depth + 1){};
 
-  virtual ~IpftSearchStatistics() = default;
+  ~IpftSearchStatistics() override = default;
 
   IpftSearchStatistics(const IpftSearchStatistics &other) = delete;
   IpftSearchStatistics(IpftSearchStatistics &&other) = delete;

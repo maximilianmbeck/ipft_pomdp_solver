@@ -22,6 +22,7 @@ public:
     explicit SearchStatistics(std::shared_ptr<POMDP> model) : model_(std::move(model)) {
     }
 
+    virtual ~SearchStatistics() = default;
     virtual std::string text() const = 0;
 };
 
