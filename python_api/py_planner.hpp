@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
-#include <solver_ipft/planner.hpp>
 #include <vector>
+#include <solver_ipft/planner.hpp>
 
 #include "py_node.hpp"
 
@@ -9,10 +9,10 @@ namespace solver_ipft {
 namespace pyadapters {
 
 class PyPlanner : public Planner {
-   protected:
+protected:
     std::vector<std::shared_ptr<PyVNode>> search_trees_;
 
-   public:
+public:
     PyPlanner() = default;
     virtual ~PyPlanner() = default;
 
@@ -25,5 +25,5 @@ class PyPlanner : public Planner {
     int numSteps() const;
 };
 
-}  // namespace pyadapters
-}  // namespace solver_ipft
+} // namespace pyadapters
+} // namespace solver_ipft

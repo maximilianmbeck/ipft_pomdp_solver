@@ -21,7 +21,7 @@ protected:
 TEST_F(ParticleBeliefTest, ParticleSetVariance) { // NOLINT
   State *wSampleStd = belief1->std();
   double wstd = wSampleStd->get(0);
-  belief1->model_->freeState(wSampleStd);
+  belief1->model->freeState(wSampleStd);
   EXPECT_DOUBLE_EQ(sqrt(5.365756272242247), wstd)
       << "The calculated std is: " << wstd;
 }
@@ -29,7 +29,7 @@ TEST_F(ParticleBeliefTest, ParticleSetVariance) { // NOLINT
 TEST_F(ParticleBeliefTest, ParticleSetVarianceZero) { // NOLINT
   State *wSampleStd = belief2->std();
   double wstd = wSampleStd->get(0);
-  belief2->model_->freeState(wSampleStd);
+  belief2->model->freeState(wSampleStd);
   EXPECT_TRUE(wstd < Globals::DOUBLEEQLIM) << "The calculated std is: " << wstd;
 }
 
@@ -37,7 +37,7 @@ TEST_F(ParticleBeliefTest, ParticleSetVarianceZero) { // NOLINT
 TEST_F(ParticleBeliefTest, ParticleSetMean) { // NOLINT
   State *wSampleMean = belief1->mean();
   double mean = wSampleMean->get(0);
-  belief1->model_->freeState(wSampleMean);
+  belief1->model->freeState(wSampleMean);
   EXPECT_DOUBLE_EQ(2.1138270500000003, mean)
       << "The calculated mean is: " << mean;
 }
@@ -154,7 +154,7 @@ TEST_F(ParticleBeliefTest, SequenceUpdateWorldStateTracked) { // NOLINT
   EXPECT_LE(absdiff, 5.0) << "World State: " << s->get(0)
                           << ", Solver Mean: " << mean->get(0);
   this->model_->freeState(s);
-  b->model_->freeState(mean);
+  b->model->freeState(mean);
 }
 
 // check if pf can track world state in case of interaction with pomdp world
@@ -235,7 +235,7 @@ TEST_F(ParticleBeliefTest, SequenceUpdateWorldStateTracked2) { // NOLINT
   EXPECT_LE(absdiff, 5.0) << "World State: " << s->get(0)
                           << ", Solver Mean: " << mean->get(0);
   this->model_->freeState(s);
-  b->model_->freeState(mean);
+  b->model->freeState(mean);
 }
 
 TEST_F(ParticleBeliefTest,                          // NOLINT

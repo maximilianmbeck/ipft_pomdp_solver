@@ -20,21 +20,20 @@ class ParticleBelief;
  */
 class ParticleSetToString {
 private:
-  std::shared_ptr<POMDP> model_;
+    std::shared_ptr<POMDP> model_;
 
 public:
-  explicit ParticleSetToString(std::shared_ptr<POMDP> model);
+    explicit ParticleSetToString(std::shared_ptr<POMDP> model);
 
-  std::string shortDescription(const std::vector<State *> &particleSet,
-                               bool terminated) const;
+    std::string shortDescription(const std::vector<State*>& particleSet, bool terminated) const;
 
-  std::string particleTable(const std::vector<State *> &particleSet) const;
+    std::string particleTable(const std::vector<State*>& particleSet) const;
 };
 
 /* -------------------------------------------------------------------------- */
 /*                             ToString functions                             */
 /* -------------------------------------------------------------------------- */
 
-std::string doubleVecToString(const std::vector<double> &vec);
+std::string doubleVecToString(const std::vector<double>& vec);
 
 } // namespace solver_ipft
