@@ -8,12 +8,12 @@
 #include <solver_ipft/interface/solver.hpp>
 
 namespace solver_ipft {
+
 class RolloutPolicy;
 
-/* -------------------------------------------------------------------------- */
-/*                         IpftSearchStatistics class                         */
-/* -------------------------------------------------------------------------- */
-
+/**
+ * @brief IpftSearchStatistics class
+ */
 class IpftSearchStatistics : public SearchStatistics {
 public:
     double time_search{0.0};                       // ms
@@ -57,10 +57,10 @@ protected:
     std::string printNodeStats() const;
 };
 
-/* -------------------------------------------------------------------------- */
-/*                              Ipft value class                              */
-/* -------------------------------------------------------------------------- */
 
+/**
+ * @brief Ipft value class
+ */
 class IpftValue : public Value {
 protected:
     static constexpr int componentCount = 2;
@@ -96,13 +96,9 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const IpftValue& v);
 };
 
-/* -------------------------------------------------------------------------- */
-/*                              Ipft solver class                             */
-/* -------------------------------------------------------------------------- */
 
 /**
  * @brief Class implementing the ipft using the solver interface
- *
  */
 class Ipft : public Solver {
 protected:
@@ -158,10 +154,10 @@ protected:
                                        int level) const;
 };
 
-/* -------------------------------------------------------------------------- */
-/*                            Ipft helper functions                           */
-/* -------------------------------------------------------------------------- */
 
+/**
+ * @brief Ipft helper function to measure elapsed time.
+ */
 double stopTime(const std::chrono::time_point<std::chrono::high_resolution_clock>& start);
 
 } // namespace solver_ipft

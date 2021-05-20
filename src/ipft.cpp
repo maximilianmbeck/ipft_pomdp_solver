@@ -70,8 +70,7 @@ std::string IpftSearchStatistics::printValuedActions() const {
             oChar = optimalChar;
         }
         ss << right << setw(width1) << setfill(fillChar) << oChar << setw(1) << " ";
-        ss << left << setw(15) << setfill(fillChar)
-           << this->model->to_string(this->valuedActions[i].action_)
+        ss << left << setw(15) << setfill(fillChar) << this->model->to_string(this->valuedActions[i].action_)
            << this->valuedActions[i] << this->actionSequences[i] << endl;
     }
     return ss.str();
@@ -174,7 +173,7 @@ void IpftValue::setComponent(int index, const double& val) {
 }
 
 double IpftValue::getComponent(int index) const {
-  return this->value_.at(index);
+    return this->value_.at(index);
 }
 
 double IpftValue::getWeightedComponent(int index) const {
@@ -640,9 +639,6 @@ std::shared_ptr<VNode> Ipft::createVNode(const std::shared_ptr<QNode>& parent,
     return vnode;
 }
 
-/* -------------------------------------------------------------------------- */
-/*                            Ipft helper functions                           */
-/* -------------------------------------------------------------------------- */
 
 double stopTime(const std::chrono::time_point<std::chrono::high_resolution_clock>& start) {
     if (Globals::config.record_statistics) {
