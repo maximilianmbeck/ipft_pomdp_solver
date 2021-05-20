@@ -5,12 +5,7 @@
 #include <vector>
 
 /**
- * This piece of code is taken from DESPOT and POMCP solvers
- *
- * cf. https://github.com/AdaCompNUS/despot
- *
- * cf. Ye, Nan, et al. "Despot: Online pomdp planning with regularization."
- * Journal of Artificial Intelligence Research 58 (2017): 231-266.
+ * This piece of code is taken from POMCP solver
  *
  * cf. Silver, David, and Joel Veness. "Monte-Carlo planning in large POMDPs."
  * Neural Information Processing Systems, 2010.

@@ -16,7 +16,6 @@ class State : public Point {
 public:
     double weight_{1.0};
 
-public:
     State() = default;
     ~State() override = default;
 
