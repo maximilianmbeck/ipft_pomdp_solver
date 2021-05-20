@@ -65,8 +65,19 @@ public:
     static bool hasBiggerWeight(State* state1, State* state2);
 };
 
+/**
+ * @brief Current implementation makes no difference between Point and Observation.
+ */
 using Observation = Point;
-// action space assumed to be discrete
+
+/**
+ * @brief Action space assumed to be discrete.
+ */
 using Action = int;
+
+/**
+ * @brief Leave ActionValue generic and not just type double.
+ */
 using ActionValue = Point;
+
 } // namespace solver_ipft
