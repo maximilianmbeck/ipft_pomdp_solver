@@ -5,21 +5,21 @@ namespace solver_ipft {
 double State::weightSum(const std::vector<State*>& states) {
     double weight = 0;
     for (auto& state : states) {
-      weight += state->weight;
+        weight += state->weight;
     }
     return weight;
 }
 
 void State::normalizeWeights(const std::vector<State*>& states, const double& total_weight) {
     for (auto& state : states) {
-      state->weight = state->weight / total_weight;
+        state->weight = state->weight / total_weight;
     }
 }
 
 void State::normalizeWeights(const std::vector<State*>& states) {
     double total_weight = 0.0;
     for (State* s : states) {
-      total_weight += s->weight;
+        total_weight += s->weight;
     }
     normalizeWeights(states, total_weight);
 }
@@ -37,7 +37,7 @@ State* State::weightedMean(const std::vector<State*>& states, const std::shared_
     for (int dim = 0; dim < dimensions; dim++) {
         double dimValue = 0.0;
         for (auto& state : states) {
-          dimValue += state->weight * state->get(dim);
+            dimValue += state->weight * state->get(dim);
         }
         dimValue = dimValue / weightSum;
         meanState->set(dimValue, dim);
@@ -78,7 +78,7 @@ void State::varToStd(State* varState) {
 }
 
 bool State::weightCompare(State* state1, State* state2) {
-  return state1->weight < state2->weight;
+    return state1->weight < state2->weight;
 }
 
 } // namespace solver_ipft

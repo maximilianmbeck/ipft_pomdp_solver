@@ -59,8 +59,7 @@ std::string ParticleSetToString::particleTable(const std::vector<State*>& partic
     // print data
     for (int i = 0; i < particleSet.size(); i++) {
         ss << left << setw(smallColumnSize) << setfill(fillChar) << to_string(i) << "| ";
-        ss << left << setw(smallColumnSize) << setfill(fillChar)
-           << to_string(particleSet[i]->weight) << "| ";
+        ss << left << setw(smallColumnSize) << setfill(fillChar) << to_string(particleSet[i]->weight) << "| ";
         ss << left << setw(largeColumnSize) << setfill(fillChar) << particleSet[i]->text() << endl;
     }
     ss << lineSep << endl;
