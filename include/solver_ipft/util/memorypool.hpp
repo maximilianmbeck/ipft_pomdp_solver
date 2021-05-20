@@ -47,7 +47,7 @@ public:
     MemoryPool(MemoryPool&&) = delete;
     MemoryPool& operator=(const MemoryPool&) = delete;
     MemoryPool& operator=(MemoryPool&&) = delete;
-    
+
     //! DO NOT USE -> causes assertion failure
     T* Construct() {
         T* obj = Allocate();

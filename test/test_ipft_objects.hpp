@@ -13,16 +13,16 @@ namespace test {
 
 class IpftObjects : public ::testing::Test {
 protected:
-  std::shared_ptr<Random> rand_;
-  std::shared_ptr<POMDP> model_;
-  std::shared_ptr<World> world_;
-  std::shared_ptr<Solver> solver_;
+    std::shared_ptr<Random> rand_;
+    std::shared_ptr<POMDP> model_;
+    std::shared_ptr<World> world_;
+    std::shared_ptr<Solver> solver_;
 
-  IpftObjects() : model_(nullptr), world_(nullptr), solver_(nullptr) {
-    this->rand_ = std::make_shared<Random>();
-  }
+    IpftObjects() : model_(nullptr), world_(nullptr), solver_(nullptr) {
+        this->rand_ = std::make_shared<Random>();
+    }
 
-  ~IpftObjects() override = default;
+    ~IpftObjects() override = default;
 };
 
 } // namespace test
