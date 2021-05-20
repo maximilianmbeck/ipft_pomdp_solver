@@ -251,7 +251,7 @@ TEST_F(ParticleBeliefTest,                            // NOLINT
     std::vector<double> weights = {1, 1, 1, 1, 1, 50, 1, 1, 1, 100};
     std::vector<State*> states = debug::doubleVec2StateVec(numbers, this->model_);
     for (int i = 0; i < states.size(); i++) {
-        states[i]->weight_ = weights[i];
+      states[i]->weight = weights[i];
     }
     State::normalizeWeights(states);
     auto b = std::make_unique<ParticleBelief>(states, false, this->model_, this->rand_);

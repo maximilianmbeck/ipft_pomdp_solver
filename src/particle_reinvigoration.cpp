@@ -39,7 +39,7 @@ bool ObsAdaptiveReinvigorator::particleReinvigorationNeeded(const std::vector<St
     double mpw = this->model_->maxPossibleWeight(act, obs);
     // maximal weight in particle set
     auto stateMaxWeight = std::max_element(particleSet.begin(), particleSet.end(), State::weightCompare);
-    double maxWeight = (*stateMaxWeight)->weight_;
+    double maxWeight = (*stateMaxWeight)->weight;
     double frac_replaced = ObsAdaptiveReinvigorator::max_frac_replaced * std::max(0.0, 1 - maxWeight / mpw);
     this->n_replaced_ = static_cast<int>(std::floor(frac_replaced * particleSet.size()));
     // DLOG(INFO) << "[PF] n_replaced: " << n_replaced_;

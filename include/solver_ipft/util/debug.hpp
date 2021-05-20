@@ -34,7 +34,7 @@ std::vector<State*> doubleVec2StateVec(const std::vector<double>& numbers) {
     for (double n : numbers) {
         State* s = new exp1DimState();
         s->set(n, 0);
-        s->weight_ = 1.0 / numbers.size();
+        s->weight = 1.0 / numbers.size();
         states.push_back(s);
     }
 

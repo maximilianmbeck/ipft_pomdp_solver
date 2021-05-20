@@ -66,7 +66,7 @@
 //       particlesData(i, j) = particle->get(j);
 //     }
 //     // weight
-//     weightsData(i) = particle->weight_;
+//     weightsData(i) = particle->weight;
 //   }
 // }
 
@@ -385,7 +385,7 @@
 //         NoReinvigoration());
 //     LOG(INFO) << bel->detailedText();
 //     bool correct =
-//         particleSet[0]->get(0) == 5.0 && particleSet[0]->weight_ == 0.5;
+//         particleSet[0]->get(0) == 5.0 && particleSet[0]->weight == 0.5;
 //     delete bel;
 //     return correct;
 //   }

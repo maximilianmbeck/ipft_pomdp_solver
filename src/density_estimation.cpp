@@ -65,7 +65,7 @@ double NormalKernel::univariateValue(const State* s, const ParticleBelief* belie
         double x = (s->get(0) - particle->get(0));
         double arg = -((x * x) / (2 * bandwidth * bandwidth));
         double expVal = std::exp(arg);
-        value += particle->weight_ * expVal;
+        value += particle->weight * expVal;
     }
     value *= Globals::INV_SQRT2PI / bandwidth;
     return value;
@@ -84,7 +84,7 @@ double NormalKernel::multivariateValue(const State* s,
         }
         arg *= -0.5;
 
-        value += belief->particle(i)->weight_ * std::exp(arg);
+        value += belief->particle(i)->weight * std::exp(arg);
     }
 
     double detBwMatrix = 1.0;

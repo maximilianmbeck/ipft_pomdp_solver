@@ -232,7 +232,7 @@ void ContLightDark::newParticle(State* particle,
     Observation* obsTemp = this->observation(s);
 
     particle->set(obsTemp->get(0), 0);
-    particle->weight_ = 1.0 / particleSet.size(); // normalize weight
+    particle->weight = 1.0 / particleSet.size(); // normalize weight
 
     this->freeObs(obsTemp);
 }

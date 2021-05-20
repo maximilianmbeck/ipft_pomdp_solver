@@ -160,12 +160,12 @@ double ParticleBelief::update(const Action& action, const Observation& obs) {
         // reward calculation (calculates the first term of equation (1) in IPFT
         // paper)
         double reward = this->model->reward(*state, action, *stateP);
-        total_old_weight += state->weight_;
-        total_state_reward += reward * state->weight_;
+        total_old_weight += state->weight;
+        total_state_reward += reward * state->weight;
         // update state weight
         // stateP->weight_ = state->weight_ * prob;  // use this state update, if
         // states are not resampled in every timestep
-        stateP->weight_ = prob;
+        stateP->weight = prob;
         total_new_weight += prob;
 
         // avoid round off to zero #1
@@ -173,7 +173,7 @@ double ParticleBelief::update(const Action& action, const Observation& obs) {
         {
             // new state is not a terminal state and observation probability is not
             // 0.0
-            total_updated_weight += stateP->weight_;
+            total_updated_weight += stateP->weight;
             predictedParticles.push_back(stateP);
         } else {
             // LOG(WARNING) << "Particle " << *stateP << " rejected with weight " <<
@@ -264,7 +264,7 @@ std::vector<State*> ParticleBelief::sample(int num, const std::vector<State*>& p
     std::vector<State*> sampledParticles;
     double invNum = 1.0 / static_cast<double>(num);
     double r = this->rand_->nextUniform(0, invNum);
-    double cur = particleSet[0]->weight_; // corresponds to c in alg
+    double cur = particleSet[0]->weight; // corresponds to c in alg
     int i = 0;
     for (int m = 0; m < num; m++) {
         double u = r + m * invNum;
@@ -273,10 +273,10 @@ std::vector<State*> ParticleBelief::sample(int num, const std::vector<State*>& p
             if (i == particleSet.size()) {
                 i = 0;
             }
-            cur += particleSet[i]->weight_;
+            cur += particleSet[i]->weight;
         }
         State* particle = this->model->copyState(particleSet[i]);
-        particle->weight_ = invNum;
+        particle->weight = invNum;
         sampledParticles.push_back(particle);
     }
     return sampledParticles;
