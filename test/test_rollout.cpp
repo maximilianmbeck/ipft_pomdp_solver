@@ -30,8 +30,8 @@
 //     }
 
 //     // expect somewhere around mean
-//     double meanStateR = qval.getRawComponent(0) / N_r;
-//     double meanInfR = qval.getRawComponent(1) / N_r;
+//     double meanStateR = qval.getComponent(0) / N_r;
+//     double meanInfR = qval.getComponent(1) / N_r;
 //     LOG(INFO) << "mean state reward: " << meanStateR;
 //     LOG(INFO) << "mean inf reward: " << meanInfR;
 //     EXPECT_LE(std::abs(-71.11 - meanStateR), deltaStateReward);

@@ -39,7 +39,7 @@ public:
     virtual void update(const Value& val, int count) = 0;
     virtual void set(const Value& val) = 0;
     virtual void setComponent(int index, const double& val) = 0;
-    virtual double getRawComponent(int index) const = 0;
+    virtual double getComponent(int index) const = 0;
     virtual double getWeightedComponent(int index) const = 0;
     virtual int getComponentCount() const = 0;
     virtual std::string text() const = 0;

@@ -173,8 +173,8 @@ void IpftValue::setComponent(int index, const double& val) {
     this->value_.at(index) = val;
 }
 
-double IpftValue::getRawComponent(int index) const {
-    return this->value_.at(index);
+double IpftValue::getComponent(int index) const {
+  return this->value_.at(index);
 }
 
 double IpftValue::getWeightedComponent(int index) const {
