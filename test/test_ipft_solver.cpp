@@ -21,10 +21,7 @@ TEST_F(IpftSolverTest, TestSingleSearch) { // NOLINT
     std::vector<double> numbers = {3.9433,  3.1378, 0.2911, -1.6948, 1.1413, 3.2896, 2.1801, 2.9403, 3.0115,  4.5241,
                                    -0.1786, 3.6636, 3.2806, 3.5872,  2.1970, 4.3526, 3.2905, 3.4663, -3.0771, 2.1328};
 
-#ifdef NDEBUG
-#else
     Globals::config.time_per_move = 10000; // set a very high value for testing on low performance servers.
-#endif
 
     std::vector<State*> states = debug::doubleVec2StateVec(numbers, this->model_);
     auto initBel = std::make_unique<ParticleBelief>(states, false, this->model_, this->rand_);
