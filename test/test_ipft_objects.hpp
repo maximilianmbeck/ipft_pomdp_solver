@@ -2,8 +2,8 @@
 #include <gtest/gtest.h>
 
 #include <solver_ipft/core/particle_belief.hpp>
-#include <solver_ipft/core/solver.hpp>
 #include <solver_ipft/interface/pomdp.hpp>
+#include <solver_ipft/interface/solver.hpp>
 #include <solver_ipft/interface/world.hpp>
 #include <solver_ipft/problems/cont_lightdark.hpp>
 #include <solver_ipft/util/debug.hpp>
