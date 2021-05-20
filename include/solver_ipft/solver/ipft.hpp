@@ -4,8 +4,8 @@
 #include <chrono>
 #include <solver_ipft/config.hpp>
 #include <solver_ipft/core/information_gain.hpp>
-#include <solver_ipft/core/solver.hpp>
 #include <solver_ipft/interface/rollout.hpp>
+#include <solver_ipft/interface/solver.hpp>
 
 namespace solver_ipft {
 class RolloutPolicy;

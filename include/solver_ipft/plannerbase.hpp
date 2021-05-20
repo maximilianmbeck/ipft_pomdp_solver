@@ -3,8 +3,8 @@
 #include <chrono>
 #include <memory>
 #include <solver_ipft/simulation_statistics.hpp>
-#include <solver_ipft/core/solver.hpp>
 #include <solver_ipft/interface/pomdp.hpp>
+#include <solver_ipft/interface/solver.hpp>
 #include <solver_ipft/interface/world.hpp>
 #include <solver_ipft/util/random.hpp>
 

@@ -1,4 +1,4 @@
-#include <solver_ipft/core/solver.hpp>
+#include <solver_ipft/interface/solver.hpp>
 
 namespace solver_ipft {
 

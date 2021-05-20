@@ -1,6 +1,6 @@
 #include <iomanip>
 #include <sstream>
-#include <solver_ipft/core/solver.hpp>
+#include <solver_ipft/interface/solver.hpp>
 #include <solver_ipft/solver/ipft.hpp>
 #include <solver_ipft/util/output.hpp>
 #include <solver_ipft/util/util.hpp>

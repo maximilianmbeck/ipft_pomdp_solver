@@ -1,8 +1,8 @@
 #pragma once
 
 #include <memory>
-#include <solver_ipft/core/solver.hpp>
 #include <solver_ipft/interface/belief.hpp>
+#include <solver_ipft/interface/solver.hpp>
 #include <solver_ipft/interface/spaces.hpp>
 
 namespace solver_ipft {
