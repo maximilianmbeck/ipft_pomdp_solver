@@ -10,9 +10,9 @@ double State::weightSum(const std::vector<State*>& states) {
     return weight;
 }
 
-void State::normalizeWeights(const std::vector<State*>& states, const double& total_weight) {
+void State::normalizeWeights(const std::vector<State*>& states, const double& weightSum) {
     for (auto& state : states) {
-        state->weight = state->weight / total_weight;
+        state->weight = state->weight / weightSum;
     }
 }
 
@@ -77,7 +77,7 @@ void State::varToStd(State* varState) {
     }
 }
 
-bool State::weightCompare(State* state1, State* state2) {
+bool State::hasBiggerWeight(State* state1, State* state2) {
     return state1->weight < state2->weight;
 }
 
