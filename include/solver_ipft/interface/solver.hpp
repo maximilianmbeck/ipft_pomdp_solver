@@ -13,7 +13,9 @@ namespace solver_ipft {
 class SearchStatistics {
 public:
     std::shared_ptr<POMDP> model_;
-    ValuedAction optimalAction; // contains optimal action + optimal value
+
+    // store both optimal action and optimal value with ValuedAction
+    ValuedAction optimalAction;
     std::vector<ValuedAction> valuedActions;
     explicit SearchStatistics(std::shared_ptr<POMDP> model) : model_(std::move(model)) {
     }
