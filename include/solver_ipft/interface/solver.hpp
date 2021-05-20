@@ -10,8 +10,12 @@
 #include <solver_ipft/interface/spaces.hpp>
 namespace solver_ipft {
 
+/**
+ * @brief Interface for saving statistics of a single search step.
+ */
 class SearchStatistics {
 public:
+    // include to call toString() alike methods
     std::shared_ptr<POMDP> model;
 
     // store both optimal action and optimal value with ValuedAction
@@ -24,7 +28,9 @@ public:
     virtual std::string text() const = 0;
 };
 
-
+/**
+ * @brief Interface for value vectors.
+ */
 class Value {
 public:
     Value() = default;
@@ -54,6 +60,9 @@ public:
 // forward declarations
 class VNode;
 
+/**
+ * @brief Interface for solver.
+ */
 class Solver {
 protected:
     std::shared_ptr<POMDP> model_;
@@ -90,8 +99,7 @@ public:
     std::shared_ptr<VNode> getSearchTree() const;
 
     /**
-     * @brief
-     * Update current belief and history
+     * @brief Update current belief and history
      *
      * @param action the action selected by the previous search
      * @param obs the observation received from the environment
