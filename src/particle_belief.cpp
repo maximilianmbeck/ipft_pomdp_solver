@@ -155,7 +155,7 @@ double ParticleBelief::update(const Action& action, const Observation& obs) {
         // state posterior / next state
         State* stateP = this->model->transition(*state, action);
         double prob = this->model->obsProb(*stateP, obs);
-        bool terminal = this->model->terminalState(*stateP, action);
+        bool terminal = this->model->terminalState(action, *stateP);
 
         // reward calculation (calculates the first term of equation (1) in IPFT
         // paper)

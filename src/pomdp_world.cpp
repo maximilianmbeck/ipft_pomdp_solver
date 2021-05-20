@@ -48,7 +48,7 @@ bool POMDPWorld::executeAction(const Action& action, Observation*& obs) {
     Observation* o = this->model_->observation(*stateP);
     // obs.set(o->get(0), 0); // necessary if obs passed by reference
     obs = o;
-    bool terminal = this->model_->terminalState(*stateP, action);
+    bool terminal = this->model_->terminalState(action, *stateP);
 
     this->setState(stateP);
     return terminal;
