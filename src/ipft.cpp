@@ -70,7 +70,8 @@ std::string IpftSearchStatistics::printValuedActions() const {
             oChar = optimalChar;
         }
         ss << right << setw(width1) << setfill(fillChar) << oChar << setw(1) << " ";
-        ss << left << setw(15) << setfill(fillChar) << this->model_->to_string(this->valuedActions[i].action_)
+        ss << left << setw(15) << setfill(fillChar)
+           << this->model->to_string(this->valuedActions[i].action_)
            << this->valuedActions[i] << this->actionSequences[i] << endl;
     }
     return ss.str();
