@@ -10,10 +10,6 @@
 #include <solver_ipft/interface/spaces.hpp>
 namespace solver_ipft {
 
-/* -------------------------------------------------------------------------- */
-/*                         SearchStatistics interface                         */
-/* -------------------------------------------------------------------------- */
-
 class SearchStatistics {
 public:
     std::shared_ptr<POMDP> model_;
@@ -26,9 +22,6 @@ public:
     virtual std::string text() const = 0;
 };
 
-/* -------------------------------------------------------------------------- */
-/*                               Value interface                              */
-/* -------------------------------------------------------------------------- */
 
 class Value {
 public:
@@ -55,9 +48,6 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Value& v);
 };
 
-/* -------------------------------------------------------------------------- */
-/*                                Solver class                                */
-/* -------------------------------------------------------------------------- */
 
 // forward declarations
 class VNode;
