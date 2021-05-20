@@ -8,13 +8,11 @@
 namespace solver_ipft {
 class IpftValue;
 
-/* -------------------------------------------------------------------------- */
-/*                                 Interfaces                                 */
-/* -------------------------------------------------------------------------- */
 
-/* --------------------- ActionChooser interface --------------------- */
-
-// implement this interface to incorporate domain knowledge
+/**
+ * @brief   Interface for action selection strategy in the rollout policy.
+ * With this, incorporating domain knowledge during rollout is possible.
+ */
 class ActionChooser {
 public:
     ActionChooser() = default;
@@ -28,9 +26,11 @@ public:
     virtual Action chooseAction(const Belief* belief) const = 0;
 };
 
-/* ---------------------------- Rollout interface --------------------------- */
 
-// Interface for the rollout policy
+/**
+ * @brief   Interface for the rollout policy
+ * Use design principle "template method pattern".
+ */
 class RolloutPolicy {
 protected:
     const std::shared_ptr<POMDP> model_;
@@ -57,11 +57,9 @@ public:
     virtual IpftValue rollout(std::unique_ptr<Belief>&& belief, int depth) const = 0;
 };
 
-/* -------------------------------------------------------------------------- */
-/*                     Classes implementing the interface                     */
-/* -------------------------------------------------------------------------- */
-
-/* ------------------------- Random action selection ------------------------ */
+/**
+ * @brief   Choose actions randomly from action space.
+ */
 class RandomActionChooser : public ActionChooser {
 protected:
     const std::shared_ptr<Random> rand_;
@@ -79,8 +77,10 @@ public:
     Action chooseAction(const Belief* belief) const override;
 };
 
-/* --------------------- Deterministic action selection --------------------- */
-
+/**
+ * @brief   Chooses predefined actions.
+ * Using 'actions' vector, chooses actions based on their indices.
+ */
 class DeterministicActionChooser : public ActionChooser {
 protected:
     std::vector<Action> actions_;
@@ -103,6 +103,9 @@ public:
     void reset();
 };
 
+/**
+ * @brief   Chooses a predefined action repeatedly.
+ */
 class DeterministicSingleActionChooser : public ActionChooser {
 protected:
     Action deterministicAction;
@@ -120,9 +123,11 @@ public:
     Action chooseAction(const Belief* belief) const override;
 };
 
-/* --------------------------- BeliefRolloutPolicy -------------------------- */
 
-// Belief based rollout
+/**
+ * @brief   Belief based rollout.
+ * Propagates belief for estimating the value.
+ */
 class BeliefRolloutPolicy : public RolloutPolicy {
 public:
     BeliefRolloutPolicy(std::shared_ptr<POMDP> model,
@@ -141,9 +146,11 @@ public:
     IpftValue rollout(std::unique_ptr<Belief>&& belief, int depth) const override;
 };
 
-/* ------------------------- Default rollout policy ------------------------- */
 
-// Belief based rollout with information reward computation
+/**
+ * @brief   Belief based rollout with information reward computation.
+ * Propagates belief for estimating the value.
+ */
 class BeliefInformationPolicy : public BeliefRolloutPolicy {
 public:
     BeliefInformationPolicy(std::shared_ptr<POMDP> model, std::shared_ptr<Random> rand)
