@@ -302,13 +302,13 @@ std::string ContLightDark::to_string(const Belief* belief) const {
 /* ----------------------- Memory management functions ---------------------- */
 
 Observation* ContLightDark::allocateObs() const {
-    CLDObs* obs = obs_memory_pool_.Construct();
-    return obs;
+  CLDObs *obs = obs_memory_pool_.Allocate();
+  return obs;
 }
 
 State* ContLightDark::allocateState() const {
-    CLDState* state = state_memory_pool_.Construct();
-    return state;
+  CLDState *state = state_memory_pool_.Allocate();
+  return state;
 }
 
 Observation* ContLightDark::copyObs(const Observation* obs) const {
@@ -326,11 +326,11 @@ State* ContLightDark::copyState(const State* state) const {
 }
 
 void ContLightDark::freeObs(Observation* obs) const {
-    obs_memory_pool_.Destroy(dynamic_cast<CLDObs*>(obs));
+  obs_memory_pool_.Free(dynamic_cast<CLDObs *>(obs));
 }
 
 void ContLightDark::freeState(State* state) const {
-    state_memory_pool_.Destroy(dynamic_cast<CLDState*>(state));
+  state_memory_pool_.Free(dynamic_cast<CLDState *>(state));
 }
 
 int ContLightDark::numActiveObs() const {
