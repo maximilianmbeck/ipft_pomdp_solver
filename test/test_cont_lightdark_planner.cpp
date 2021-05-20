@@ -40,6 +40,12 @@ namespace test {
 
 TEST(ProblemContLightDark, TestPlanner) { // NOLINT
   cld::MyPlanner planner;
+#ifdef NDEBUG
+#else
+  Globals::config.sim_len = 2; // set this parameter to avoid long test runtime,
+                               // when compiled in debug mode
+#endif
+  LOG(WARNING) << "Simulation length:" << Globals::config.sim_len;
   planner.runPlanning(0, nullptr);
   EXPECT_TRUE(true);
 }
