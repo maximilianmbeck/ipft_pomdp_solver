@@ -47,11 +47,13 @@ public:
     MemoryPool(MemoryPool&&) = delete;
     MemoryPool& operator=(const MemoryPool&) = delete;
     MemoryPool& operator=(MemoryPool&&) = delete;
-
+    
+    //! DO NOT USE -> causes assertion failure
     T* Construct() {
         T* obj = Allocate();
         return new (obj) T;
     }
+    //! DO NOT USE -> causes assertion failure
     void Destroy(T* obj) {
         obj->~T();
         Free(obj);

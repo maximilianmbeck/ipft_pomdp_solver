@@ -8,6 +8,13 @@ namespace test {
 
 TEST(ProblemContLightDark, TestEvaluator) { // NOLINT
   Evaluator evaluator(std::make_unique<cld::MyPlanner>());
+#ifdef NDEBUG
+#else
+  Globals::config.sim_len = 2; // set this parameter to avoid long test runtime,
+                               // when compiled in debug mode
+  Globals::config.eval_len = 1;
+#endif
+  LOG(WARNING) << "Evaluation length: " << Globals::config.eval_len;
   evaluator.runEvaluation(0, nullptr);
   EXPECT_TRUE(true);
 }
