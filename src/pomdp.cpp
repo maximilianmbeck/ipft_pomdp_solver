@@ -98,7 +98,7 @@ std::unique_ptr<ActionValue> POMDP::valueOfAction(const Action& act) const {
     return nullptr;
 }
 
-double POMDP::maxPossibleWeight(const Action& act, const Observation& obs) const {
+double POMDP::maxPossibleWeight(const Action& action, const Observation& obs) const {
     throw std::runtime_error("POMDP::maxPossibleWeight not supported!");
     return 0.0;
 }
