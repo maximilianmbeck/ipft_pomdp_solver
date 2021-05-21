@@ -53,7 +53,7 @@ VNode::~VNode() {
     if (obsEdge != nullptr) {
       this->model_->freeObs(obsEdge);
     }
-    this->model_->freeObss(this->obs_archive_);
+    this->model_->freeObss(this->obs_archive);
 }
 
 Observation* VNode::getObservationObj() const {
@@ -62,7 +62,7 @@ Observation* VNode::getObservationObj() const {
 
 void VNode::setObs(Observation* obs) {
   if (this->obsEdge != nullptr) {
-    this->obs_archive_.push_back(this->obsEdge);
+    this->obs_archive.push_back(this->obsEdge);
   }
     this->obsEdge = obs;
 }
@@ -76,7 +76,7 @@ std::unique_ptr<Belief> VNode::getBelief() const {
 
 void VNode::setBelief(std::unique_ptr<Belief>&& belief) {
   if (this->belief) {
-    this->belief_archive_.emplace_back(std::move(this->belief));
+    this->belief_archive.emplace_back(std::move(this->belief));
   };
     this->belief = std::move(belief);
 }

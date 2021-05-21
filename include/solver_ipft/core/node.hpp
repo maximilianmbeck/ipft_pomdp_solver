@@ -52,11 +52,11 @@ public:
   std::unique_ptr<Belief> belief;
   Observation *obsEdge; // the input edge to this VNode
   std::vector<std::unique_ptr<Belief>>
-      belief_archive_; // holds all previousely sampled beliefs in this node
-                       // (first sampled -> index 0)
+      belief_archive; // holds all previousely sampled beliefs in this node
+                      // (first sampled -> index 0)
   std::vector<Observation *>
-      obs_archive_; // holds all previously sampled observations for this node
-                    // (first sampled -> index 0)
+      obs_archive; // holds all previously sampled observations for this node
+                   // (first sampled -> index 0)
 
 protected:
     std::shared_ptr<QNode> parent_;
