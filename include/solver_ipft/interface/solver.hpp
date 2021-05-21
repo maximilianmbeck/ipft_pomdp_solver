@@ -41,9 +41,30 @@ public:
     Value& operator=(const Value&) = default;
     Value& operator=(Value&&) = default;
 
+    /**
+     * @brief Add another value to the current Value
+     * @param val
+     */
     virtual void add(const Value& val) = 0;
+
+    /**
+     * @brief Update value and count
+     * @param val The value to be added (R in IPFT-paper in Alg. 1, L22)
+     * @param count The number of value updates (N(ha) in IPFT-paper in Alg. 1, L22)
+     */
     virtual void update(const Value& val, int count) = 0;
+
+    /**
+     * @brief Set a new value
+     * @param val
+     */
     virtual void set(const Value& val) = 0;
+
+    /**
+     * @brief Sets only a single value component
+     * @param index
+     * @param val
+     */
     virtual void setComponent(int index, const double& val) = 0;
 
     /**
