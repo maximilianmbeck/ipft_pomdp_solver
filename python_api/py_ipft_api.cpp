@@ -146,8 +146,8 @@
 //   auto pynode = std::static_pointer_cast<PyNode>(pyvnode);
 //   convertNode(pynode, vnode);
 //   pyvnode->parent_ = qparent;
-//   if (vnode->obsEdge_ != nullptr)
-//     pyvnode->observation_ = point2NpArray(*(vnode->obsEdge_));
+//   if (vnode->obsEdge != nullptr)
+//     pyvnode->observation_ = point2NpArray(*(vnode->obsEdge));
 //   // TODO support general belief
 //   ParticleBelief *pbelief = static_cast<ParticleBelief *>(vnode->belief);
 //   pyvnode->belief = PyParticleBelief::createPyParticleBelief(*pbelief);

@@ -403,8 +403,8 @@ IpftValue Ipft::simulate(const std::shared_ptr<VNode>& vnode, int depth) {
         obs = o;
 
         // log observation selection
-        DLOG(INFO) << "[SIM] select " << model_->to_string((obsNode->obsEdge_)) << " and replace by "
-                   << model_->to_string(obs);
+        DLOG(INFO) << "[SIM] select " << model_->to_string((obsNode->obsEdge))
+                   << " and replace by " << model_->to_string(obs);
     }
 
     //* Particle filter and reward calculation
@@ -484,9 +484,11 @@ IpftValue Ipft::simulate(const std::shared_ptr<VNode>& vnode, int depth) {
     actionNode->updateValueCount(accDiscountedReward);
 
     // log backup
-    DLOG(INFO) << "[SIM][BU] " << std::setfill(' ') << std::setw(15) << std::right << model_->to_string(vnode->obsEdge_)
-               << " on level " << Globals::config.search_depth - depth << ": " << *(vnode->getValue()) << " = "
-               << *oldVNodeVal << "<-" << accDiscountedReward << "|[C: " << vnode->getCount() << "]";
+    DLOG(INFO) << "[SIM][BU] " << std::setfill(' ') << std::setw(15)
+               << std::right << model_->to_string(vnode->obsEdge)
+               << " on level " << Globals::config.search_depth - depth << ": "
+               << *(vnode->getValue()) << " = " << *oldVNodeVal << "<-"
+               << accDiscountedReward << "|[C: " << vnode->getCount() << "]";
     DLOG(INFO) << "[SIM][BU] " << std::setfill(' ') << std::setw(15) << std::right
                << model_->to_string(actionNode->getAction()) << " on level " << Globals::config.search_depth - depth
                << ": " << *(actionNode->getValue()) << " = " << *oldQNodeVal << "<-" << accDiscountedReward

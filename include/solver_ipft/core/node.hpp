@@ -50,7 +50,7 @@ class QNode;
 class VNode : public Node {
 public:
   std::unique_ptr<Belief> belief;
-  Observation *obsEdge_; // the input edge to this VNode
+  Observation *obsEdge; // the input edge to this VNode
   std::vector<std::unique_ptr<Belief>>
       belief_archive_; // holds all previousely sampled beliefs in this node
                        // (first sampled -> index 0)

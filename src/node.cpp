@@ -45,26 +45,26 @@ void Node::updateValueCount(const Value& v) {
 
 VNode::VNode(std::shared_ptr<POMDP> model, std::shared_ptr<QNode> parent,
              Observation *obs, std::unique_ptr<Belief> &&belief, int level)
-    : Node(std::move(model), level), parent_(std::move(parent)), obsEdge_(obs),
+    : Node(std::move(model), level), parent_(std::move(parent)), obsEdge(obs),
       belief(std::move(belief)) {}
 
 VNode::~VNode() {
     // free observations
-    if (obsEdge_ != nullptr) {
-        this->model_->freeObs(obsEdge_);
+    if (obsEdge != nullptr) {
+      this->model_->freeObs(obsEdge);
     }
     this->model_->freeObss(this->obs_archive_);
 }
 
 Observation* VNode::getObservationObj() const {
-    return this->model_->copyObs(this->obsEdge_);
+  return this->model_->copyObs(this->obsEdge);
 }
 
 void VNode::setObs(Observation* obs) {
-    if (this->obsEdge_ != nullptr) {
-        this->obs_archive_.push_back(this->obsEdge_);
-    }
-    this->obsEdge_ = obs;
+  if (this->obsEdge != nullptr) {
+    this->obs_archive_.push_back(this->obsEdge);
+  }
+    this->obsEdge = obs;
 }
 
 std::unique_ptr<Belief> VNode::getBelief() const {
