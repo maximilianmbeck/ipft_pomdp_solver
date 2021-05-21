@@ -32,8 +32,8 @@ public:
     virtual int getTreelevel() const;
     virtual void setValue(std::unique_ptr<Value>&& value); ///< Used during initialization
     virtual std::unique_ptr<Value> cloneValue() const;
-    virtual const Value* getValue() const;
-    virtual double getTotalValue() const;
+    virtual const Value* getValue() const;         ///< get Value unmodifiable
+    virtual double getTotalValue() const;          ///< total value (cumulative sum)
     virtual void updateValueCount(const Value& v); ///< update Value and set current count
 };
 
