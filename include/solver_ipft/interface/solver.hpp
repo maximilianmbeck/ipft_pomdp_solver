@@ -45,14 +45,52 @@ public:
     virtual void update(const Value& val, int count) = 0;
     virtual void set(const Value& val) = 0;
     virtual void setComponent(int index, const double& val) = 0;
+
+    /**
+     * @brief Get the Component
+     * Return all the (raw/unweighted) values
+     * @param index
+     * @return double
+     */
     virtual double getComponent(int index) const = 0;
+
+    /**
+     * @brief Get the Weighted Component
+     * Some Value components might be weighted. This method returns all the values by multiplying with their weights, if
+     * defined any.
+     * @param index
+     * @return double
+     */
     virtual double getWeightedComponent(int index) const = 0;
+
+    /**
+     * @brief Get the number of components in Value
+     * @return int
+     */
     virtual int getComponentCount() const = 0;
+
+    /**
+     * @brief Returns string representation for information output.
+     * @return std::string
+     */
     virtual std::string text() const = 0;
 
+    /**
+     * @brief Return total value (cumulative sum)
+     * @return double
+     */
     virtual double total() const = 0;
+
+    /**
+     * @brief Perform a deepcopy of the Value.
+     * @return std::unique_ptr<Value>
+     */
     virtual std::unique_ptr<Value> clone() const = 0;
 
+    /**
+     * @brief Output operator.
+     * @return std::ostream&
+     */
     friend std::ostream& operator<<(std::ostream& os, const Value& v);
 };
 
@@ -82,12 +120,9 @@ public:
     Solver& operator=(Solver&&) = delete;
 
     /**
-     * @brief
-     * Find the optimal action for current belief, and optionally return the
-     * found value for the action. Return the value Globals::NEG_INFTY if the
-     * value is not to be used.
+     * @brief Find the optimal action for current belief
      *
-     * @return ValuedAction
+     * @return ValuedAction The estimated value of the action.
      */
     virtual ValuedAction search() = 0;
 
@@ -101,32 +136,48 @@ public:
     /**
      * @brief Update current belief and history
      *
-     * @param action the action selected by the previous search
-     * @param obs the observation received from the environment
+     * @param action prior action
+     * @param obs current observation
      */
     virtual void beliefUpdate(const Action& action, const Observation& obs) = 0;
 
     /**
-     * @brief Reset the Belief
-     * Belief are reset to the new belief. History is reset: Action,
-     * Observation and Belief history are cleared.
+     * @brief Reset the Belief to a new belief.
+     * During this, History is reset: Action, Observation and Belief history are cleared.
+     *
+     * Used at the end of a simulation run.
      * @param b the new belief
      */
     virtual void resetBelief(std::unique_ptr<Belief>&& b);
 
     /**
-     * @brief Set the Belief to a new belief ("weak" version of "resetBelief")
-     * History is not reset. Only the current belief is changed.
+     * @brief Set the Belief to a new belief ("weak" version of "resetBelief").
+     * During this, History is NOT reset. Only the current belief is changed.
+     *
+     * In some cases, the environment does not change but the belief needs to be modified.
+     * In such, call getBelief(), modify it, and then setBelief().
      * @param b the new belief
      */
     virtual void setBelief(std::unique_ptr<Belief>&& b);
+
+    /**
+     * @brief Get an unmodifiable pointer to the Belief.
+     *
+     * @return const Belief*
+     */
     virtual const Belief* getBelief() const;
+
+    /**
+     * @brief Perform a deepcopy of the Belief.
+     *
+     * @return std::unique_ptr<Belief>
+     */
     virtual std::unique_ptr<Belief> copyBelief() const;
 
     /**
-     * @brief Returns the search statistics and resets statistics in the solver
+     * @brief Returns the search statistics and resets statistics in the solver.
      *
-     * @return SearchStatistics the search statistics object
+     * @return SearchStatistics the search statistics object.
      */
     virtual std::unique_ptr<SearchStatistics> getSearchStatistics() = 0;
 

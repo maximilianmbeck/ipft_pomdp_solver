@@ -179,10 +179,11 @@ double IpftValue::getComponent(int index) const {
 double IpftValue::getWeightedComponent(int index) const {
     switch (index) {
     case 0:
-        return this->value_.at(index);
+        return this->getComponent(index);
         break;
     case 1:
-        return Globals::config.inf_gather_constant_lambda * value_.at(index);
+        double weight = Globals::config.inf_gather_constant_lambda;
+        return weight * this->getComponent(index);
         break;
     default:
         throw std::out_of_range("IpftValue has only valid indices 0 and 1.");
@@ -195,7 +196,8 @@ int IpftValue::getComponentCount() const {
 }
 
 double IpftValue::total() const {
-    double total = value_[0] + Globals::config.inf_gather_constant_lambda * value_[1];
+    double weight = Globals::config.inf_gather_constant_lambda;
+    double total = value_[0] + weight * value_[1];
     return total;
 }
 
