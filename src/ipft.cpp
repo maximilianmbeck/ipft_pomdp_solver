@@ -157,7 +157,9 @@ void IpftValue::add(const Value& val) {
 
 void IpftValue::update(const Value& val, int count) {
     auto v = dynamic_cast<const IpftValue&>(val);
+    // both for state reward and information reward
     for (int i = 0; i < IpftValue::componentCount; i++) {
+        // incremental value update
         this->value_.at(i) += (v.value_.at(i) - this->value_.at(i)) / (count + 1);
     }
 }

@@ -7,18 +7,16 @@
 
 namespace solver_ipft {
 
-/* -------------------------------------------------------------------------- */
-/*                                Node classes                                */
-/* -------------------------------------------------------------------------- */
-
+/**
+ * @brief Base class tree nodes.
+ */
 class Node {
-public:
-    std::shared_ptr<POMDP> model_;
-
 protected:
-    int count_;                    // number of visits on the node
-    const int treelevel_;          // depth / level of node in the tree
-    std::unique_ptr<Value> value_; // value of the node
+    std::shared_ptr<POMDP> model_;
+    int count_;                    ///< number of visits on the node
+    const int treelevel_;          ///< depth / level of node in the tree
+    std::unique_ptr<Value> value_; ///< value of the node
+
 public:
     Node(std::shared_ptr<POMDP> model, int level)
             : model_(std::move(model)), treelevel_(level), count_(0), value_(nullptr) {
@@ -29,14 +27,14 @@ public:
     Node& operator=(const Node&) = delete;
     Node& operator=(Node&&) = delete;
 
-    virtual void setCount(int count);
+    virtual void setCount(int count); ///< To set preferred actions' count
     virtual int getCount() const;
     virtual int getTreelevel() const;
-    virtual void setValue(std::unique_ptr<Value>&& value);
+    virtual void setValue(std::unique_ptr<Value>&& value); ///< Used during initialization
     virtual std::unique_ptr<Value> cloneValue() const;
     virtual const Value* getValue() const;
     virtual double getTotalValue() const;
-    virtual void updateValueCount(const Value& v);
+    virtual void updateValueCount(const Value& v); ///< update Value and set current count
 };
 
 // forward declarations
