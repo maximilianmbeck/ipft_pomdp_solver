@@ -49,17 +49,26 @@ class QNode;
  */
 class VNode : public Node {
 public:
-  std::unique_ptr<Belief> belief;
-  Observation *obsEdge; // the input edge to this VNode
-  std::vector<std::unique_ptr<Belief>>
-      belief_archive; // holds all previousely sampled beliefs in this node
-                      // (first sampled -> index 0)
-  std::vector<Observation *>
-      obs_archive; // holds all previously sampled observations for this node
-                   // (first sampled -> index 0)
+    // The belief stored in this node
+    std::unique_ptr<Belief> belief;
+
+    // The input edge to this VNode
+    Observation* obsEdge;
+
+    // Holds all prev. sampled beliefs in this node (first sampled -> index 0)
+    // Mainly for visualization
+    std::vector<std::unique_ptr<Belief>> belief_archive;
+
+    // Holds all prev. sampled observations for this node (first sampled -> index 0)
+    // Mainly for visualization
+    std::vector<Observation*> obs_archive;
+
 
 protected:
+    // Parent node in the tree
     std::shared_ptr<QNode> parent_;
+
+    // Child Q-nodes
     mutable std::vector<std::shared_ptr<QNode>> actChildren_;
 
 public:
@@ -76,21 +85,37 @@ public:
     VNode& operator=(VNode&&) = delete;
 
     // Return a pointer to a copy of the observation edge leading to this vnode
+    // not a unique_ptr, it needs to be handled by the memory_pool!
     Observation* getObservationObj() const;
+
     // Clear old obs and set to new one
     void setObs(Observation* obs);
+
     // Return a pointer to a copy of the belief
     std::unique_ptr<Belief> getBelief() const;
+
     // Clear old belief and set to new one
     void setBelief(std::unique_ptr<Belief>&& belief);
+
+    // Check to call rollout
     bool isLeaf() const;
 
+    // Added for convenience
     std::shared_ptr<QNode> getParent() const;
+
+    // Get children(), e.g. in UCB Multi-Armed Bandit
     std::vector<std::shared_ptr<QNode>>& children() const;
+
+    // Get child for a specific action
     std::shared_ptr<QNode> child(Action action) const;
+
+    // Returns child with the maximum value
     std::shared_ptr<QNode> maxChild() const;
+
+    // Traverses the tree and adds the actions and observations for maximum Q & V nodes to the history
     History maximumValueActionObservationSequence(const Action& action) const;
 
+    // Returns a vector of (action, value, visitation counts) for every possible action
     std::vector<ValuedAction> getValuedActions() const;
 };
 
