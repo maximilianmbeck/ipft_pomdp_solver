@@ -149,8 +149,8 @@
 //   if (vnode->obsEdge_ != nullptr)
 //     pyvnode->observation_ = point2NpArray(*(vnode->obsEdge_));
 //   // TODO support general belief
-//   ParticleBelief *pbelief = static_cast<ParticleBelief *>(vnode->belief_);
-//   pyvnode->belief_ = PyParticleBelief::createPyParticleBelief(*pbelief);
+//   ParticleBelief *pbelief = static_cast<ParticleBelief *>(vnode->belief);
+//   pyvnode->belief = PyParticleBelief::createPyParticleBelief(*pbelief);
 //   std::vector<QNode *> vNodeChildren = vnode->children();
 //   for (QNode *qchild : vNodeChildren) {
 //     pyvnode->children_.append(PyQNode::convertQNode(qchild, pyvnode));
@@ -445,7 +445,7 @@
 //       .def_readwrite("parent_", &PyVNode::parent_)
 //       .def_readwrite("children_", &PyVNode::children_)
 //       .def_readwrite("observation_", &PyVNode::observation_)
-//       .def_readwrite("belief_", &PyVNode::belief_);
+//       .def_readwrite("belief", &PyVNode::belief);
 
 //   py::class_<PyQNode, std::shared_ptr<PyQNode> /* <- holder type */> pyQNode(
 //       m, "PyQNode", pyNode);

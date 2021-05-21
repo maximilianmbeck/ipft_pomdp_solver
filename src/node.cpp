@@ -43,13 +43,10 @@ void Node::updateValueCount(const Value& v) {
 /*                                 VNode class                                */
 /* -------------------------------------------------------------------------- */
 
-VNode::VNode(std::shared_ptr<POMDP> model,
-             std::shared_ptr<QNode> parent,
-             Observation* obs,
-             std::unique_ptr<Belief>&& belief,
-             int level)
-        : Node(std::move(model), level), parent_(std::move(parent)), obsEdge_(obs), belief_(std::move(belief)) {
-}
+VNode::VNode(std::shared_ptr<POMDP> model, std::shared_ptr<QNode> parent,
+             Observation *obs, std::unique_ptr<Belief> &&belief, int level)
+    : Node(std::move(model), level), parent_(std::move(parent)), obsEdge_(obs),
+      belief(std::move(belief)) {}
 
 VNode::~VNode() {
     // free observations
@@ -71,17 +68,17 @@ void VNode::setObs(Observation* obs) {
 }
 
 std::unique_ptr<Belief> VNode::getBelief() const {
-    if (this->belief_) {
-        return this->belief_->clone();
-    }
+  if (this->belief) {
+    return this->belief->clone();
+  }
     return nullptr;
 }
 
 void VNode::setBelief(std::unique_ptr<Belief>&& belief) {
-    if (this->belief_) {
-        this->belief_archive_.emplace_back(std::move(this->belief_));
-    };
-    this->belief_ = std::move(belief);
+  if (this->belief) {
+    this->belief_archive_.emplace_back(std::move(this->belief));
+  };
+    this->belief = std::move(belief);
 }
 
 bool VNode::isLeaf() const {

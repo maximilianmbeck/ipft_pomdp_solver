@@ -378,7 +378,7 @@ IpftValue Ipft::simulate(const std::shared_ptr<VNode>& vnode, int depth) {
     // sample state s from b and generate observation o from (s,a)
     //? one observation is (almost) never sampled twice (continuous observation
     //? space)
-    State* s = vnode->belief_->sample();
+    State *s = vnode->belief->sample();
     State* statePosterior = this->model_->transition(*s, actionNode->getAction());
     Observation* o = this->model_->observation(*statePosterior);
     // states are unused
@@ -514,7 +514,8 @@ IpftValue Ipft::simulate(const std::shared_ptr<VNode>& vnode, int depth) {
 
 IpftValue Ipft::rollout(const std::shared_ptr<VNode>& leaf, int depth) {
     // log rollout
-    DLOG(WARNING) << "[ROLLOUT] estimate value of " << leaf->belief_->text() << "..";
+    DLOG(WARNING) << "[ROLLOUT] estimate value of " << leaf->belief->text()
+                  << "..";
     auto start = std::chrono::high_resolution_clock::now();
     IpftValue value = this->rolloutPolicy_->rollout(leaf->getBelief(), depth);
     this->stats_->time_node_rollout += stopTime(start);

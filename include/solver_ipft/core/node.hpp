@@ -49,12 +49,14 @@ class QNode;
  */
 class VNode : public Node {
 public:
-    std::unique_ptr<Belief> belief_;
-    Observation* obsEdge_;                                // the input edge to this VNode
-    std::vector<std::unique_ptr<Belief>> belief_archive_; // holds all previousely sampled beliefs in this node
-                                                          // (first sampled -> index 0)
-    std::vector<Observation*> obs_archive_;               // holds all previously sampled observations for this node
-                                                          // (first sampled -> index 0)
+  std::unique_ptr<Belief> belief;
+  Observation *obsEdge_; // the input edge to this VNode
+  std::vector<std::unique_ptr<Belief>>
+      belief_archive_; // holds all previousely sampled beliefs in this node
+                       // (first sampled -> index 0)
+  std::vector<Observation *>
+      obs_archive_; // holds all previously sampled observations for this node
+                    // (first sampled -> index 0)
 
 protected:
     std::shared_ptr<QNode> parent_;
