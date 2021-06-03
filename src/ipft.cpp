@@ -379,7 +379,7 @@ IpftValue Ipft::simulate(const std::shared_ptr<VNode>& vnode, int depth) {
     // sample state s from b and generate observation o from (s,a)
     //? one observation is (almost) never sampled twice (continuous observation
     //? space)
-    State *s = vnode->belief->sample();
+    State* s = vnode->belief->sample();
     State* statePosterior = this->model_->transition(*s, actionNode->getAction());
     Observation* o = this->model_->observation(*statePosterior);
     // states are unused
@@ -404,8 +404,8 @@ IpftValue Ipft::simulate(const std::shared_ptr<VNode>& vnode, int depth) {
         obs = o;
 
         // log observation selection
-        DLOG(INFO) << "[SIM] select " << model_->to_string((obsNode->obsEdge))
-                   << " and replace by " << model_->to_string(obs);
+        DLOG(INFO) << "[SIM] select " << model_->to_string((obsNode->obsEdge)) << " and replace by "
+                   << model_->to_string(obs);
     }
 
     //* Particle filter and reward calculation
@@ -485,11 +485,9 @@ IpftValue Ipft::simulate(const std::shared_ptr<VNode>& vnode, int depth) {
     actionNode->updateValueCount(accDiscountedReward);
 
     // log backup
-    DLOG(INFO) << "[SIM][BU] " << std::setfill(' ') << std::setw(15)
-               << std::right << model_->to_string(vnode->obsEdge)
-               << " on level " << Globals::config.search_depth - depth << ": "
-               << *(vnode->getValue()) << " = " << *oldVNodeVal << "<-"
-               << accDiscountedReward << "|[C: " << vnode->getCount() << "]";
+    DLOG(INFO) << "[SIM][BU] " << std::setfill(' ') << std::setw(15) << std::right << model_->to_string(vnode->obsEdge)
+               << " on level " << Globals::config.search_depth - depth << ": " << *(vnode->getValue()) << " = "
+               << *oldVNodeVal << "<-" << accDiscountedReward << "|[C: " << vnode->getCount() << "]";
     DLOG(INFO) << "[SIM][BU] " << std::setfill(' ') << std::setw(15) << std::right
                << model_->to_string(actionNode->getAction()) << " on level " << Globals::config.search_depth - depth
                << ": " << *(actionNode->getValue()) << " = " << *oldQNodeVal << "<-" << accDiscountedReward
@@ -517,8 +515,7 @@ IpftValue Ipft::simulate(const std::shared_ptr<VNode>& vnode, int depth) {
 
 IpftValue Ipft::rollout(const std::shared_ptr<VNode>& leaf, int depth) {
     // log rollout
-    DLOG(WARNING) << "[ROLLOUT] estimate value of " << leaf->belief->text()
-                  << "..";
+    DLOG(WARNING) << "[ROLLOUT] estimate value of " << leaf->belief->text() << "..";
     auto start = std::chrono::high_resolution_clock::now();
     IpftValue value = this->rolloutPolicy_->rollout(leaf->getBelief(), depth);
     this->stats_->time_node_rollout += stopTime(start);
