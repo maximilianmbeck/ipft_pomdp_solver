@@ -31,8 +31,9 @@ public:
     std::vector<History> actionSequences;
 
     // convergence eval
-    std::vector<double> timesteps;
-    std::vector<std::vector<ValuedAction>> valuedActionsPerTimestep;
+    std::vector<double> timesteps; // elapsed time after every call to simulate in the root node
+    std::vector<std::vector<ValuedAction>> valuedActionsPerTimestep; // perSimulate
+    // todo: rename these variables
 
     explicit IpftSearchStatistics(std::shared_ptr<POMDP> model)
             : SearchStatistics(std::move(model)), num_visits_vnodes_on_level(Globals::config.search_depth),
