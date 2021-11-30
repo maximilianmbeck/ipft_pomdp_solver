@@ -1,6 +1,8 @@
 # IPFT
 
-C++ implementation of Information Particle Filter Tree algorithm
+C++ implementation of [Information Particle Filter Tree](https://proceedings.mlr.press/v119/fischer20a.html) algorithm. 
+
+The original Julia implementation can be found [here](https://github.com/johannes-fischer/icml2020_ipft)
 
 ### [Doxygen documentation](/doxygen/index.html)
 ### [Coverage report](/coverage/index.html)
